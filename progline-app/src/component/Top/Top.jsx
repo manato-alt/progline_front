@@ -34,7 +34,7 @@ export default function Top() {
       <div>
         <SearchForm />
       </div>
-      <div className="mt-5">
+      <div className="mt-5 flex justify-center">
         <button className="bg-black text-white py-2 px-4 rounded-lg font-semibold transition-colors hover:bg-gray-700">
           ログインして始める
         </button>
