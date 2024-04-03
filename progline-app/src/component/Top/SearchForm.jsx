@@ -2,16 +2,16 @@ import React from "react";
 
 export default function SearchForm() {
   return (
-    <div class="flex justify-center items-center mt-7">
-      <div class="relative w-2/5">
+    <div className="flex justify-center items-center mt-7">
+      <div className="relative w-2/5">
         <input
           type="text"
           placeholder="共有コードを入力"
-          class="border border-gray-300 bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-none w-full"
+          className="border border-gray-300 bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-none w-full"
         />
-        <button class="absolute right-0 top-0 mt-3 mr-4">
+        <button className="absolute right-0 top-0 mt-3 mr-4">
           <svg
-            class="h-4 w-4 fill-current"
+            className="h-4 w-4 fill-current"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
           >
