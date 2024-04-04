@@ -24,7 +24,7 @@ export default function TermDetail() {
           </button>
         </div>
       </div>
-      <div>グラフを表示</div>
+      <div>媒体をクリックするとそれに付随するコンテンツを表示</div>
     </div>
   );
 }
