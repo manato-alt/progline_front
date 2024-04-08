@@ -5,6 +5,7 @@ import Header from "./component/Header";
 import Top from "./component/Top/Top";
 import Terms from "./component/Terms/Terms";
 import TermDetail from "./component/TermDetail/TermDetail";
+import axios from "axios";
 
 function App() {
   return (
