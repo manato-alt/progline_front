@@ -1,8 +1,26 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import myImage from "../../images/toppage-removebg.jpg";
 import { Modal, Button } from "react-daisyui";
+import TermTemplate from "./TermTemplate";
+import TermCustom from "./TermCustom";
+import axios from "axios";
 
 export default function Terms() {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get("http://localhost:3010/categories");
+        setCategories(res.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const modalRef = useRef(null);
   const [isTemplate, setIsTemplate] = useState(true);
 
@@ -83,10 +101,10 @@ export default function Terms() {
           {/* テンプレートとカスタムの内容をここに記述 */}
           {isTemplate ? (
             /* テンプレートの内容 */
-            <p>テンプレートを表示</p>
+            <TermTemplate categories={categories} />
           ) : (
             /* カスタムの内容 */
-            <p>カスタムを表示</p>
+            <TermCustom />
           )}
           {/* 切り替えるボタン */}
         </Modal.Body>
