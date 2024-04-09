@@ -1,7 +1,12 @@
-import { signInWithPopup } from "firebase/auth";
 import React from "react";
+import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { FaShareNodes } from "react-icons/fa6";
+import { GoTriangleDown } from "react-icons/go";
+import { Dropdown } from "react-daisyui";
+import { PiSignOutBold } from "react-icons/pi";
+import { FcGoogle } from "react-icons/fc";
 import axios from "axios";
 
 export default function Header() {
@@ -12,10 +17,34 @@ export default function Header() {
         <h1 className="text-white text-2xl font-bold">Progline</h1>
         <p className="text-white text-lg">
           {user ? (
-            <>
-              <UserInfo />
-              <SignOutButton />
-            </>
+            <div className="flex items-center">
+              <button className="text-white bg-blue-500 hover:bg-blue-600 py-1 px-4 rounded flex items-center mt-1 mr-2">
+                <FaShareNodes className="mr-1" />
+                <p>共有</p>
+              </button>
+
+              <Dropdown>
+                <Dropdown.Toggle>
+                  <UserInfo />
+                </Dropdown.Toggle>
+                <Dropdown.Menu className="w-[200px] absolute right-0 mt-1 border">
+                  <div className="flex items-center p-2">
+                    <img
+                      src={auth.currentUser.photoURL}
+                      alt=""
+                      className="rounded-full w-8 h-8 mr-3"
+                    />
+                    <p className="text-sm text-black">
+                      {auth.currentUser.displayName}
+                    </p>
+                  </div>
+                  <div className="border my-2"></div>
+                  <Dropdown.Item>
+                    <SignOutButton />
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
           ) : (
             <SignInButton />
           )}
@@ -33,23 +62,35 @@ function SignInButton() {
     //firebaceを使ってGoogleでサインインする
   };
 
-  return <button onClick={signInWithGoogle}>Googleでサインイン</button>;
+  return (
+    <button
+      onClick={signInWithGoogle}
+      className="flex items-center bg-white p-2 rounded-lg hover:bg-gray-200"
+    >
+      <FcGoogle />
+      <p className="text-black text-sm ml-1">Login with Google</p>
+    </button>
+  );
 }
 
 //サインアウト
 function SignOutButton() {
   return (
-    <button onClick={() => auth.signOut()}>
-      <p>サインアウト</p>
+    <button
+      className="flex items-center text-black"
+      onClick={() => auth.signOut()}
+    >
+      <PiSignOutBold className="mr-1" />
+      <p>ログアウト</p>
     </button>
   );
 }
 
 function UserInfo() {
   return (
-    <div>
-      <img src={auth.currentUser.photoURL} alt="" />
+    <div className="flex items-center">
       <p>{auth.currentUser.displayName}</p>
+      <GoTriangleDown />
     </div>
   );
 }
