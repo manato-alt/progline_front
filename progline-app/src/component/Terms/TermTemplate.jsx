@@ -1,6 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { auth } from "../../contexts/AuthContext";
+import { useAuthState } from "react-firebase-hooks/auth";
 
-export default function TermTemplate({ categories }) {
+export default function TermTemplate({ categories, closeModal }) {
+  const [selectedCategory, setSelectedCategory] = useState(null); // 選択されたカテゴリのIDを保持するステート
+  const [user] = useAuthState(auth);
+
+  // カテゴリをクリックしたときのハンドラー
+  const handleCategoryClick = (categoryId) => {
+    setSelectedCategory(categoryId);
+  };
+
+  // 登録ボタンがクリックされたときのハンドラー
+  const handleRegistration = async () => {
+    if (!selectedCategory) return; // カテゴリが選択されていない場合は何もしない
+
+    try {
+      // 選択されたカテゴリの情報を含めて API リクエストを送信
+      await axios.post("http://localhost:3010/term_registrations", {
+        user_id: user.uid, // ログインユーザーのID
+        category_id: selectedCategory, // 選択されたカテゴリのID
+      });
+      console.log("登録が成功しました");
+      setSelectedCategory(null);
+      closeModal();
+    } catch (error) {
+      console.error("登録中にエラーが発生しました:", error);
+    }
+  };
+
   return (
     <div>
       <div
@@ -8,7 +37,13 @@ export default function TermTemplate({ categories }) {
         style={{ maxHeight: "500px" }}
       >
         {categories.map((category) => (
-          <div key={category.id} className="border p-4 overflow-hidden">
+          <div
+            key={category.id}
+            className={`border p-4 overflow-hidden cursor-pointer hover:bg-blue-200 ${
+              category.id === selectedCategory ? "bg-blue-100" : ""
+            }`}
+            onClick={() => handleCategoryClick(category.id)} // カテゴリをクリックしたときのハンドラーを追加
+          >
             <img
               src={category.image_url}
               alt={category.name}
@@ -19,8 +54,11 @@ export default function TermTemplate({ categories }) {
         ))}
       </div>
       <div className="flex justify-center mt-4">
-        <button className="bg-gray-300 py-2 px-10 rounded-lg font-semibold transition-colors hover:bg-gray-400">
-          追加
+        <button
+          onClick={handleRegistration} // 登録ボタンがクリックされたときのハンドラーを追加
+          className="bg-gray-300 py-2 px-10 rounded-lg font-semibold transition-colors hover:bg-gray-400"
+        >
+          登録
         </button>
       </div>
     </div>
