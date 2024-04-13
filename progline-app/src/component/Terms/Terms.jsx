@@ -1,12 +1,19 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import myImage from "../../images/toppage-removebg.jpg";
 import { Modal, Button } from "react-daisyui";
 import TermTemplate from "./TermTemplate";
 import TermCustom from "./TermCustom";
 import axios from "axios";
+import TermRegistration from "./TermRegistration";
+import { auth } from "../../contexts/AuthContext";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function Terms() {
   const [categories, setCategories] = useState([]);
+  const [registrationCategories, setRegistrationCategories] = useState([]);
+  const [isTemplate, setIsTemplate] = useState(true);
+  const ref = useRef(null);
+  const [user] = useAuthState(auth);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,16 +28,38 @@ export default function Terms() {
     fetchData();
   }, []);
 
-  const modalRef = useRef(null);
-  const [isTemplate, setIsTemplate] = useState(true);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:3010/term_registrations",
+          {
+            params: {
+              user_id: user.uid,
+            },
+          }
+        );
+        setRegistrationCategories(res.data);
+      } catch (error) {
+        console.error("Error fetching registrationCategories:", error);
+      }
+    };
 
-  const handleShowModal = () => {
-    modalRef.current?.showModal();
-  };
+    fetchData();
+  }, [user, registrationCategories]); // user.uidを依存リストに含める
+
+  const handleShow = useCallback(() => {
+    ref.current?.showModal();
+  }, [ref]);
 
   const toggleTemplate = () => {
     setIsTemplate(!isTemplate);
   };
+
+  const handleCloseModal = () => {
+    ref.current?.close();
+  };
+
   return (
     <div>
       <div className="bg-[#f8f9fb] flex justify-center items-center  pt-5 pl-5 pr-32">
@@ -45,26 +74,33 @@ export default function Terms() {
           IT特化の学習メモリアル
         </p>
       </div>
-      <div className="border flex justify-between p-5  my-5 mx-32">
-        <div>登録したカテゴリ</div>
-        <div>
-          <button
-            onClick={handleShowModal}
-            className="bg-gray-300 py-2 px-4 rounded-lg font-semibold transition-colors hover:bg-gray-400"
-          >
-            カテゴリを追加
-          </button>
+      <div>
+        <div className="border p-5  my-5 mx-32">
+          <div className="flex justify-between items-center mb-3">
+            <div className="font-bold">登録したカテゴリ</div>
+            <div>
+              <button
+                onClick={handleShow}
+                className="bg-gray-300 py-2 px-4 rounded-lg font-semibold transition-colors hover:bg-gray-400"
+              >
+                カテゴリを追加
+              </button>
+            </div>
+          </div>
+          <div>
+            <TermRegistration registrationCategories={registrationCategories} />
+          </div>
         </div>
       </div>
       <div>グラフを表示</div>
-      <Modal ref={modalRef}>
+      <Modal ref={ref}>
+        {/* モーダルの状態を isOpen で制御 */}
         <form method="dialog">
           <Button
             size="sm"
             color="ghost"
             shape="circle"
             className="absolute right-2 top-2"
-            onClick={() => modalRef.current?.close()}
           >
             x
           </Button>
@@ -101,7 +137,10 @@ export default function Terms() {
           {/* テンプレートとカスタムの内容をここに記述 */}
           {isTemplate ? (
             /* テンプレートの内容 */
-            <TermTemplate categories={categories} />
+            <TermTemplate
+              categories={categories}
+              closeModal={handleCloseModal}
+            />
           ) : (
             /* カスタムの内容 */
             <TermCustom />
