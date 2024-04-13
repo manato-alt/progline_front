@@ -39,16 +39,18 @@ export default function TermTemplate({ categories, closeModal }) {
         {categories.map((category) => (
           <div
             key={category.id}
-            className={`border p-4 overflow-hidden cursor-pointer hover:bg-blue-200 ${
-              category.id === selectedCategory ? "bg-blue-100" : ""
+            className={`rounded-md p-4 overflow-hidden cursor-pointer hover:bg-blue-200 ${
+              category.id === selectedCategory ? "bg-blue-200" : "bg-slate-100"
             }`}
             onClick={() => handleCategoryClick(category.id)} // カテゴリをクリックしたときのハンドラーを追加
           >
-            <img
-              src={category.image_url}
-              alt={category.name}
-              className="mx-auto"
-            />
+            <div className="w-8 h-8 mx-auto">
+              <img
+                src={category.image_url}
+                alt={category.name}
+                className="object-cover w-full h-full"
+              />
+            </div>
             <p className="text-sm text-center mt-2">{category.name}</p>
           </div>
         ))}

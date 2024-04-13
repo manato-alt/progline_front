@@ -4,11 +4,16 @@ import { Modal, Button } from "react-daisyui";
 import TermTemplate from "./TermTemplate";
 import TermCustom from "./TermCustom";
 import axios from "axios";
+import TermRegistration from "./TermRegistration";
+import { auth } from "../../contexts/AuthContext";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function Terms() {
   const [categories, setCategories] = useState([]);
+  const [registrationCategories, setRegistrationCategories] = useState([]);
   const [isTemplate, setIsTemplate] = useState(true);
   const ref = useRef(null);
+  const [user] = useAuthState(auth);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,6 +27,26 @@ export default function Terms() {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:3010/term_registrations",
+          {
+            params: {
+              user_id: user.uid,
+            },
+          }
+        );
+        setRegistrationCategories(res.data);
+      } catch (error) {
+        console.error("Error fetching registrationCategories:", error);
+      }
+    };
+
+    fetchData();
+  }, [user, registrationCategories]); // user.uidを依存リストに含める
 
   const handleShow = useCallback(() => {
     ref.current?.showModal();
@@ -50,15 +75,20 @@ export default function Terms() {
         </p>
       </div>
       <div>
-        <div className="border flex justify-between p-5  my-5 mx-32">
-          <div>登録したカテゴリ</div>
+        <div className="border p-5  my-5 mx-32">
+          <div className="flex justify-between items-center mb-3">
+            <div className="font-bold">登録したカテゴリ</div>
+            <div>
+              <button
+                onClick={handleShow}
+                className="bg-gray-300 py-2 px-4 rounded-lg font-semibold transition-colors hover:bg-gray-400"
+              >
+                カテゴリを追加
+              </button>
+            </div>
+          </div>
           <div>
-            <button
-              onClick={handleShow}
-              className="bg-gray-300 py-2 px-4 rounded-lg font-semibold transition-colors hover:bg-gray-400"
-            >
-              カテゴリを追加
-            </button>
+            <TermRegistration registrationCategories={registrationCategories} />
           </div>
         </div>
       </div>
