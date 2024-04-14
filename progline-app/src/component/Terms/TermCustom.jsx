@@ -1,19 +1,37 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { auth } from "../../contexts/AuthContext";
+import { useAuthState } from "react-firebase-hooks/auth";
 
-export default function TermCustom() {
+export default function TermCustom({ closeModal }) {
   const [imageFile, setImageFile] = useState(null);
   const [imageName, setImageName] = useState("");
   const [imagePreview, setImagePreview] = useState(null); // 追加: 画像プレビューの状態
+  const [user] = useAuthState(auth);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // ここでバックエンドへのデータ送信を行う
-    console.log("画像ファイル:", imageFile);
-    console.log("画像名:", imageName);
-    // フォーム送信後に入力値をクリアする
-    setImageFile(null);
-    setImageName("");
-    setImagePreview(null); // 追加: プレビューのクリア
+    try {
+      const formData = new FormData();
+      formData.append("image_file", imageFile);
+      formData.append("name", imageName);
+      formData.append("user_id", user.uid);
+      formData.append("is_original", true); // is_originalを常にtrueに設定
+
+      await axios.post("http://localhost:3010/categories", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      console.log("登録が成功しました");
+      closeModal();
+    } catch (error) {
+      console.error("登録中にエラーが発生しました:", error);
+    } finally {
+      // フォーム送信後に入力値をクリアする
+      setImageFile(null);
+      setImageName("");
+      setImagePreview(null);
+    }
   };
 
   // 画像ファイルが選択されたときにプレビューを表示する関数
@@ -66,7 +84,7 @@ export default function TermCustom() {
             type="submit"
             className="bg-gray-300 py-2 px-10 rounded-lg font-semibold transition-colors hover:bg-gray-400 w-[fit-content]"
           >
-            追加
+            登録
           </button>
         </div>
       </form>

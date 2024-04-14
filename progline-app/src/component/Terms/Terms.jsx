@@ -143,7 +143,7 @@ export default function Terms() {
             />
           ) : (
             /* カスタムの内容 */
-            <TermCustom />
+            <TermCustom closeModal={handleCloseModal} />
           )}
           {/* 切り替えるボタン */}
         </Modal.Body>
