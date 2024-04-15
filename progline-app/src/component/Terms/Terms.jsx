@@ -46,7 +46,7 @@ export default function Terms() {
     };
 
     fetchData();
-  }, [user, registrationCategories]); // user.uidを依存リストに含める
+  }, [user]); // user.uidを依存リストに含める
 
   const handleShow = useCallback(() => {
     ref.current?.showModal();
@@ -58,6 +58,19 @@ export default function Terms() {
 
   const handleCloseModal = () => {
     ref.current?.close();
+  };
+
+  const updateRegistrationCategories = async () => {
+    try {
+      const res = await axios.get("http://localhost:3010/term_registrations", {
+        params: {
+          user_id: user.uid,
+        },
+      });
+      setRegistrationCategories(res.data);
+    } catch (error) {
+      console.error("Error fetching registrationCategories:", error);
+    }
   };
 
   return (
@@ -140,10 +153,14 @@ export default function Terms() {
             <TermTemplate
               categories={categories}
               closeModal={handleCloseModal}
+              updateRegistrationCategories={updateRegistrationCategories}
             />
           ) : (
             /* カスタムの内容 */
-            <TermCustom closeModal={handleCloseModal} />
+            <TermCustom
+              closeModal={handleCloseModal}
+              updateRegistrationCategories={updateRegistrationCategories}
+            />
           )}
           {/* 切り替えるボタン */}
         </Modal.Body>

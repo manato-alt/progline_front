@@ -3,7 +3,11 @@ import axios from "axios";
 import { auth } from "../../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-export default function TermTemplate({ categories, closeModal }) {
+export default function TermTemplate({
+  categories,
+  closeModal,
+  updateRegistrationCategories,
+}) {
   const [selectedCategory, setSelectedCategory] = useState(null); // 選択されたカテゴリのIDを保持するステート
   const [user] = useAuthState(auth);
 
@@ -25,6 +29,7 @@ export default function TermTemplate({ categories, closeModal }) {
       console.log("登録が成功しました");
       setSelectedCategory(null);
       closeModal();
+      updateRegistrationCategories();
     } catch (error) {
       console.error("登録中にエラーが発生しました:", error);
     }
