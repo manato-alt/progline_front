@@ -3,14 +3,45 @@ import axios from "axios";
 import { auth } from "../../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-export default function TermCustom({ closeModal }) {
+export default function TermCustom({
+  closeModal,
+  updateRegistrationCategories,
+}) {
   const [imageFile, setImageFile] = useState(null);
   const [imageName, setImageName] = useState("");
   const [imagePreview, setImagePreview] = useState(null); // 追加: 画像プレビューの状態
   const [user] = useAuthState(auth);
+  const [errorMessages, setErrorMessages] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setErrorMessages([]);
+    let hasError = false; // エラーフラグを追加
+
+    // 画像が選択されていない場合のエラーチェック
+    if (!imageFile) {
+      setErrorMessages((prevMessages) => [
+        ...prevMessages,
+        "画像を選択してください",
+      ]);
+      hasError = true;
+    }
+
+    // 名前が入力されていない場合のエラーチェック
+    if (!imageName.trim()) {
+      setErrorMessages((prevMessages) => [
+        ...prevMessages,
+        "名称を入力してください",
+      ]);
+      hasError = true;
+    }
+
+    if (hasError) {
+      // エラーがあればここで処理を中断
+      return;
+    }
+
     try {
       const formData = new FormData();
       formData.append("image_file", imageFile);
@@ -24,6 +55,7 @@ export default function TermCustom({ closeModal }) {
 
       console.log("登録が成功しました");
       closeModal();
+      updateRegistrationCategories();
     } catch (error) {
       console.error("登録中にエラーが発生しました:", error);
     } finally {
@@ -50,6 +82,11 @@ export default function TermCustom({ closeModal }) {
   return (
     <div>
       <form onSubmit={handleSubmit} className="flex flex-col">
+        {errorMessages.map((message, index) => (
+          <p key={index} className="text-red-500 mb-4">
+            {message}
+          </p>
+        ))}
         <label htmlFor="imageInput" className="mb-2">
           画像:
         </label>
