@@ -30,23 +30,26 @@ export default function Terms() {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const res = await axios.get(
-          "http://localhost:3010/term_registrations",
-          {
-            params: {
-              user_id: user.uid,
-            },
-          }
-        );
-        setRegistrationCategories(res.data);
-      } catch (error) {
-        console.error("Error fetching registrationCategories:", error);
+      if (user && user.uid) {
+        // userとuser.uidが存在するかを確認
+        try {
+          const res = await axios.get(
+            "http://localhost:3010/term_registrations",
+            {
+              params: {
+                user_id: user.uid,
+              },
+            }
+          );
+          setRegistrationCategories(res.data);
+        } catch (error) {
+          console.error("Error fetching registrationCategories:", error);
+        }
       }
     };
 
     fetchData();
-  }, [user]); // user.uidを依存リストに含める
+  }, [user]);
 
   const handleShow = useCallback(() => {
     ref.current?.showModal();
@@ -101,7 +104,10 @@ export default function Terms() {
             </div>
           </div>
           <div>
-            <TermRegistration registrationCategories={registrationCategories} />
+            <TermRegistration
+              registrationCategories={registrationCategories}
+              updateRegistrationCategories={updateRegistrationCategories}
+            />
           </div>
         </div>
       </div>
