@@ -15,7 +15,7 @@ export default function Header() {
     <header className="bg-gray-800 py-4">
       <div className="container mx-auto flex justify-between items-center">
         <h1 className="text-white text-2xl font-bold">Progline</h1>
-        <p className="text-white text-lg">
+        <div className="text-white text-lg">
           {user ? (
             <div className="flex items-center">
               <button className="text-white bg-blue-500 hover:bg-blue-600 py-1 px-4 rounded flex items-center mt-1 mr-2">
@@ -48,7 +48,7 @@ export default function Header() {
           ) : (
             <SignInButton />
           )}
-        </p>
+        </div>
       </div>
     </header>
   );
