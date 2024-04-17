@@ -1,11 +1,12 @@
-import React from "react";
-import { Dropdown } from "react-daisyui";
+import React, { useRef, useCallback } from "react";
+import { Dropdown, Modal, Button } from "react-daisyui";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { CiEdit } from "react-icons/ci";
 import { auth } from "../../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import TermEdit from "./TermEdit";
 
 export default function TermRegistration({
   registrationCategories,
@@ -15,6 +16,7 @@ export default function TermRegistration({
   const generateUUID = () => {
     return uuidv4();
   };
+  const ref = useRef(null);
 
   const handleDelete = async (userId, categoryId) => {
     try {
@@ -31,6 +33,13 @@ export default function TermRegistration({
     }
   };
 
+  const handleShow = useCallback(() => {
+    ref.current?.showModal();
+  }, [ref]);
+
+  const handleCloseModal = () => {
+    ref.current?.close();
+  };
   return (
     <div>
       <div className="grid grid-cols-9 gap-4">
@@ -55,11 +64,15 @@ export default function TermRegistration({
             <Dropdown className="absolute right-0 top-0">
               <Dropdown.Toggle className="opacity-0 hover:opacity-50"></Dropdown.Toggle>
               <Dropdown.Menu className="w-40 right-0 border z-50">
-                <Dropdown.Item>
-                  <CiEdit className="mr-1" />
-                  編集
-                </Dropdown.Item>
-                <div className="border my-2"></div>
+                {registrationCategory.is_original && ( // is_original が true の場合のみ表示
+                  <>
+                    <Dropdown.Item onClick={handleShow}>
+                      <CiEdit className="mr-1" />
+                      編集
+                    </Dropdown.Item>
+                    <div className="border my-2"></div>
+                  </>
+                )}
                 <Dropdown.Item
                   onClick={() =>
                     handleDelete(user.uid, registrationCategory.id)
@@ -70,6 +83,27 @@ export default function TermRegistration({
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
+            <Modal ref={ref}>
+              {/* モーダルの状態を isOpen で制御 */}
+              <form method="dialog">
+                <Button
+                  size="sm"
+                  color="ghost"
+                  shape="circle"
+                  className="absolute right-2 top-2"
+                >
+                  x
+                </Button>
+              </form>
+              <Modal.Header className="font-bold">あああ</Modal.Header>
+              <Modal.Body>
+                <TermEdit
+                  closeModal={handleCloseModal}
+                  updateRegistrationCategories={updateRegistrationCategories}
+                  category={registrationCategory}
+                />
+              </Modal.Body>
+            </Modal>
           </div>
         ))}
       </div>
