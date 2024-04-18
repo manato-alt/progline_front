@@ -7,6 +7,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import TermEdit from "./TermEdit";
+import { Link } from "react-router-dom";
 
 export default function TermRegistration({
   registrationCategories,
@@ -44,27 +45,30 @@ export default function TermRegistration({
     <div>
       <div className="grid grid-cols-9 gap-4">
         {registrationCategories.map((registrationCategory) => (
-          <div
-            key={generateUUID()}
-            className="bg-slate-100 rounded-md p-4 cursor-pointer hover:bg-blue-200  w-28 h-28 flex flex-col justify-center relative"
-          >
-            <div className="w-10 h-10 mx-auto">
-              <img
-                src={registrationCategory.image_url}
-                alt={registrationCategory.name}
-                className="object-cover w-full h-full"
-              />
-            </div>
-            <p className="text-sm text-center mt-2">
-              {registrationCategory.name}
-            </p>
+          <div key={generateUUID()} className="relative">
+            <Link
+              to={`/termsDetail/${registrationCategory.id}`}
+              className="bg-slate-100 rounded-md p-4 cursor-pointer hover:bg-blue-200  w-28 h-28 flex flex-col justify-center"
+            >
+              <div>
+                <div className="w-10 h-10 mx-auto">
+                  <img
+                    src={registrationCategory.image_url}
+                    alt={registrationCategory.name}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+                <p className="text-sm text-center mt-2">
+                  {registrationCategory.name}
+                </p>
+              </div>
+            </Link>
             <div className="absolute right-3 top-3 font-bold">︙</div>
-
             {/* ドロップダウンメニュー */}
             <Dropdown className="absolute right-0 top-0">
               <Dropdown.Toggle className="opacity-0 hover:opacity-50"></Dropdown.Toggle>
               <Dropdown.Menu className="w-40 right-0 border z-50">
-                {registrationCategory.is_original && ( // is_original が true の場合のみ表示
+                {registrationCategory.is_original && (
                   <>
                     <Dropdown.Item onClick={handleShow}>
                       <CiEdit className="mr-1" />
@@ -84,7 +88,6 @@ export default function TermRegistration({
               </Dropdown.Menu>
             </Dropdown>
             <Modal ref={ref}>
-              {/* モーダルの状態を isOpen で制御 */}
               <form method="dialog">
                 <Button
                   size="sm"
