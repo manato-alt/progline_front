@@ -1,20 +1,42 @@
-import React from "react";
-import myImage from "../../images/toppage-removebg.jpg";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 export default function TermDetail() {
+  const [category, setCategory] = useState(null);
+  const { categoryId } = useParams();
+
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3010/categories/${categoryId}`
+        );
+        setCategory(response.data);
+      } catch (error) {
+        console.error("Error fetching category:", error);
+      }
+    };
+
+    fetchCategory();
+  }, [categoryId]);
   return (
     <div>
-      <div className="bg-[#f8f9fb] flex justify-center items-center  pt-5 pl-5 pr-32">
-        <img
-          src={myImage}
-          alt="イラスト画像"
-          className="object-contain w-1/3"
-        />
-        <p className="text-3xl text-sky-500 font-bold">
-          技術の道しるべ、
-          <br />
-          IT特化の学習メモリアル
-        </p>
+      <div className="flex items-center py-5 mx-32">
+        {category && (
+          <div className="flex p-2 items-center">
+            <div className="w-14 h-14 mx-auto mr-4">
+              <img
+                src={category.image_url}
+                alt={category.name}
+                className="object-cover w-full h-full"
+              />
+            </div>
+            <div className="font-bold text-lg">
+              "{category.name}"に関する記録
+            </div>
+          </div>
+        )}
       </div>
       <div className="border flex justify-between p-5  my-5 mx-32">
         <div>登録した媒体</div>
