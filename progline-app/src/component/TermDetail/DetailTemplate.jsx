@@ -34,6 +34,7 @@ export default function DetailTemplate({
       setSelectedService(null);
       closeModal();
       updateRegistrationServices();
+      setError(null);
     } catch (error) {
       if (error.response && error.response.data && error.response.data.errors) {
         setError(error.response.data.errors.join(", "));
