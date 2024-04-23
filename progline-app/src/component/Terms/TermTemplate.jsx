@@ -10,6 +10,7 @@ export default function TermTemplate({
 }) {
   const [selectedCategory, setSelectedCategory] = useState(null); // 選択されたカテゴリのIDを保持するステート
   const [user] = useAuthState(auth);
+  const [error, setError] = useState(null); // エラーステートの追加
 
   // カテゴリをクリックしたときのハンドラー
   const handleCategoryClick = (categoryId) => {
@@ -30,13 +31,19 @@ export default function TermTemplate({
       setSelectedCategory(null);
       closeModal();
       updateRegistrationCategories();
+      setError(null);
     } catch (error) {
-      console.error("登録中にエラーが発生しました:", error);
+      if (error.response && error.response.data && error.response.data.errors) {
+        setError(error.response.data.errors.join(", "));
+      } else {
+        setError("登録中にエラーが発生しました");
+      }
     }
   };
 
   return (
     <div>
+      {error && <div className="text-red-500">{error}</div>}{" "}
       <div
         className="grid grid-cols-4 gap-4 border p-4 overflow-auto"
         style={{ maxHeight: "500px" }}
