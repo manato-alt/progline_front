@@ -152,6 +152,8 @@ export default function TermDetail() {
           <ServiceRegistration
             registrationServices={registrationServices}
             MediaIcon={MediaIcon}
+            updateRegistrationServices={updateRegistrationServices}
+            categoryId={categoryId}
           />
         </div>
       </div>
@@ -209,7 +211,11 @@ export default function TermDetail() {
             />
           ) : (
             /* カスタムの内容 */
-            <DetailCustom closeModal={handleCloseModal} />
+            <DetailCustom
+              closeModal={handleCloseModal}
+              category={category}
+              updateRegistrationServices={updateRegistrationServices}
+            />
           )}
           {/* 切り替えるボタン */}
         </Modal.Body>
