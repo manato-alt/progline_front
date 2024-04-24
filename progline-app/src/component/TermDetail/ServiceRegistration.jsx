@@ -11,6 +11,8 @@ import ServiceEdit from "./ServiceEdit";
 export default function ServiceRegistration({
   registrationServices,
   MediaIcon,
+  updateRegistrationServices,
+  categoryId,
 }) {
   const [user] = useAuthState(auth);
   const generateUUID = () => {
@@ -24,13 +26,29 @@ export default function ServiceRegistration({
   const handleCloseModal = () => {
     ref.current?.close();
   };
+
+  const handleDelete = async (userId, categoryId, serviceId) => {
+    try {
+      // カテゴリーを削除するリクエストを送信
+      await axios.delete(
+        `http://localhost:3010/services/${userId}/${categoryId}/${serviceId}`
+      );
+      console.log("サービスが削除されました");
+      updateRegistrationServices();
+      // 成功した場合の処理をここに記述
+    } catch (error) {
+      console.error("サービスの削除中にエラーが発生しました:", error);
+      // エラー時の処理をここに記述
+    }
+  };
+
   return (
     <div className="grid grid-cols-4 gap-4">
       {registrationServices.map((registrationService) => (
         <div key={generateUUID()} className="relative">
           <div className="bg-slate-100 p-6 cursor-pointer hover:bg-blue-200 flex items-center justify-center">
             {registrationService.image_url && (
-              <div className="w-10 h-10 mx-auto">
+              <div className="w-5 h-5">
                 <img
                   src={registrationService.image_url}
                   alt={registrationService.name}
@@ -59,7 +77,9 @@ export default function ServiceRegistration({
                 </>
               )}
               <Dropdown.Item
-              // onClick={() => handleDelete(user.uid, registrationService.id)}
+                onClick={() =>
+                  handleDelete(user.uid, categoryId, registrationService.id)
+                }
               >
                 <RiDeleteBinLine className="mr-1" />
                 削除
