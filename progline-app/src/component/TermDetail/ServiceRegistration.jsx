@@ -101,8 +101,8 @@ export default function ServiceRegistration({
             <Modal.Body>
               <ServiceEdit
                 closeModal={handleCloseModal}
-                // updateRegistrationServices={updateRegistrationServices}
-                category={registrationService}
+                updateRegistrationServices={updateRegistrationServices}
+                service={registrationService}
               />
             </Modal.Body>
           </Modal>
