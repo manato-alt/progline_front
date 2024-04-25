@@ -41,7 +41,6 @@ export default function TermDetail() {
       if (user && user.uid) {
         // userとuser.uidが存在するかを確認
         try {
-          console.log(categoryId);
           const res = await axios.get(
             "http://localhost:3010/service_registrations",
             {
@@ -59,7 +58,7 @@ export default function TermDetail() {
     };
 
     fetchData();
-  }, [user]);
+  }, [user, categoryId]);
 
   useEffect(() => {
     const fetchCategory = async () => {
