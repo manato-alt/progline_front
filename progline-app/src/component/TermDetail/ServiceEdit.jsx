@@ -8,10 +8,10 @@ export default function ServiceEdit({
   updateRegistrationServices,
   service,
 }) {
-  const [editedService, setEditedService] = useState(service); // カテゴリー情報の編集用ステート
+  const [editedService, setEditedService] = useState(service || {}); // カテゴリー情報の編集用ステート
   const [user] = useAuthState(auth);
   const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(service.image_url); // 画像プレビューの状態
+  const [imagePreview, setImagePreview] = useState(service?.image_url); // 画像プレビューの状態
   const [errorMessages, setErrorMessages] = useState([]);
 
   const handleSubmit = async (e) => {
@@ -20,7 +20,7 @@ export default function ServiceEdit({
     let hasError = false;
 
     // 名前が入力されていない場合のエラーチェック
-    if (!editedService.name.trim()) {
+    if (!editedService.name?.trim()) {
       setErrorMessages((prevMessages) => [
         ...prevMessages,
         "名称を入力してください",
@@ -107,7 +107,7 @@ export default function ServiceEdit({
         <input
           type="text"
           id="editNameInput"
-          value={editedService.name}
+          value={editedService.name || ""}
           onChange={(e) =>
             setEditedService({ ...editedService, name: e.target.value })
           }
