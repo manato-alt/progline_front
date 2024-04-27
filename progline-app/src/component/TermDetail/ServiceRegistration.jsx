@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef, useCallback, useEffect, useState } from "react";
 import { Dropdown, Modal, Button } from "react-daisyui";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { CiEdit } from "react-icons/ci";
@@ -7,6 +7,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import ServiceEdit from "./ServiceEdit";
+import { MdAppRegistration } from "react-icons/md";
+import ContentTemplate from "./contents/ContentTemplate";
 
 export default function ServiceRegistration({
   registrationServices,
@@ -19,9 +21,17 @@ export default function ServiceRegistration({
     return uuidv4();
   };
   const ref = useRef(null);
-  const handleShow = useCallback(() => {
-    ref.current?.showModal();
-  }, [ref]);
+
+  const [editingService, setEditingService] = useState(null);
+  const handleShow = useCallback((service) => {
+    setEditingService(service);
+  }, []);
+
+  useEffect(() => {
+    if (editingService) {
+      ref.current?.showModal();
+    }
+  }, [editingService]);
 
   const handleCloseModal = () => {
     ref.current?.close();
@@ -67,9 +77,17 @@ export default function ServiceRegistration({
           <Dropdown className="absolute right-0 top-2">
             <Dropdown.Toggle className="opacity-0 hover:opacity-50"></Dropdown.Toggle>
             <Dropdown.Menu className="w-40 right-0 border z-50">
+              <Dropdown.Item>
+                <MdAppRegistration className="mr-1" />
+                登録
+              </Dropdown.Item>
+              <div className="border my-2"></div>
+
               {registrationService.is_original && (
                 <>
-                  <Dropdown.Item onClick={handleShow}>
+                  <Dropdown.Item
+                    onClick={() => handleShow(registrationService)}
+                  >
                     <CiEdit className="mr-1" />
                     編集
                   </Dropdown.Item>
@@ -102,8 +120,9 @@ export default function ServiceRegistration({
               <ServiceEdit
                 closeModal={handleCloseModal}
                 updateRegistrationServices={updateRegistrationServices}
-                service={registrationService}
+                service={editingService}
               />
+              {/* コンテント */}
             </Modal.Body>
           </Modal>
         </div>
