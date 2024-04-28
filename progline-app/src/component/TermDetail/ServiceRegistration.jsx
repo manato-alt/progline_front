@@ -52,6 +52,10 @@ export default function ServiceRegistration({
     }
   };
 
+  const handleCancelEditing = () => {
+    setEditingService(null); // 編集サービスをリセット
+  };
+
   return (
     <div className="grid grid-cols-4 gap-4">
       {registrationServices.map((registrationService) => (
@@ -111,6 +115,7 @@ export default function ServiceRegistration({
                 color="ghost"
                 shape="circle"
                 className="absolute right-2 top-2"
+                onClick={handleCancelEditing}
               >
                 x
               </Button>
