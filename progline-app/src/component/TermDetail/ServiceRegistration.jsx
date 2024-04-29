@@ -21,17 +21,24 @@ export default function ServiceRegistration({
     return uuidv4();
   };
   const ref = useRef(null);
-
   const [editingService, setEditingService] = useState(null);
+  const [addService, setAddService] = useState(null);
+
   const handleShow = useCallback((service) => {
+    setAddService(null);
     setEditingService(service);
   }, []);
 
+  const handleShowContentTemplate = useCallback((service) => {
+    setEditingService(null);
+    setAddService(service);
+  }, []);
+
   useEffect(() => {
-    if (editingService) {
+    if (addService || editingService) {
       ref.current?.showModal();
     }
-  }, [editingService]);
+  }, [addService, editingService]);
 
   const handleCloseModal = () => {
     ref.current?.close();
@@ -53,6 +60,7 @@ export default function ServiceRegistration({
   };
 
   const handleCancelEditing = () => {
+    setAddService(null);
     setEditingService(null); // 編集サービスをリセット
   };
 
@@ -81,7 +89,9 @@ export default function ServiceRegistration({
           <Dropdown className="absolute right-0 top-2">
             <Dropdown.Toggle className="opacity-0 hover:opacity-50"></Dropdown.Toggle>
             <Dropdown.Menu className="w-40 right-0 border z-50">
-              <Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => handleShowContentTemplate(registrationService)}
+              >
                 <MdAppRegistration className="mr-1" />
                 登録
               </Dropdown.Item>
@@ -122,12 +132,18 @@ export default function ServiceRegistration({
             </form>
             <Modal.Header className="font-bold">あああ</Modal.Header>
             <Modal.Body>
-              <ServiceEdit
-                closeModal={handleCloseModal}
-                updateRegistrationServices={updateRegistrationServices}
-                service={editingService}
-              />
-              {/* コンテント */}
+              {addService ? (
+                <ContentTemplate
+                  service={addService}
+                  closeModal={handleCloseModal}
+                />
+              ) : (
+                <ServiceEdit
+                  closeModal={handleCloseModal}
+                  updateRegistrationServices={updateRegistrationServices}
+                  service={editingService}
+                />
+              )}
             </Modal.Body>
           </Modal>
         </div>
