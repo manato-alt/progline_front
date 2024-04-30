@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import ServiceEdit from "./ServiceEdit";
 import { MdAppRegistration } from "react-icons/md";
 import ContentTemplate from "./contents/ContentTemplate";
+import ContentCustom from "./contents/ContentCustom";
 
 export default function ServiceRegistration({
   registrationServices,
@@ -23,6 +24,7 @@ export default function ServiceRegistration({
   const ref = useRef(null);
   const [editingService, setEditingService] = useState(null);
   const [addService, setAddService] = useState(null);
+  const [isTemplate, setIsTemplate] = useState(true);
 
   const handleShow = useCallback((service) => {
     setAddService(null);
@@ -38,7 +40,7 @@ export default function ServiceRegistration({
     if (addService || editingService) {
       ref.current?.showModal();
     }
-  }, [addService, editingService]);
+  }, [addService, editingService, isTemplate]);
 
   const handleCloseModal = () => {
     ref.current?.close();
@@ -62,6 +64,10 @@ export default function ServiceRegistration({
   const handleCancelEditing = () => {
     setAddService(null);
     setEditingService(null); // 編集サービスをリセット
+  };
+
+  const toggleTemplate = () => {
+    setIsTemplate(!isTemplate);
   };
 
   return (
@@ -130,13 +136,51 @@ export default function ServiceRegistration({
                 x
               </Button>
             </form>
-            <Modal.Header className="font-bold">あああ</Modal.Header>
+            <Modal.Header className="font-bold">
+              {addService ? (
+                isTemplate ? (
+                  <>
+                    <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
+                      テンプレート
+                    </button>
+                    <button
+                      onClick={toggleTemplate}
+                      className="bg-blue-200 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+                    >
+                      カスタム
+                    </button>
+                  </>
+                ) : (
+                  /* カスタムの内容 */
+                  <>
+                    <button
+                      onClick={toggleTemplate}
+                      className="bg-blue-200 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+                    >
+                      テンプレート
+                    </button>
+                    <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
+                      カスタム
+                    </button>
+                  </>
+                )
+              ) : (
+                <p>aaa</p>
+              )}
+            </Modal.Header>
             <Modal.Body>
               {addService ? (
-                <ContentTemplate
-                  service={addService}
-                  closeModal={handleCloseModal}
-                />
+                isTemplate ? (
+                  <ContentTemplate
+                    service={addService}
+                    closeModal={handleCloseModal}
+                  />
+                ) : (
+                  <ContentCustom
+                    service={addService}
+                    closeModal={handleCloseModal}
+                  />
+                )
               ) : (
                 <ServiceEdit
                   closeModal={handleCloseModal}
