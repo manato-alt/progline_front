@@ -10,6 +10,7 @@ import ServiceEdit from "./ServiceEdit";
 import { MdAppRegistration } from "react-icons/md";
 import ContentTemplate from "./contents/ContentTemplate";
 import ContentCustom from "./contents/ContentCustom";
+import Content from "./contents/Content";
 
 export default function ServiceRegistration({
   registrationServices,
@@ -25,6 +26,17 @@ export default function ServiceRegistration({
   const [editingService, setEditingService] = useState(null);
   const [addService, setAddService] = useState(null);
   const [isTemplate, setIsTemplate] = useState(true);
+  const [selectedService, setSelectedService] = useState(null);
+
+  useEffect(() => {
+    if (registrationServices.length > 0) {
+      setSelectedService(registrationServices[0]);
+    }
+  }, [registrationServices]);
+
+  const handleServiceClick = (service) => {
+    setSelectedService(service);
+  };
 
   const handleShow = useCallback((service) => {
     setAddService(null);
@@ -71,127 +83,138 @@ export default function ServiceRegistration({
   };
 
   return (
-    <div className="grid grid-cols-4 gap-4">
-      {registrationServices.map((registrationService) => (
-        <div key={generateUUID()} className="relative">
-          <div className="bg-slate-100 p-6 cursor-pointer hover:bg-blue-200 flex items-center justify-center">
-            {registrationService.image_url && (
-              <div className="w-5 h-5">
-                <img
-                  src={registrationService.image_url}
-                  alt={registrationService.name}
-                  className="object-cover w-full h-full"
-                />
-              </div>
-            )}
-            {!registrationService.is_original && (
-              <MediaIcon name={registrationService.name} />
-            )}
-            <p className="text-sm text-center font-bold ml-2">
-              {registrationService.name}
-            </p>
-          </div>
-          <div className="absolute right-3 top-5 font-bold">︙</div>
-          <Dropdown className="absolute right-0 top-2">
-            <Dropdown.Toggle className="opacity-0 hover:opacity-50"></Dropdown.Toggle>
-            <Dropdown.Menu className="w-40 right-0 border z-50">
-              <Dropdown.Item
-                onClick={() => handleShowContentTemplate(registrationService)}
-              >
-                <MdAppRegistration className="mr-1" />
-                登録
-              </Dropdown.Item>
-              <div className="border my-2"></div>
+    <div>
+      <div className="grid grid-cols-4 gap-4 mx-32">
+        {registrationServices.map((registrationService) => (
+          <div key={generateUUID()} className="relative">
+            <div
+              className={`p-6 cursor-pointer hover:bg-blue-200 flex items-center justify-center ${
+                selectedService === registrationService
+                  ? "bg-blue-200"
+                  : "bg-slate-100"
+              }`}
+              onClick={() => handleServiceClick(registrationService)}
+            >
+              {registrationService.image_url && (
+                <div className="w-5 h-5">
+                  <img
+                    src={registrationService.image_url}
+                    alt={registrationService.name}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+              )}
+              {!registrationService.is_original && (
+                <MediaIcon name={registrationService.name} />
+              )}
+              <p className="text-sm text-center font-bold ml-2">
+                {registrationService.name}
+              </p>
+            </div>
+            <div className="absolute right-3 top-5 font-bold">︙</div>
+            <Dropdown className="absolute right-0 top-2">
+              <Dropdown.Toggle className="opacity-0 hover:opacity-50"></Dropdown.Toggle>
+              <Dropdown.Menu className="w-40 right-0 border z-50">
+                <Dropdown.Item
+                  onClick={() => handleShowContentTemplate(registrationService)}
+                >
+                  <MdAppRegistration className="mr-1" />
+                  登録
+                </Dropdown.Item>
+                <div className="border my-2"></div>
 
-              {registrationService.is_original && (
-                <>
-                  <Dropdown.Item
-                    onClick={() => handleShow(registrationService)}
-                  >
-                    <CiEdit className="mr-1" />
-                    編集
-                  </Dropdown.Item>
-                  <div className="border my-2"></div>
-                </>
-              )}
-              <Dropdown.Item
-                onClick={() =>
-                  handleDelete(user.uid, categoryId, registrationService.id)
-                }
-              >
-                <RiDeleteBinLine className="mr-1" />
-                削除
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-          <Modal ref={ref}>
-            <form method="dialog">
-              <Button
-                size="sm"
-                color="ghost"
-                shape="circle"
-                className="absolute right-2 top-2"
-                onClick={handleCancelEditing}
-              >
-                x
-              </Button>
-            </form>
-            <Modal.Header className="font-bold">
-              {addService ? (
-                isTemplate ? (
+                {registrationService.is_original && (
                   <>
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
-                      テンプレート
-                    </button>
-                    <button
-                      onClick={toggleTemplate}
-                      className="bg-blue-200 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+                    <Dropdown.Item
+                      onClick={() => handleShow(registrationService)}
                     >
-                      カスタム
-                    </button>
+                      <CiEdit className="mr-1" />
+                      編集
+                    </Dropdown.Item>
+                    <div className="border my-2"></div>
                   </>
+                )}
+                <Dropdown.Item
+                  onClick={() =>
+                    handleDelete(user.uid, categoryId, registrationService.id)
+                  }
+                >
+                  <RiDeleteBinLine className="mr-1" />
+                  削除
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+            <Modal ref={ref}>
+              <form method="dialog">
+                <Button
+                  size="sm"
+                  color="ghost"
+                  shape="circle"
+                  className="absolute right-2 top-2"
+                  onClick={handleCancelEditing}
+                >
+                  x
+                </Button>
+              </form>
+              <Modal.Header className="font-bold">
+                {addService ? (
+                  isTemplate ? (
+                    <>
+                      <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
+                        テンプレート
+                      </button>
+                      <button
+                        onClick={toggleTemplate}
+                        className="bg-blue-200 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+                      >
+                        カスタム
+                      </button>
+                    </>
+                  ) : (
+                    /* カスタムの内容 */
+                    <>
+                      <button
+                        onClick={toggleTemplate}
+                        className="bg-blue-200 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+                      >
+                        テンプレート
+                      </button>
+                      <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
+                        カスタム
+                      </button>
+                    </>
+                  )
                 ) : (
-                  /* カスタムの内容 */
-                  <>
-                    <button
-                      onClick={toggleTemplate}
-                      className="bg-blue-200 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
-                    >
-                      テンプレート
-                    </button>
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
-                      カスタム
-                    </button>
-                  </>
-                )
-              ) : (
-                <p>aaa</p>
-              )}
-            </Modal.Header>
-            <Modal.Body>
-              {addService ? (
-                isTemplate ? (
-                  <ContentTemplate
-                    service={addService}
-                    closeModal={handleCloseModal}
-                  />
+                  <p>aaa</p>
+                )}
+              </Modal.Header>
+              <Modal.Body>
+                {addService ? (
+                  isTemplate ? (
+                    <ContentTemplate
+                      service={addService}
+                      closeModal={handleCloseModal}
+                    />
+                  ) : (
+                    <ContentCustom
+                      service={addService}
+                      closeModal={handleCloseModal}
+                    />
+                  )
                 ) : (
-                  <ContentCustom
-                    service={addService}
+                  <ServiceEdit
                     closeModal={handleCloseModal}
+                    updateRegistrationServices={updateRegistrationServices}
+                    service={editingService}
                   />
-                )
-              ) : (
-                <ServiceEdit
-                  closeModal={handleCloseModal}
-                  updateRegistrationServices={updateRegistrationServices}
-                  service={editingService}
-                />
-              )}
-            </Modal.Body>
-          </Modal>
-        </div>
-      ))}
+                )}
+              </Modal.Body>
+            </Modal>
+          </div>
+        ))}
+      </div>
+      <div className="border my-3 mx-3"></div>
+      <Content service={selectedService} />
     </div>
   );
 }
