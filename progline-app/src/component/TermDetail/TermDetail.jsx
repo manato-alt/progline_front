@@ -119,7 +119,7 @@ export default function TermDetail() {
 
   return (
     <div>
-      <div className="flex items-center py-5 mx-32">
+      <div className="flex items-center py-3 mx-32">
         {category && (
           <div className="flex p-2 items-center">
             <div className="w-14 h-14 mx-auto mr-4">
@@ -135,9 +135,9 @@ export default function TermDetail() {
           </div>
         )}
       </div>
-      <div className="border p-5  my-5 mx-32">
-        <div className="flex justify-between items-center mb-3">
-          <div>登録した媒体</div>
+      <div className="p-5">
+        <div className="flex justify-between items-center mb-3 mx-32">
+          <div className="font-bold">登録した媒体</div>
           <div>
             <button
               onClick={handleShow}
@@ -156,7 +156,6 @@ export default function TermDetail() {
           />
         </div>
       </div>
-      <div>媒体をクリックするとそれに付随するコンテンツを表示</div>
       <Modal ref={ref}>
         {/* モーダルの状態を isOpen で制御 */}
         <form method="dialog">
