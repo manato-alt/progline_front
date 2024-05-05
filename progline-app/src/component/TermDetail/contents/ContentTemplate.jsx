@@ -3,7 +3,11 @@ import axios from "axios";
 import { auth } from "../../../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-export default function ContentTemplate({ service, closeModal }) {
+export default function ContentTemplate({
+  service,
+  closeModal,
+  updateContents,
+}) {
   const [user] = useAuthState(auth);
   const [errorMessages, setErrorMessages] = useState([]);
   const [url, setUrl] = useState("");
@@ -38,8 +42,9 @@ export default function ContentTemplate({ service, closeModal }) {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      console.log("登録が成功しました");
+      updateContents();
       closeModal();
+      console.log("登録が成功しました");
     } catch (error) {
       console.error("登録中にエラーが発生しました:", error);
     } finally {

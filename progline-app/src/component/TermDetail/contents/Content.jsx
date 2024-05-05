@@ -5,34 +5,14 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
-export default function Content({ service }) {
+export default function Content({ contents, updateContents }) {
   const [user] = useAuthState(auth);
-  const [contents, setContents] = useState(null);
   const [selectedContent, setSelectedContent] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (user && service) {
-          const response = await axios.get("http://localhost:3010/contents", {
-            params: {
-              user_id: user.uid,
-              service_id: service.id,
-            },
-          });
-          setContents(response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching contents:", error);
-      }
-    };
-
-    fetchData();
-  }, [user, service]);
 
   const handleDelete = async (content_id) => {
     try {
       await axios.delete(`http://localhost:3010/contents/${content_id}`);
+      updateContents();
       // 削除後にコンテンツを再取得して更新
     } catch (error) {
       console.error("Error deleting content:", error);
