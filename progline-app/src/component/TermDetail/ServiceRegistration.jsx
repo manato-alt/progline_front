@@ -231,12 +231,14 @@ export default function ServiceRegistration({
                       service={addService}
                       closeModal={handleCloseModal}
                       updateContents={updateContents}
+                      handleCancelEditing={handleCancelEditing}
                     />
                   ) : (
                     <ContentCustom
                       service={addService}
                       closeModal={handleCloseModal}
                       updateContents={updateContents}
+                      handleCancelEditing={handleCancelEditing}
                     />
                   )
                 ) : (

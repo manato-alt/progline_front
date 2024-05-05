@@ -3,7 +3,12 @@ import axios from "axios";
 import { auth } from "../../../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-export default function ContentCustom({ service, closeModal, updateContents }) {
+export default function ContentCustom({
+  service,
+  closeModal,
+  updateContents,
+  handleCancelEditing,
+}) {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null); // 追加: 画像プレビューの状態
   const [title, setTitle] = useState("");
@@ -58,6 +63,7 @@ export default function ContentCustom({ service, closeModal, updateContents }) {
       setUrl("");
       closeModal();
       updateContents();
+      handleCancelEditing();
       console.log("登録が成功しました");
     } catch (error) {
       console.error("登録中にエラーが発生しました:", error);
