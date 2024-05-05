@@ -7,6 +7,7 @@ export default function ContentTemplate({
   service,
   closeModal,
   updateContents,
+  handleCancelEditing,
 }) {
   const [user] = useAuthState(auth);
   const [errorMessages, setErrorMessages] = useState([]);
@@ -44,6 +45,7 @@ export default function ContentTemplate({
 
       updateContents();
       closeModal();
+      handleCancelEditing();
       console.log("登録が成功しました");
     } catch (error) {
       console.error("登録中にエラーが発生しました:", error);
