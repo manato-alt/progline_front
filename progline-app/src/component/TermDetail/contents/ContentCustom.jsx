@@ -3,11 +3,10 @@ import axios from "axios";
 import { auth } from "../../../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-export default function ContentCustom({ service, closeModal }) {
+export default function ContentCustom({ service, closeModal, updateContents }) {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null); // 追加: 画像プレビューの状態
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
   const [url, setUrl] = useState("");
   const [user] = useAuthState(auth);
   const [errorMessages, setErrorMessages] = useState([]);
@@ -45,7 +44,6 @@ export default function ContentCustom({ service, closeModal }) {
       const formData = new FormData();
       formData.append("image_file", imageFile);
       formData.append("title", title);
-      formData.append("description", description);
       formData.append("url", url);
       formData.append("user_id", user.uid);
       formData.append("service_id", service.id);
@@ -57,9 +55,9 @@ export default function ContentCustom({ service, closeModal }) {
       setImageFile(null);
       setTitle("");
       setImagePreview(null);
-      setDescription("");
       setUrl("");
       closeModal();
+      updateContents();
       console.log("登録が成功しました");
     } catch (error) {
       console.error("登録中にエラーが発生しました:", error);
@@ -114,16 +112,6 @@ export default function ContentCustom({ service, closeModal }) {
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="border rounded-md px-2 py-1 mb-4"
-        />
-        <label htmlFor="description" className="mb-2">
-          概要:
-        </label>
-        <input
-          type="text"
-          id="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
           className="border rounded-md px-2 py-1 mb-4"
         />
         <label htmlFor="url" className="mb-2">

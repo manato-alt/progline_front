@@ -27,6 +27,7 @@ export default function ServiceRegistration({
   const [addService, setAddService] = useState(null);
   const [isTemplate, setIsTemplate] = useState(true);
   const [selectedService, setSelectedService] = useState(null);
+  const [contents, setContents] = useState(null);
 
   useEffect(() => {
     if (registrationServices.length > 0) {
@@ -80,6 +81,41 @@ export default function ServiceRegistration({
 
   const toggleTemplate = () => {
     setIsTemplate(!isTemplate);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (user && selectedService) {
+          const response = await axios.get("http://localhost:3010/contents", {
+            params: {
+              user_id: user.uid,
+              service_id: selectedService.id,
+            },
+          });
+          setContents(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching contents:", error);
+      }
+    };
+
+    fetchData();
+  }, [user, selectedService]);
+
+  const updateContents = async () => {
+    try {
+      const response = await axios.get("http://localhost:3010/contents", {
+        params: {
+          user_id: user.uid,
+          service_id: selectedService.id,
+        },
+      });
+      // 取得したコンテンツをセットする
+      setContents(response.data);
+    } catch (error) {
+      console.error("Error fetching contents:", error);
+    }
   };
 
   return (
@@ -194,11 +230,13 @@ export default function ServiceRegistration({
                     <ContentTemplate
                       service={addService}
                       closeModal={handleCloseModal}
+                      updateContents={updateContents}
                     />
                   ) : (
                     <ContentCustom
                       service={addService}
                       closeModal={handleCloseModal}
+                      updateContents={updateContents}
                     />
                   )
                 ) : (
@@ -214,7 +252,7 @@ export default function ServiceRegistration({
         ))}
       </div>
       <div className="border my-3 mx-3"></div>
-      <Content service={selectedService} />
+      <Content contents={contents} updateContents={updateContents} />
     </div>
   );
 }
