@@ -68,15 +68,13 @@ export default function TermRegistration({
             <Dropdown className="absolute right-0 top-0">
               <Dropdown.Toggle className="opacity-0 hover:opacity-50"></Dropdown.Toggle>
               <Dropdown.Menu className="w-40 right-0 border z-50">
-                {registrationCategory.is_original && (
-                  <>
-                    <Dropdown.Item onClick={handleShow}>
-                      <CiEdit className="mr-1" />
-                      編集
-                    </Dropdown.Item>
-                    <div className="border my-2"></div>
-                  </>
-                )}
+                <>
+                  <Dropdown.Item onClick={handleShow}>
+                    <CiEdit className="mr-1" />
+                    編集
+                  </Dropdown.Item>
+                  <div className="border my-2"></div>
+                </>
                 <Dropdown.Item
                   onClick={() =>
                     handleDelete(user.uid, registrationCategory.id)
