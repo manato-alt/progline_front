@@ -140,7 +140,7 @@ export default function ServiceRegistration({
                   />
                 </div>
               )}
-              {!registrationService.is_original && (
+              {!registrationService.image_url && (
                 <MediaIcon name={registrationService.name} />
               )}
               <p className="text-sm text-center font-bold ml-2">
@@ -159,17 +159,15 @@ export default function ServiceRegistration({
                 </Dropdown.Item>
                 <div className="border my-2"></div>
 
-                {registrationService.is_original && (
-                  <>
-                    <Dropdown.Item
-                      onClick={() => handleShow(registrationService)}
-                    >
-                      <CiEdit className="mr-1" />
-                      編集
-                    </Dropdown.Item>
-                    <div className="border my-2"></div>
-                  </>
-                )}
+                <>
+                  <Dropdown.Item
+                    onClick={() => handleShow(registrationService)}
+                  >
+                    <CiEdit className="mr-1" />
+                    編集
+                  </Dropdown.Item>
+                  <div className="border my-2"></div>
+                </>
                 <Dropdown.Item
                   onClick={() =>
                     handleDelete(user.uid, categoryId, registrationService.id)
