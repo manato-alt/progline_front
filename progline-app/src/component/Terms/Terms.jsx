@@ -18,7 +18,9 @@ export default function Terms() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:3010/categories");
+        const res = await axios.get(
+          "http://localhost:3010/template_categories"
+        );
         setCategories(res.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -33,14 +35,11 @@ export default function Terms() {
       if (user && user.uid) {
         // userとuser.uidが存在するかを確認
         try {
-          const res = await axios.get(
-            "http://localhost:3010/term_registrations",
-            {
-              params: {
-                user_id: user.uid,
-              },
-            }
-          );
+          const res = await axios.get("http://localhost:3010/categories", {
+            params: {
+              user_id: user.uid,
+            },
+          });
           setRegistrationCategories(res.data);
         } catch (error) {
           console.error("Error fetching registrationCategories:", error);
@@ -65,7 +64,7 @@ export default function Terms() {
 
   const updateRegistrationCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:3010/term_registrations", {
+      const res = await axios.get("http://localhost:3010/categories", {
         params: {
           user_id: user.uid,
         },

@@ -39,11 +39,10 @@ export default function ServiceEdit({
         formData.append("image_file", imageFile);
       }
       formData.append("name", editedService.name);
-      formData.append("user_id", user.uid);
 
       // カテゴリー情報の更新リクエストを送信
       await axios.put(
-        `http://localhost:3010/services/${user.uid}/${editedService.id}`,
+        `http://localhost:3010/services/${editedService.id}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

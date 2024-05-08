@@ -36,7 +36,6 @@ export default function ContentTemplate({
     try {
       const formData = new FormData();
       formData.append("url", url);
-      formData.append("user_id", user.uid);
       formData.append("service_id", service.id);
 
       await axios.post("http://localhost:3010/contents", formData, {

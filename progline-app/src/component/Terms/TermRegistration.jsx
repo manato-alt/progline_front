@@ -19,12 +19,10 @@ export default function TermRegistration({
   };
   const ref = useRef(null);
 
-  const handleDelete = async (userId, categoryId) => {
+  const handleDelete = async (categoryId) => {
     try {
       // カテゴリーを削除するリクエストを送信
-      await axios.delete(
-        `http://localhost:3010/categories/${userId}/${categoryId}`
-      );
+      await axios.delete(`http://localhost:3010/categories/${categoryId}`);
       console.log("カテゴリーが削除されました");
       updateRegistrationCategories();
       // 成功した場合の処理をここに記述
@@ -76,9 +74,7 @@ export default function TermRegistration({
                   <div className="border my-2"></div>
                 </>
                 <Dropdown.Item
-                  onClick={() =>
-                    handleDelete(user.uid, registrationCategory.id)
-                  }
+                  onClick={() => handleDelete(registrationCategory.id)}
                 >
                   <RiDeleteBinLine className="mr-1" />
                   削除
