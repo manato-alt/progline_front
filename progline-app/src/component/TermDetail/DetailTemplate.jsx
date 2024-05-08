@@ -25,7 +25,6 @@ export default function DetailTemplate({
     try {
       // 選択されたカテゴリの情報を含めて API リクエストを送信
       await axios.post("http://localhost:3010/services_template", {
-        user_id: user.uid, // ログインユーザーのID
         service_id: selectedService,
         category_id: category.id,
         // 選択されたサービスのID

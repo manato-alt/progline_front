@@ -41,15 +41,11 @@ export default function TermDetail() {
       if (user && user.uid) {
         // userとuser.uidが存在するかを確認
         try {
-          const res = await axios.get(
-            "http://localhost:3010/service_registrations",
-            {
-              params: {
-                user_id: user.uid,
-                category_id: categoryId,
-              },
-            }
-          );
+          const res = await axios.get("http://localhost:3010/services", {
+            params: {
+              category_id: categoryId,
+            },
+          });
           setRegistrationServices(res.data);
         } catch (error) {
           console.error("Error fetching registrationServices:", error);
@@ -78,7 +74,7 @@ export default function TermDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:3010/services");
+        const res = await axios.get("http://localhost:3010/template_services");
         setServices(res.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -102,15 +98,11 @@ export default function TermDetail() {
 
   const updateRegistrationServices = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:3010/service_registrations",
-        {
-          params: {
-            user_id: user.uid,
-            category_id: categoryId,
-          },
-        }
-      );
+      const res = await axios.get("http://localhost:3010/services", {
+        params: {
+          category_id: categoryId,
+        },
+      });
       setRegistrationServices(res.data);
     } catch (error) {
       console.error("Error fetching registrationServices:", error);

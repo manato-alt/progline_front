@@ -59,12 +59,10 @@ export default function ServiceRegistration({
     ref.current?.close();
   };
 
-  const handleDelete = async (userId, categoryId, serviceId) => {
+  const handleDelete = async (serviceId) => {
     try {
       // カテゴリーを削除するリクエストを送信
-      await axios.delete(
-        `http://localhost:3010/services/${userId}/${categoryId}/${serviceId}`
-      );
+      await axios.delete(`http://localhost:3010/services/${serviceId}`);
       console.log("サービスが削除されました");
       updateRegistrationServices();
       // 成功した場合の処理をここに記述
@@ -86,10 +84,9 @@ export default function ServiceRegistration({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (user && selectedService) {
+        if (selectedService) {
           const response = await axios.get("http://localhost:3010/contents", {
             params: {
-              user_id: user.uid,
               service_id: selectedService.id,
             },
           });
@@ -101,13 +98,12 @@ export default function ServiceRegistration({
     };
 
     fetchData();
-  }, [user, selectedService]);
+  }, [selectedService]);
 
   const updateContents = async () => {
     try {
       const response = await axios.get("http://localhost:3010/contents", {
         params: {
-          user_id: user.uid,
           service_id: selectedService.id,
         },
       });
@@ -169,9 +165,7 @@ export default function ServiceRegistration({
                   <div className="border my-2"></div>
                 </>
                 <Dropdown.Item
-                  onClick={() =>
-                    handleDelete(user.uid, categoryId, registrationService.id)
-                  }
+                  onClick={() => handleDelete(registrationService.id)}
                 >
                   <RiDeleteBinLine className="mr-1" />
                   削除

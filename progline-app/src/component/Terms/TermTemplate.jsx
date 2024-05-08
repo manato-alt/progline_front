@@ -23,7 +23,7 @@ export default function TermTemplate({
 
     try {
       // 選択されたカテゴリの情報を含めて API リクエストを送信
-      await axios.post("http://localhost:3010/categories_template", {
+      await axios.post("http://localhost:3010/template_categories", {
         user_id: user.uid, // ログインユーザーのID
         category_id: selectedCategory, // 選択されたカテゴリのID
       });

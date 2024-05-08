@@ -39,11 +39,9 @@ export default function TermEdit({
         formData.append("image_file", imageFile);
       }
       formData.append("name", editedCategory.name);
-      formData.append("user_id", user.uid);
-
       // カテゴリー情報の更新リクエストを送信
       await axios.put(
-        `http://localhost:3010/categories/${user.uid}/${editedCategory.id}`,
+        `http://localhost:3010/categories/${editedCategory.id}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

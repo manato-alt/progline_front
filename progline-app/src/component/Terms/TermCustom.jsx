@@ -47,7 +47,6 @@ export default function TermCustom({
       formData.append("image_file", imageFile);
       formData.append("name", imageName);
       formData.append("user_id", user.uid);
-      formData.append("is_original", true); // is_originalを常にtrueに設定
 
       await axios.post("http://localhost:3010/categories", formData, {
         headers: { "Content-Type": "multipart/form-data" },
