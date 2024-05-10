@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { auth } from "../../../contexts/AuthContext";
-import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function ContentCustom({
   service,
@@ -13,7 +11,6 @@ export default function ContentCustom({
   const [imagePreview, setImagePreview] = useState(null); // 追加: 画像プレビューの状態
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
-  const [user] = useAuthState(auth);
   const [errorMessages, setErrorMessages] = useState([]);
 
   const handleSubmit = async (e) => {

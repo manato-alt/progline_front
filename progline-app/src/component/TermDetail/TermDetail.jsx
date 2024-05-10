@@ -144,7 +144,6 @@ export default function TermDetail() {
             registrationServices={registrationServices}
             MediaIcon={MediaIcon}
             updateRegistrationServices={updateRegistrationServices}
-            categoryId={categoryId}
           />
         </div>
       </div>

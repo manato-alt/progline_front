@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { auth } from "../../../contexts/AuthContext";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Content({ contents, updateContents }) {
-  const [user] = useAuthState(auth);
   const [selectedContent, setSelectedContent] = useState(null);
 
   const handleDelete = async (content_id) => {

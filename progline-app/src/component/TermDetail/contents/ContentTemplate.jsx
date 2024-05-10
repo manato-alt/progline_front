@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { auth } from "../../../contexts/AuthContext";
-import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function ContentTemplate({
   service,
@@ -9,7 +7,6 @@ export default function ContentTemplate({
   updateContents,
   handleCancelEditing,
 }) {
-  const [user] = useAuthState(auth);
   const [errorMessages, setErrorMessages] = useState([]);
   const [url, setUrl] = useState("");
 
