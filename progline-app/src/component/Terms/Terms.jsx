@@ -7,6 +7,7 @@ import axios from "axios";
 import TermRegistration from "./TermRegistration";
 import { auth } from "../../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
+import TermGraph from "./TermGraph";
 
 export default function Terms() {
   const [categories, setCategories] = useState([]);
@@ -110,7 +111,9 @@ export default function Terms() {
           </div>
         </div>
       </div>
-      <div>グラフを表示</div>
+      <div>
+        <TermGraph />
+      </div>
       <Modal ref={ref}>
         {/* モーダルの状態を isOpen で制御 */}
         <form method="dialog">
