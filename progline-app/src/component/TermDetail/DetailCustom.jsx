@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { auth } from "../../contexts/AuthContext";
-import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function DetailCustom({
   closeModal,
@@ -11,7 +9,6 @@ export default function DetailCustom({
   const [imageFile, setImageFile] = useState(null);
   const [imageName, setImageName] = useState("");
   const [imagePreview, setImagePreview] = useState(null); // 追加: 画像プレビューの状態
-  const [user] = useAuthState(auth);
   const [errorMessages, setErrorMessages] = useState([]);
 
   const handleSubmit = async (e) => {

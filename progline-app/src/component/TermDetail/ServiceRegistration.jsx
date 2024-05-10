@@ -2,8 +2,6 @@ import React, { useRef, useCallback, useEffect, useState } from "react";
 import { Dropdown, Modal, Button } from "react-daisyui";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { CiEdit } from "react-icons/ci";
-import { auth } from "../../contexts/AuthContext";
-import { useAuthState } from "react-firebase-hooks/auth";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import ServiceEdit from "./ServiceEdit";
@@ -16,9 +14,7 @@ export default function ServiceRegistration({
   registrationServices,
   MediaIcon,
   updateRegistrationServices,
-  categoryId,
 }) {
-  const [user] = useAuthState(auth);
   const generateUUID = () => {
     return uuidv4();
   };

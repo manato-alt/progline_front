@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { auth } from "../../contexts/AuthContext";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { SiQiita, SiUdemy, SiZenn } from "react-icons/si";
 import { FaYoutube, FaAmazon } from "react-icons/fa";
 
@@ -12,7 +10,6 @@ export default function DetailTemplate({
   updateRegistrationServices,
 }) {
   const [selectedService, setSelectedService] = useState(null);
-  const [user] = useAuthState(auth);
   const [error, setError] = useState(null); // エラーステートの追加
 
   const handleServiceClick = (serviceId) => {

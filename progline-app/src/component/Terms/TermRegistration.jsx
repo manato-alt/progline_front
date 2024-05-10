@@ -2,8 +2,6 @@ import React, { useRef, useCallback } from "react";
 import { Dropdown, Modal, Button } from "react-daisyui";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { CiEdit } from "react-icons/ci";
-import { auth } from "../../contexts/AuthContext";
-import { useAuthState } from "react-firebase-hooks/auth";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import TermEdit from "./TermEdit";
@@ -13,7 +11,6 @@ export default function TermRegistration({
   registrationCategories,
   updateRegistrationCategories,
 }) {
-  const [user] = useAuthState(auth);
   const generateUUID = () => {
     return uuidv4();
   };

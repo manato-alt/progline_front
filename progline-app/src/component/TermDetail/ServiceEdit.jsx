@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { auth } from "../../contexts/AuthContext";
-import { useAuthState } from "react-firebase-hooks/auth";
 import axios from "axios";
 
 export default function ServiceEdit({
@@ -9,7 +7,6 @@ export default function ServiceEdit({
   service,
 }) {
   const [editedService, setEditedService] = useState(service || {}); // カテゴリー情報の編集用ステート
-  const [user] = useAuthState(auth);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(service?.image_url); // 画像プレビューの状態
   const [errorMessages, setErrorMessages] = useState([]);
