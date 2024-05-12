@@ -3,7 +3,7 @@ import visualizationImage from "../../images/可視化.png";
 
 export default function ElementD() {
   return (
-    <div className="flex flex-col items-start m-3">
+    <div className="flex flex-col items-center m-3 lg:items-start">
       <div class="bg-indigo-100 rounded-lg w-10 h-10 flex items-center justify-center">
         <img
           src={visualizationImage}
@@ -11,9 +11,11 @@ export default function ElementD() {
           className="object-contain w-8 h-8"
         />
       </div>
-      <div className="text-start">
-        <p className="font-bold text-lg mt-2 mb-1">④可視化</p>
-        <p className="text-sm text-gray-600 mr-3">
+      <div className="text-center lg:text-start">
+        <p className="mt-2 mb-1 text-xs md:text-sm md:font-bold lg:text-lg">
+          ④可視化
+        </p>
+        <p className="hidden lg:flex text-sm text-gray-600 mr-3">
           カテゴリごとの学習度合いをグラフ化し、可視化します。
         </p>
       </div>

@@ -14,17 +14,19 @@ export default function Header() {
   return (
     <header className="bg-gray-800 py-4">
       <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-white text-2xl font-bold">Progline</h1>
+        <h1 className="text-white text-xl ml-4 font-bold lg:text-2xl">
+          Progline
+        </h1>
         <div className="text-white text-lg">
           {user ? (
             <div className="flex items-center">
-              <button className="text-white bg-blue-500 hover:bg-blue-600 py-1 px-4 rounded flex items-center mt-1 mr-2">
+              <button className="hidden sm:flex text-white bg-blue-500 hover:bg-blue-600 py-1 px-4 rounded items-center mt-1 mr-2">
                 <FaShareNodes className="mr-1" />
                 <p>共有</p>
               </button>
 
               <Dropdown>
-                <Dropdown.Toggle>
+                <Dropdown.Toggle className="mr-2">
                   <UserInfo />
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="w-[200px] absolute right-0 mt-1 border">
@@ -38,6 +40,13 @@ export default function Header() {
                       {auth.currentUser.displayName}
                     </p>
                   </div>
+                  <div className="border my-2 sm:hidden"></div>
+                  <Dropdown.Item className="sm:hidden">
+                    <button className="flex items-center text-black">
+                      <FaShareNodes className="mr-2" />
+                      <p>共有</p>
+                    </button>
+                  </Dropdown.Item>
                   <div className="border my-2"></div>
                   <Dropdown.Item>
                     <SignOutButton />

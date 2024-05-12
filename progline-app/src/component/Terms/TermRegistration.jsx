@@ -38,31 +38,31 @@ export default function TermRegistration({
   };
   return (
     <div>
-      <div className="grid grid-cols-9 gap-4">
+      <div className="grid grid-cols-2 min-[300px]:grid-cols-3 min-[400px]:grid-cols-4 min-[500px]:grid-cols-5 sm:grid-cols-6 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-8 2xl:grid-cols-9">
         {registrationCategories.map((registrationCategory) => (
-          <div key={generateUUID()} className="relative">
+          <div key={generateUUID()} className="relative w-20 md:w-28 mr-2 mt-2">
             <Link
               to={`/termsDetail/${registrationCategory.id}`}
-              className="bg-slate-100 rounded-md p-4 cursor-pointer hover:bg-blue-200  w-28 h-28 flex flex-col justify-center"
+              className="bg-slate-100 rounded-md p-4 cursor-pointer hover:bg-blue-200  w-20 h-20 md:w-28 md:h-28 flex flex-col justify-center"
             >
               <div>
-                <div className="w-10 h-10 mx-auto">
+                <div className="w-6 h-6 md:w-10 md:h-10 mx-auto">
                   <img
                     src={registrationCategory.image_url}
                     alt={registrationCategory.name}
                     className="object-cover w-full h-full"
                   />
                 </div>
-                <p className="text-sm text-center mt-2">
+                <p className="text-xs md:text-sm text-center mt-2 overflow-hidden">
                   {registrationCategory.name}
                 </p>
               </div>
             </Link>
-            <div className="absolute right-3 top-3 font-bold">︙</div>
+            <div className="absolute top-3 right-3  font-bold">︙</div>
             {/* ドロップダウンメニュー */}
             <Dropdown className="absolute right-0 top-0">
               <Dropdown.Toggle className="opacity-0 hover:opacity-50"></Dropdown.Toggle>
-              <Dropdown.Menu className="w-40 right-0 border z-50">
+              <Dropdown.Menu className="w-28 sm:w-40 right-0 border z-50">
                 <>
                   <Dropdown.Item onClick={handleShow}>
                     <CiEdit className="mr-1" />

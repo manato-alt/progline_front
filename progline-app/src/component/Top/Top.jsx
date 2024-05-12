@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import SearchForm from "./SearchForm";
-import UserList from "./UserList";
 import myImage from "../../images/toppage.jpg";
 import Square from "./HoverSquare";
 import dummyImages from "./dummyImages.jsx";
@@ -29,10 +28,12 @@ export default function Top() {
     <div className="py-12">
       <div className="flex justify-center items-center">
         <div className="text-center">
-          <h1 className="text-5xl font-bold tracking-wider">
-            技術の道しるべ、IT特化の学習メモリアル
+          <h1 className="text-3xl font-bold tracking-wider md:text-4xl lg:text-5xl">
+            技術の道しるべ、
+            <br className="sm:hidden" />
+            IT特化の学習メモリアル
           </h1>
-          <p className="text-2xl mt-3 mx-auto text-gray-500">
+          <p className="mt-3 mx-auto text-gray-500 sm:text-2xl">
             学習の記録・可視化・共有を行うことができます。
           </p>
         </div>
@@ -50,7 +51,7 @@ export default function Top() {
       </div>
       <div>
         {/* 横並びの四角の要素 */}
-        <div className="flex justify-center">
+        <div className="flex flex-wrap justify-center mx-1 space-x-2 sm:space-x-3">
           {["A", "B", "C", "D", "E"].map((item) => (
             <Square
               key={item}
@@ -67,7 +68,7 @@ export default function Top() {
             <img
               src={dummyImages[hoveredImage || lastHoveredImage]}
               alt={`ダミー画像 ${hoveredImage || lastHoveredImage}`}
-              className="mt-4"
+              className="w-full sm:max-w-lg"
             />
           )}
         </div>

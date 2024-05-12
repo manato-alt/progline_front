@@ -3,7 +3,7 @@ import React from "react";
 export default function SearchForm() {
   return (
     <div className="flex justify-center items-center mt-7">
-      <div className="relative w-2/5">
+      <div className="relative w-1/2 sm:w-2/5">
         <input
           type="text"
           placeholder="共有コードを入力"

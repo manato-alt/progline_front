@@ -78,26 +78,32 @@ export default function Terms() {
 
   return (
     <div>
-      <div className="bg-[#f8f9fb] flex justify-center items-center  pt-5 pl-5 pr-32">
+      <div className="flex flex-col bg-[#f8f9fb] justify-center items-center  pt-5 sm:flex-row">
+        <p className="text-xl mb-1 text-center mt-2 text-sky-500 font-bold sm:hidden">
+          技術の道しるべ、
+          <br />
+          IT特化の学習メモリアル
+        </p>
+
         <img
           src={myImage}
           alt="イラスト画像"
-          className="object-contain w-1/3"
+          className="object-contain w-2/3 sm:w-1/3"
         />
-        <p className="text-3xl text-sky-500 font-bold">
+        <p className="hidden text-sky-500 font-bold sm:flex sm:text-start md:text-2xl lg:text-3xl ">
           技術の道しるべ、
           <br />
           IT特化の学習メモリアル
         </p>
       </div>
       <div>
-        <div className="border p-5  my-5 mx-32">
+        <div className="my-5 p-5 ml-4">
           <div className="flex justify-between items-center mb-3">
             <div className="font-bold">登録したカテゴリ</div>
             <div>
               <button
                 onClick={handleShow}
-                className="bg-gray-300 py-2 px-4 rounded-lg font-semibold transition-colors hover:bg-gray-400"
+                className="text-xs bg-gray-300  py-2 px-4 rounded-lg font-semibold transition-colors hover:bg-gray-400"
               >
                 カテゴリを追加
               </button>
@@ -111,7 +117,7 @@ export default function Terms() {
           </div>
         </div>
       </div>
-      <div>
+      <div className="mx-5 min-[500px]:mx-10 sm:mx-20 mb-10">
         <TermGraph />
       </div>
       <Modal ref={ref}>
