@@ -120,7 +120,7 @@ export default function Terms() {
       <div className="mx-5 min-[500px]:mx-10 sm:mx-20 mb-10">
         <TermGraph />
       </div>
-      <Modal ref={ref}>
+      <Modal ref={ref} className="w-4/5 min-[560px]:w-3/5">
         {/* モーダルの状態を isOpen で制御 */}
         <form method="dialog">
           <Button
@@ -136,13 +136,13 @@ export default function Terms() {
           {isTemplate ? (
             <>
               <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
-                テンプレート
+                <p className="text-sm min-[500px]:text-base">テンプレート</p>
               </button>
               <button
                 onClick={toggleTemplate}
                 className="bg-blue-200 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
               >
-                カスタム
+                <p className="text-sm min-[500px]:text-base">カスタム</p>
               </button>
             </>
           ) : (
@@ -152,10 +152,10 @@ export default function Terms() {
                 onClick={toggleTemplate}
                 className="bg-blue-200 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
               >
-                テンプレート
+                <p className="text-sm min-[500px]:text-base">テンプレート</p>
               </button>
               <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
-                カスタム
+                <p className="text-sm min-[500px]:text-base">カスタム</p>
               </button>
             </>
           )}
