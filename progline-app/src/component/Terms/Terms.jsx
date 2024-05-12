@@ -103,7 +103,7 @@ export default function Terms() {
             <div>
               <button
                 onClick={handleShow}
-                className="text-xs bg-gray-300  py-2 px-4 rounded-lg font-semibold transition-colors hover:bg-gray-400"
+                className="text-sm bg-gray-300  py-2 px-4 rounded-lg font-semibold transition-colors hover:bg-gray-400"
               >
                 カテゴリを追加
               </button>
