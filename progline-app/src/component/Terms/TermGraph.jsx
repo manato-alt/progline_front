@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import axios from "axios";
 import { auth } from "../../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Bar } from "react-chartjs-2";
-import { Chart, registerables } from "chart.js"; // registerables を追加
+import Chart from "chart.js/auto";
 
 export default function TermGraph() {
   const [graphData, setGraphData] = useState(null);
   const [user] = useAuthState(auth);
+  const chartRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,65 +29,82 @@ export default function TermGraph() {
     fetchData();
   }, [user]);
 
-  useEffect(() => {
-    Chart.register(...registerables); // registerables を使用して全ての要素を登録
-
-    return () => {
-      Chart.unregister(...registerables); // 登録解除
-    };
-  }, []);
-
-  const formatDataForChart = () => {
-    if (!graphData) return { labels: [], datasets: [] };
-
-    return {
-      labels: graphData.map((data) => data.label),
+  const data = useMemo(
+    () => ({
+      labels: graphData ? graphData.map((data) => data.label) : [],
       datasets: [
         {
           label: "コンテンツ数",
-          data: graphData.map((data) => data.data),
-          backgroundColor: "rgba(255, 99, 132, 0.5)",
+          data: graphData ? graphData.map((data) => data.data) : [],
+          backgroundColor: [
+            "rgba(255, 99, 132, 0.2)",
+            "rgba(255, 159, 64, 0.2)",
+            "rgba(255, 205, 86, 0.2)",
+            "rgba(75, 192, 192, 0.2)",
+            "rgba(54, 162, 235, 0.2)",
+            "rgba(153, 102, 255, 0.2)",
+            "rgba(201, 203, 207, 0.2)",
+          ],
+          borderColor: [
+            "rgb(255, 99, 132)",
+            "rgb(255, 159, 64)",
+            "rgb(255, 205, 86)",
+            "rgb(75, 192, 192)",
+            "rgb(54, 162, 235)",
+            "rgb(153, 102, 255)",
+            "rgb(201, 203, 207)",
+          ],
+          borderWidth: 1,
         },
       ],
-    };
-  };
+    }),
+    [graphData]
+  );
+
+  const options = useMemo(
+    () => ({
+      maintainAspectRatio: false,
+      indexAxis: "y",
+      scales: {
+        y: {
+          ticks: {
+            beginAtZero: true,
+          },
+        },
+        x: {
+          ticks: {
+            stepSize: 1,
+          },
+        },
+      },
+    }),
+    []
+  );
+
+  useEffect(() => {
+    if (graphData && graphData.length > 0) {
+      if (chartRef && chartRef.current) {
+        chartRef.current.destroy();
+      }
+      const ctx = document.getElementById("myChart")?.getContext("2d");
+      if (ctx) {
+        chartRef.current = new Chart(ctx, {
+          type: "bar",
+          data: data,
+          options: options,
+        });
+      }
+    }
+  }, [graphData, data, options]);
 
   return (
-    <div className="w-3/4 mx-auto my-20">
-      {" "}
-      {/* グラフの幅を調整 */}
-      {graphData && (
-        <Bar
-          height={70}
-          options={{
-            responsive: true,
-            plugins: {
-              legend: {
-                position: "top",
-              },
-              title: {
-                display: true,
-                text: "カテゴリー別コンテンツ数",
-              },
-            },
-            scales: {
-              x: {
-                ticks: {
-                  stepSize: 1, // 目盛りの間隔
-                },
-              },
-            },
-            indexAxis: "y", // 棒グラフの向きをy軸方向に設定
-            elements: {
-              bar: {
-                borderWidth: 1, // 棒の枠線の幅を設定
-                borderRadius: 10, // 棒の角の丸みを設定
-              },
-            },
-          }}
-          data={formatDataForChart()}
-        />
-      )}
-    </div>
+    <Bar
+      id="myChart"
+      data={data}
+      options={options}
+      width={500}
+      height={800}
+      ref={chartRef}
+    />
   );
 }
