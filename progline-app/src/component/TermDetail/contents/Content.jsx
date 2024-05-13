@@ -17,7 +17,7 @@ export default function Content({ contents, updateContents }) {
   };
 
   return (
-    <div className="container grid grid-cols-5 gap-4 mx-auto mt-3">
+    <div className="grid  grid-cols-1 min-[440px]:grid-cols-2 min-[600px]:grid-cols-3 min-[800px]:grid-cols-4 min-[1030px]:grid-cols-5 gap-4 mt-3">
       {contents &&
         contents.map((content) => (
           <div

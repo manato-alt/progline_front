@@ -163,13 +163,13 @@ export default function TermDetail() {
           {isTemplate ? (
             <>
               <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
-                テンプレート
+                <p className="text-sm min-[500px]:text-base">テンプレート</p>
               </button>
               <button
                 onClick={toggleTemplate}
                 className="bg-blue-200 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
               >
-                カスタム
+                <p className="text-sm min-[500px]:text-base">カスタム</p>
               </button>
             </>
           ) : (
@@ -179,10 +179,10 @@ export default function TermDetail() {
                 onClick={toggleTemplate}
                 className="bg-blue-200 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
               >
-                テンプレート
+                <p className="text-sm min-[500px]:text-base">テンプレート</p>
               </button>
               <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
-                カスタム
+                <p className="text-sm min-[500px]:text-base">カスタム</p>
               </button>
             </>
           )}

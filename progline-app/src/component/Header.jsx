@@ -25,7 +25,7 @@ export default function Header() {
                 <p>共有</p>
               </button>
 
-              <Dropdown>
+              <Dropdown className="z-40">
                 <Dropdown.Toggle className="mr-2">
                   <UserInfo />
                 </Dropdown.Toggle>

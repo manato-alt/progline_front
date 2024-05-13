@@ -97,7 +97,7 @@ export default function Terms() {
         </p>
       </div>
       <div>
-        <div className="my-5 p-5 ml-4">
+        <div className="my-5 p-5 ml-4  min-[1300px]:mx-32">
           <div className="flex justify-between items-center mb-3">
             <div className="font-bold">登録したカテゴリ</div>
             <div>
