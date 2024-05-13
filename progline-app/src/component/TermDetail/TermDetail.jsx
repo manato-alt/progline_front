@@ -111,29 +111,29 @@ export default function TermDetail() {
 
   return (
     <div>
-      <div className="flex items-center py-3 mx-32">
+      <div className="flex items-center py-3 mx-6  min-[550px]:mx-14 min-[970px]:mx-32">
         {category && (
           <div className="flex p-2 items-center">
-            <div className="w-14 h-14 mx-auto mr-4">
+            <div className="w-8 h-8 min-[550px]:w-14 min-[550px]:h-14 mx-auto mr-4">
               <img
                 src={category.image_url}
                 alt={category.name}
                 className="object-cover w-full h-full"
               />
             </div>
-            <div className="font-bold text-lg">
+            <div className="font-bold text-sm min-[350px]:text-base min-[550px]:text-lg">
               "{category.name}"に関する記録
             </div>
           </div>
         )}
       </div>
       <div className="p-5">
-        <div className="flex justify-between items-center mb-3 mx-32">
+        <div className="flex justify-between items-center mb-3 mx-4 min-[550px]:mx-14 min-[970px]:mx-32">
           <div className="font-bold">登録した媒体</div>
           <div>
             <button
               onClick={handleShow}
-              className="bg-gray-300 py-2 px-4 rounded-lg font-semibold transition-colors hover:bg-gray-400"
+              className="text-sm min-[700px]:text-base bg-gray-300 py-2 px-4 rounded-lg font-semibold transition-colors hover:bg-gray-400"
             >
               媒体を追加
             </button>
@@ -163,13 +163,13 @@ export default function TermDetail() {
           {isTemplate ? (
             <>
               <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
-                テンプレート
+                <p className="text-sm min-[500px]:text-base">テンプレート</p>
               </button>
               <button
                 onClick={toggleTemplate}
                 className="bg-blue-200 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
               >
-                カスタム
+                <p className="text-sm min-[500px]:text-base">カスタム</p>
               </button>
             </>
           ) : (
@@ -179,10 +179,10 @@ export default function TermDetail() {
                 onClick={toggleTemplate}
                 className="bg-blue-200 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
               >
-                テンプレート
+                <p className="text-sm min-[500px]:text-base">テンプレート</p>
               </button>
               <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
-                カスタム
+                <p className="text-sm min-[500px]:text-base">カスタム</p>
               </button>
             </>
           )}

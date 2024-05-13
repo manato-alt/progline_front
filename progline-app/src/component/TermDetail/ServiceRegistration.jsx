@@ -112,11 +112,14 @@ export default function ServiceRegistration({
 
   return (
     <div>
-      <div className="grid grid-cols-4 gap-4 mx-32">
+      <div className="grid grid-cols-1 min-[350px]:grid-cols-2 min-[820px]:grid-cols-3 min-[1200px]:grid-cols-4 min-[1450px]:grid-cols-5 min-[1880px]:grid-cols-6 gap-4 mx-4 min-[550px]:mx-14 min-[970px]:mx-32">
         {registrationServices.map((registrationService) => (
-          <div key={generateUUID()} className="relative">
+          <div
+            key={generateUUID()}
+            className="relative min-[600px]:w-[14rem] min-[1650px]:w-[16.5rem]"
+          >
             <div
-              className={`p-6 cursor-pointer hover:bg-blue-200 flex items-center justify-center ${
+              className={` min-[600px]:w-[14rem] min-[1650px]:w-[16.5rem] p-5 cursor-pointer hover:bg-blue-200 flex items-center justify-center ${
                 selectedService === registrationService
                   ? "bg-blue-200"
                   : "bg-slate-100"
@@ -135,7 +138,7 @@ export default function ServiceRegistration({
               {!registrationService.image_url && (
                 <MediaIcon name={registrationService.name} />
               )}
-              <p className="text-sm text-center font-bold ml-2">
+              <p className="text-sm text-center font-bold ml-2  overflow-hidden">
                 {registrationService.name}
               </p>
             </div>
@@ -185,13 +188,17 @@ export default function ServiceRegistration({
                   isTemplate ? (
                     <>
                       <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
-                        テンプレート
+                        <p className="text-sm min-[500px]:text-base">
+                          テンプレート
+                        </p>
                       </button>
                       <button
                         onClick={toggleTemplate}
                         className="bg-blue-200 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
                       >
-                        カスタム
+                        <p className="text-sm min-[500px]:text-base">
+                          カスタム
+                        </p>
                       </button>
                     </>
                   ) : (
@@ -201,10 +208,14 @@ export default function ServiceRegistration({
                         onClick={toggleTemplate}
                         className="bg-blue-200 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
                       >
-                        テンプレート
+                        <p className="text-sm min-[500px]:text-base">
+                          テンプレート
+                        </p>
                       </button>
                       <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
-                        カスタム
+                        <p className="text-sm min-[500px]:text-base">
+                          カスタム
+                        </p>
                       </button>
                     </>
                   )

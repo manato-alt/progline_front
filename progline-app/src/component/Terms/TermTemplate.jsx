@@ -45,25 +45,27 @@ export default function TermTemplate({
     <div>
       {error && <div className="text-red-500">{error}</div>}{" "}
       <div
-        className="grid grid-cols-4 gap-4 border p-4 overflow-auto"
+        className="grid grid-cols-2 min-[400px]:grid-cols-3 min-[680px]:grid-cols-4 gap-4 border p-4 overflow-auto"
         style={{ maxHeight: "500px" }}
       >
         {categories.map((category) => (
           <div
             key={category.id}
-            className={`rounded-md p-4 overflow-hidden cursor-pointer hover:bg-blue-200 ${
+            className={`w-20 h-20 min-[860px]:w-24 min-[860px]:h-24 rounded-md p-4 overflow-hidden cursor-pointer hover:bg-blue-200 ${
               category.id === selectedCategory ? "bg-blue-200" : "bg-slate-100"
             }`}
             onClick={() => handleCategoryClick(category.id)} // カテゴリをクリックしたときのハンドラーを追加
           >
-            <div className="w-8 h-8 mx-auto">
+            <div className="w-5 h-5 min-[860px]:w-8 min-[860px]:h-8 mx-auto">
               <img
                 src={category.image_url}
                 alt={category.name}
                 className="object-cover w-full h-full"
               />
             </div>
-            <p className="text-sm text-center mt-2">{category.name}</p>
+            <p className="text-xs min-[860px]:text-sm text-center mt-2">
+              {category.name}
+            </p>
           </div>
         ))}
       </div>

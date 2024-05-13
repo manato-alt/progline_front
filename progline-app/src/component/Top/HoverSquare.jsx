@@ -34,7 +34,7 @@ export default function HoverSquare({
   }
   return (
     <div
-      className={`w-48 h-48 rounded-lg m-2 flex justify-center cursor-pointer ${
+      className={`rounded-lg my-1 flex justify-center cursor-pointer w-[6rem] h-[6rem] md:w-28 md:h-28 lg:w-48 lg:h-48 ${
         isHovered ? "bg-white border-2" : "bg-gray-100"
       }`}
       onMouseEnter={() => handleMouseEnter(id)}
