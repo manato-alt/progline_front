@@ -4,7 +4,7 @@ import detailImage from "../../images/コンテンツ.png";
 export default function ElementC() {
   return (
     <div className="flex flex-col items-center m-3 lg:items-start">
-      <div class="bg-yellow-100 rounded-lg w-10 h-10 flex items-center justify-center">
+      <div className="bg-yellow-100 rounded-lg w-10 h-10 flex items-center justify-center">
         <img
           src={detailImage}
           alt="コンテンツアイコン"
