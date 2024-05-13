@@ -4,7 +4,7 @@ import platformImage from "../../images/媒体.png";
 export default function ElementB() {
   return (
     <div className="flex flex-col items-center m-3 lg:items-start">
-      <div class="bg-rose-100 rounded-lg w-10 h-10 flex items-center justify-center">
+      <div className="bg-rose-100 rounded-lg w-10 h-10 flex items-center justify-center">
         <img
           src={platformImage}
           alt="プラットフォームアイコン"

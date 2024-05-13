@@ -4,7 +4,7 @@ import visualizationImage from "../../images/可視化.png";
 export default function ElementD() {
   return (
     <div className="flex flex-col items-center m-3 lg:items-start">
-      <div class="bg-indigo-100 rounded-lg w-10 h-10 flex items-center justify-center">
+      <div className="bg-indigo-100 rounded-lg w-10 h-10 flex items-center justify-center">
         <img
           src={visualizationImage}
           alt="可視化アイコン"
