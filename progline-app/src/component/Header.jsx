@@ -1,16 +1,27 @@
-import React from "react";
+import React, { useRef, useCallback } from "react";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { FaShareNodes } from "react-icons/fa6";
 import { GoTriangleDown } from "react-icons/go";
-import { Dropdown } from "react-daisyui";
+import { Dropdown, Modal, Button } from "react-daisyui";
 import { PiSignOutBold } from "react-icons/pi";
 import { FcGoogle } from "react-icons/fc";
 import axios from "axios";
+import ShareModal from "./Share/ShareModal";
 
 export default function Header() {
   const [user] = useAuthState(auth);
+  const ref = useRef(null);
+
+  const handleShow = useCallback(() => {
+    ref.current?.showModal();
+  }, [ref]);
+
+  const handleCloseModal = () => {
+    ref.current?.close();
+  };
+
   return (
     <header className="bg-gray-800 py-4">
       <div className="container mx-auto flex justify-between items-center">
@@ -20,7 +31,10 @@ export default function Header() {
         <div className="text-white text-lg">
           {user ? (
             <div className="flex items-center">
-              <button className="hidden sm:flex text-white bg-blue-500 hover:bg-blue-600 py-1 px-4 rounded items-center mt-1 mr-2">
+              <button
+                className="hidden sm:flex text-white bg-blue-500 hover:bg-blue-600 py-1 px-4 rounded items-center mt-1 mr-2"
+                onClick={handleShow}
+              >
                 <FaShareNodes className="mr-1" />
                 <p>共有</p>
               </button>
@@ -42,7 +56,10 @@ export default function Header() {
                   </div>
                   <div className="border my-2 sm:hidden"></div>
                   <Dropdown.Item className="sm:hidden">
-                    <button className="flex items-center text-black">
+                    <button
+                      className="flex items-center text-black"
+                      onClick={handleShow}
+                    >
                       <FaShareNodes className="mr-2" />
                       <p>共有</p>
                     </button>
@@ -59,6 +76,22 @@ export default function Header() {
           )}
         </div>
       </div>
+      <Modal ref={ref}>
+        <form method="dialog">
+          <Button
+            size="sm"
+            color="ghost"
+            shape="circle"
+            className="absolute right-2 top-2"
+          >
+            x
+          </Button>
+        </form>
+        <Modal.Header className="font-bold">あああ</Modal.Header>
+        <Modal.Body>
+          <ShareModal />
+        </Modal.Body>
+      </Modal>
     </header>
   );
 }
