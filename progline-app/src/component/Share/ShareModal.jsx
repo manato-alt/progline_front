@@ -7,6 +7,7 @@ export default function ShareModal() {
   const [publicName, setPublicName] = useState("");
   const [code, setCode] = useState("");
   const [user] = useAuthState(auth);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,7 +48,11 @@ export default function ShareModal() {
         );
         console.log(response.data);
       } catch (error) {
-        console.error("公開名の作成または更新エラー:", error);
+        if (error.response && error.response.status === 422) {
+          setError(error.response.data.error); // エラーメッセージを設定
+        } else {
+          setError("公開名の作成または更新エラー:" + error.message); // エラーメッセージを設定
+        }
       }
     }
   };
@@ -60,6 +65,7 @@ export default function ShareModal() {
           "http://localhost:3010/shared_codes/create_code",
           {
             user_id: user.uid,
+            public_name: auth.currentUser.displayName,
           }
         );
         setCode(response.data.shared_code.code);
@@ -90,6 +96,8 @@ export default function ShareModal() {
 
   return (
     <div className="p-4">
+      {error && <div className="text-red-500 mb-1">{error}</div>}{" "}
+      {/* エラーメッセージの表示 */}
       <div className="flex">
         <label htmlFor="publicName" className="mr-2">
           現在の公開名：
