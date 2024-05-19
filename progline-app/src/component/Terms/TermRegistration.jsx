@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import { Dropdown, Modal, Button } from "react-daisyui";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { CiEdit } from "react-icons/ci";
@@ -15,6 +15,7 @@ export default function TermRegistration({
     return uuidv4();
   };
   const ref = useRef(null);
+  const [errorMessages, setErrorMessages] = useState([]);
 
   const handleDelete = async (categoryId) => {
     try {
@@ -22,10 +23,14 @@ export default function TermRegistration({
       await axios.delete(`http://localhost:3010/categories/${categoryId}`);
       console.log("カテゴリーが削除されました");
       updateRegistrationCategories();
-      // 成功した場合の処理をここに記述
+      setErrorMessages([]); // エラーメッセージをクリア
     } catch (error) {
       console.error("カテゴリーの削除中にエラーが発生しました:", error);
-      // エラー時の処理をここに記述
+      if (error.response && error.response.data && error.response.data.error) {
+        setErrorMessages([error.response.data.error]);
+      } else {
+        setErrorMessages(["カテゴリーの削除中にエラーが発生しました"]);
+      }
     }
   };
 
@@ -39,6 +44,13 @@ export default function TermRegistration({
   return (
     <div>
       <div className="grid grid-cols-2 min-[300px]:grid-cols-3 min-[400px]:grid-cols-4 min-[500px]:grid-cols-5 sm:grid-cols-6 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-8 2xl:grid-cols-10">
+        {errorMessages.length > 0 && (
+          <div className="text-red-500 mt-4">
+            {errorMessages.map((message, index) => (
+              <p key={index}>{message}</p>
+            ))}
+          </div>
+        )}
         {registrationCategories.map((registrationCategory) => (
           <div key={generateUUID()} className="relative w-20 md:w-28 mr-2 mt-2">
             <Link
