@@ -1,15 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 
-export default function SearchForm() {
+export default function SearchForm({ onSearch }) {
+  const [shareCode, setShareCode] = useState("");
+
+  const handleSearch = () => {
+    if (onSearch && shareCode) {
+      onSearch(shareCode);
+    }
+  };
+
   return (
     <div className="flex justify-center items-center mt-7">
       <div className="relative w-1/2 sm:w-2/5">
         <input
           type="text"
           placeholder="共有コードを入力"
+          value={shareCode}
+          onChange={(e) => setShareCode(e.target.value)}
           className="border border-gray-300 bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-none w-full"
         />
-        <button className="absolute right-0 top-0 mt-3 mr-4">
+        <button
+          className="absolute right-0 top-0 mt-3 mr-4"
+          onClick={handleSearch}
+        >
           <svg
             className="h-4 w-4 fill-current"
             xmlns="http://www.w3.org/2000/svg"
