@@ -14,7 +14,6 @@ export default function Top() {
   const [hoveredImage, setHoveredImage] = useState("A");
   const [lastHoveredImage, setLastHoveredImage] = useState(null);
   const [user] = useAuthState(auth);
-  const [publicName, setPublicName] = useState(""); // 公開名の状態追加
   const [searchResults, setSearchResults] = useState([]); // 検索結果の状態追加
   const [searchError, setSearchError] = useState(""); // エラーメッセージの状態追加
   const dropdownRef = useRef(null); // ドロップダウンのrefを追加

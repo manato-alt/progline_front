@@ -220,7 +220,7 @@ export default function ServiceRegistration({
                     </>
                   )
                 ) : (
-                  <p>aaa</p>
+                  <p>サービスの追加は利用できません</p>
                 )}
               </Modal.Header>
               <Modal.Body>
