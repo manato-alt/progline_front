@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 import SearchForm from "./SearchForm";
 import myImage from "../../images/toppage.jpg";
 import Square from "./HoverSquare";
@@ -7,12 +9,15 @@ import { FcGoogle } from "react-icons/fc";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
-import axios from "axios";
 
 export default function Top() {
   const [hoveredImage, setHoveredImage] = useState("A");
   const [lastHoveredImage, setLastHoveredImage] = useState(null);
   const [user] = useAuthState(auth);
+  const [publicName, setPublicName] = useState(""); // 公開名の状態追加
+  const [searchResults, setSearchResults] = useState([]); // 検索結果の状態追加
+  const [searchError, setSearchError] = useState(""); // エラーメッセージの状態追加
+  const dropdownRef = useRef(null); // ドロップダウンのrefを追加
 
   const handleMouseEnter = (image) => {
     setLastHoveredImage(null);
@@ -23,6 +28,36 @@ export default function Top() {
     setLastHoveredImage(hoveredImage);
     setHoveredImage(null);
   };
+
+  // シェアコードを検索する関数
+  const searchShareCode = async (code) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3010/shared_codes/search",
+        { code }
+      );
+      setSearchResults([{ public_name: response.data.public_name, code }]);
+      setSearchError(""); // エラーをクリア
+    } catch (error) {
+      console.error("シェアコードの検索エラー:", error);
+      setSearchResults([]); // 検索結果をクリア
+      setSearchError("シェアコードが見つかりません");
+    }
+  };
+
+  // クリック外しでドロップダウンを閉じる
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setSearchResults([]);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   return (
     <div className="py-12">
@@ -38,8 +73,31 @@ export default function Top() {
           </p>
         </div>
       </div>
-      <div>
-        <SearchForm />
+      <div className="relative">
+        <SearchForm onSearch={searchShareCode} />
+        {/* 検索結果のドロップダウン表示 */}
+        {searchResults.length > 0 && (
+          <div
+            ref={dropdownRef}
+            className="absolute left-1/2 transform -translate-x-1/2 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-10 w-1/2 sm:w-2/5"
+          >
+            {searchResults.map((result, index) => (
+              <Link
+                to={`/shareTerms/${result.code}`}
+                key={index}
+                className="block p-2 hover:bg-gray-100 cursor-pointer"
+              >
+                {result.public_name}
+              </Link>
+            ))}
+          </div>
+        )}
+        {/* エラーメッセージの表示 */}
+        {searchError && (
+          <div className="mt-4 text-center text-red-500">
+            <p>{searchError}</p>
+          </div>
+        )}
       </div>
       {user ? null : (
         <div className="mt-5 flex justify-center">
@@ -80,9 +138,8 @@ export default function Top() {
 function SignInButton() {
   const signInWithGoogle = async () => {
     const result = await signInWithPopup(auth, provider);
-    const user = result.user; // resultからユーザー情報を取得
+    const user = result.user;
     addUserToDatabase(user.uid);
-    //firebaceを使ってGoogleでサインインする
   };
 
   return (
@@ -98,7 +155,6 @@ function SignInButton() {
 
 async function addUserToDatabase(uid) {
   try {
-    // RailsのAPIエンドポイントにUIDを送信
     await axios.post("http://localhost:3010/users", { uid });
     console.log("UIDがRailsのAPIに送信されました");
   } catch (error) {
