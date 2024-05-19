@@ -14,21 +14,6 @@ export default function TermEdit({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessages([]);
-    let hasError = false;
-
-    // 名前が入力されていない場合のエラーチェック
-    if (!editedCategory.name.trim()) {
-      setErrorMessages((prevMessages) => [
-        ...prevMessages,
-        "名称を入力してください",
-      ]);
-      hasError = true;
-    }
-
-    if (hasError) {
-      // エラーがあればここで処理を中断
-      return;
-    }
 
     try {
       const formData = new FormData();
@@ -52,7 +37,17 @@ export default function TermEdit({
       closeModal();
     } catch (error) {
       console.error("カテゴリーの編集中にエラーが発生しました:", error);
-      // エラー時の処理
+      if (error.response && error.response.data && error.response.data.error) {
+        setErrorMessages((prevMessages) => [
+          ...prevMessages,
+          error.response.data.error,
+        ]);
+      } else {
+        setErrorMessages((prevMessages) => [
+          ...prevMessages,
+          "カテゴリーの編集中にエラーが発生しました",
+        ]);
+      }
     }
   };
 
@@ -68,6 +63,7 @@ export default function TermEdit({
       reader.readAsDataURL(file);
     }
   };
+
   return (
     <div>
       <form onSubmit={handleSubmit} className="flex flex-col">

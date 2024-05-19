@@ -28,18 +28,8 @@ export default function TermCustom({
       hasError = true;
     }
 
-    // 名前が入力されていない場合のエラーチェック
-    if (!imageName.trim()) {
-      setErrorMessages((prevMessages) => [
-        ...prevMessages,
-        "名称を入力してください",
-      ]);
-      hasError = true;
-    }
-
     if (hasError) {
-      // エラーがあればここで処理を中断
-      return;
+      return; // エラーがあればここで処理を中断
     }
 
     try {
@@ -55,13 +45,24 @@ export default function TermCustom({
       console.log("登録が成功しました");
       closeModal();
       updateRegistrationCategories();
-    } catch (error) {
-      console.error("登録中にエラーが発生しました:", error);
-    } finally {
-      // フォーム送信後に入力値をクリアする
+
+      // フォーム送信が成功した場合に入力値をクリアする
       setImageFile(null);
       setImageName("");
       setImagePreview(null);
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.error) {
+        setErrorMessages((prevMessages) => [
+          ...prevMessages,
+          error.response.data.error,
+        ]);
+      } else {
+        setErrorMessages((prevMessages) => [
+          ...prevMessages,
+          "登録中にエラーが発生しました",
+        ]);
+      }
+      console.error("登録中にエラーが発生しました:", error);
     }
   };
 
