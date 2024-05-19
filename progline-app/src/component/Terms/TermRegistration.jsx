@@ -89,7 +89,7 @@ export default function TermRegistration({
                   x
                 </Button>
               </form>
-              <Modal.Header className="font-bold">あああ</Modal.Header>
+              <Modal.Header className="font-bold">用語編集</Modal.Header>
               <Modal.Body>
                 <TermEdit
                   closeModal={handleCloseModal}

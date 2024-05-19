@@ -18,10 +18,6 @@ export default function Header() {
     ref.current?.showModal();
   }, [ref]);
 
-  const handleCloseModal = () => {
-    ref.current?.close();
-  };
-
   return (
     <header className="bg-gray-800 py-4">
       <div className="container mx-auto flex justify-between items-center">
@@ -87,7 +83,7 @@ export default function Header() {
             x
           </Button>
         </form>
-        <Modal.Header className="font-bold">あああ</Modal.Header>
+        <Modal.Header className="font-bold">共有</Modal.Header>
         <Modal.Body>
           <ShareModal />
         </Modal.Body>
