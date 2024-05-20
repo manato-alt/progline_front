@@ -15,6 +15,7 @@ export default function Terms() {
   const [isTemplate, setIsTemplate] = useState(true);
   const ref = useRef(null);
   const [user] = useAuthState(auth);
+  const [errorMessages, setErrorMessages] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,6 +26,17 @@ export default function Terms() {
         setCategories(res.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.errors
+        ) {
+          setErrorMessages(error.response.data.errors.join(", "));
+        } else {
+          setErrorMessages(
+            "テンプレートカテゴリーの取得中にエラーが発生しました"
+          );
+        }
       }
     };
 
@@ -44,6 +56,15 @@ export default function Terms() {
           setRegistrationCategories(res.data);
         } catch (error) {
           console.error("Error fetching registrationCategories:", error);
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.errors
+          ) {
+            setErrorMessages(error.response.data.errors.join(", "));
+          } else {
+            setErrorMessages("カテゴリーの取得中にエラーが発生しました");
+          }
         }
       }
     };
@@ -73,11 +94,27 @@ export default function Terms() {
       setRegistrationCategories(res.data);
     } catch (error) {
       console.error("Error fetching registrationCategories:", error);
+      if (error.response && error.response.data && error.response.data.errors) {
+        setErrorMessages(error.response.data.errors.join(", "));
+      } else {
+        setErrorMessages("カテゴリーの取得中にエラーが発生しました");
+      }
     }
   };
 
   return (
     <div>
+      {errorMessages !== null &&
+        // errorMessages が文字列か配列かで処理を分岐
+        (typeof errorMessages === "string" ? (
+          <p className="text-red-500 mb-4">{errorMessages}</p>
+        ) : (
+          errorMessages.map((message, index) => (
+            <p key={index} className="text-red-500 mb-4">
+              {message}
+            </p>
+          ))
+        ))}
       <div className="flex flex-col bg-[#f8f9fb] justify-center items-center  pt-5 sm:flex-row">
         <p className="text-xl mb-1 text-center mt-2 text-sky-500 font-bold sm:hidden">
           技術の道しるべ、

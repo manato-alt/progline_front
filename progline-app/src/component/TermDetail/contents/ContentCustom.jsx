@@ -63,6 +63,11 @@ export default function ContentCustom({
       console.log("登録が成功しました");
     } catch (error) {
       console.error("登録中にエラーが発生しました:", error);
+      if (error.response && error.response.data && error.response.data.errors) {
+        setErrorMessages(error.response.data.errors.join(", "));
+      } else {
+        setErrorMessages("登録中にエラーが発生しました");
+      }
     }
   };
 
@@ -82,11 +87,17 @@ export default function ContentCustom({
   return (
     <div>
       <form onSubmit={handleSubmit} className="flex flex-col">
-        {errorMessages.map((message, index) => (
-          <p key={index} className="text-red-500 mb-4">
-            {message}
-          </p>
-        ))}
+        {errorMessages !== null &&
+          // errorMessages が文字列か配列かで処理を分岐
+          (typeof errorMessages === "string" ? (
+            <p className="text-red-500 mb-4">{errorMessages}</p>
+          ) : (
+            errorMessages.map((message, index) => (
+              <p key={index} className="text-red-500 mb-4">
+                {message}
+              </p>
+            ))
+          ))}
         <label htmlFor="imageInput" className="mb-2">
           画像:
         </label>

@@ -18,6 +18,7 @@ export default function TermDetail() {
   const ref = useRef(null);
   const [user] = useAuthState(auth);
   const [registrationServices, setRegistrationServices] = useState([]);
+  const [errorMessages, setErrorMessages] = useState([]);
 
   function MediaIcon({ name }) {
     switch (name) {
@@ -49,6 +50,15 @@ export default function TermDetail() {
           setRegistrationServices(res.data);
         } catch (error) {
           console.error("Error fetching registrationServices:", error);
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.error
+          ) {
+            setErrorMessages([error.response.data.error]);
+          } else {
+            setErrorMessages(["サービスの取得中にエラーが発生しました"]);
+          }
         }
       }
     };
@@ -65,6 +75,15 @@ export default function TermDetail() {
         setCategory(response.data);
       } catch (error) {
         console.error("Error fetching category:", error);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.error
+        ) {
+          setErrorMessages([error.response.data.error]);
+        } else {
+          setErrorMessages(["カテゴリーの取得中にエラーが発生しました"]);
+        }
       }
     };
 
@@ -78,6 +97,17 @@ export default function TermDetail() {
         setServices(res.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.error
+        ) {
+          setErrorMessages([error.response.data.error]);
+        } else {
+          setErrorMessages([
+            "テンプレートサービスの取得中にエラーが発生しました",
+          ]);
+        }
       }
     };
 
@@ -106,11 +136,27 @@ export default function TermDetail() {
       setRegistrationServices(res.data);
     } catch (error) {
       console.error("Error fetching registrationServices:", error);
+      if (error.response && error.response.data && error.response.data.error) {
+        setErrorMessages([error.response.data.error]);
+      } else {
+        setErrorMessages(["サービスの取得中にエラーが発生しました"]);
+      }
     }
   };
 
   return (
     <div>
+      {errorMessages !== null &&
+        // errorMessages が文字列か配列かで処理を分岐
+        (typeof errorMessages === "string" ? (
+          <p className="text-red-500 mb-4">{errorMessages}</p>
+        ) : (
+          errorMessages.map((message, index) => (
+            <p key={index} className="text-red-500 mb-4">
+              {message}
+            </p>
+          ))
+        ))}{" "}
       <div className="flex items-center py-3 mx-6  min-[550px]:mx-14 min-[970px]:mx-32">
         {category && (
           <div className="flex p-2 items-center">

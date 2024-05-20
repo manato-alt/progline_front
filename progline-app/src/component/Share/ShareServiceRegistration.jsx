@@ -9,6 +9,7 @@ export default function ShareServiceRegistration({ services, MediaIcon }) {
   };
   const [selectedService, setSelectedService] = useState(null);
   const [contents, setContents] = useState(null);
+  const [errorMessages, setErrorMessages] = useState([]);
 
   useEffect(() => {
     if (services.length > 0) {
@@ -33,6 +34,15 @@ export default function ShareServiceRegistration({ services, MediaIcon }) {
         }
       } catch (error) {
         console.error("Error fetching contents:", error);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.error
+        ) {
+          setErrorMessages([error.response.data.error]);
+        } else {
+          setErrorMessages(["コンテンツの取得中にエラーが発生しました"]);
+        }
       }
     };
 
@@ -41,6 +51,18 @@ export default function ShareServiceRegistration({ services, MediaIcon }) {
 
   return (
     <div>
+      {errorMessages !== null &&
+        // errorMessages が文字列か配列かで処理を分岐
+        (typeof errorMessages === "string" ? (
+          <p className="text-red-500 mb-4">{errorMessages}</p>
+        ) : (
+          errorMessages.map((message, index) => (
+            <p key={index} className="text-red-500 mb-4">
+              {message}
+            </p>
+          ))
+        ))}
+
       <div className="grid grid-cols-1 min-[350px]:grid-cols-2 min-[820px]:grid-cols-3 min-[1200px]:grid-cols-4 min-[1450px]:grid-cols-5 min-[1880px]:grid-cols-6 gap-4 mx-4 min-[550px]:mx-14 min-[970px]:mx-32">
         {services.map((service) => (
           <div
@@ -67,7 +89,6 @@ export default function ShareServiceRegistration({ services, MediaIcon }) {
                 {service.name}
               </p>
             </div>
-            <div className="absolute right-3 top-5 font-bold">︙</div>
           </div>
         ))}
       </div>

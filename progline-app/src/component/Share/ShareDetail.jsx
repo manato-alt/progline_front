@@ -9,6 +9,7 @@ export default function ShareDetail() {
   const [category, setCategory] = useState(null);
   const { categoryId } = useParams();
   const [services, setServices] = useState([]);
+  const [errorMessages, setErrorMessages] = useState([]);
 
   function MediaIcon({ name }) {
     switch (name) {
@@ -43,6 +44,15 @@ export default function ShareDetail() {
           setServices(res.data);
         } catch (error) {
           console.error("Error fetching Services:", error);
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.error
+          ) {
+            setErrorMessages([error.response.data.error]);
+          } else {
+            setErrorMessages(["サービスの取得中にエラーが発生しました"]);
+          }
         }
       }
     };
@@ -67,6 +77,18 @@ export default function ShareDetail() {
 
   return (
     <div>
+      {errorMessages !== null &&
+        // errorMessages が文字列か配列かで処理を分岐
+        (typeof errorMessages === "string" ? (
+          <p className="text-red-500 mb-4">{errorMessages}</p>
+        ) : (
+          errorMessages.map((message, index) => (
+            <p key={index} className="text-red-500 mb-4">
+              {message}
+            </p>
+          ))
+        ))}
+
       <div className="flex items-center py-3 mx-6  min-[550px]:mx-14 min-[970px]:mx-32">
         {category && (
           <div className="flex p-2 items-center">

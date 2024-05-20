@@ -24,6 +24,7 @@ export default function ServiceRegistration({
   const [isTemplate, setIsTemplate] = useState(true);
   const [selectedService, setSelectedService] = useState(null);
   const [contents, setContents] = useState(null);
+  const [errorMessages, setErrorMessages] = useState([]);
 
   useEffect(() => {
     if (registrationServices.length > 0) {
@@ -57,13 +58,18 @@ export default function ServiceRegistration({
 
   const handleDelete = async (serviceId) => {
     try {
-      // カテゴリーを削除するリクエストを送信
       await axios.delete(`http://localhost:3010/services/${serviceId}`);
       console.log("サービスが削除されました");
       updateRegistrationServices();
       // 成功した場合の処理をここに記述
     } catch (error) {
       console.error("サービスの削除中にエラーが発生しました:", error);
+      if (error.response && error.response.data && error.response.data.error) {
+        setErrorMessages([error.response.data.error]);
+      } else {
+        setErrorMessages(["サービスの削除中にエラーが発生しました"]);
+      }
+
       // エラー時の処理をここに記述
     }
   };
@@ -90,6 +96,15 @@ export default function ServiceRegistration({
         }
       } catch (error) {
         console.error("Error fetching contents:", error);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.error
+        ) {
+          setErrorMessages([error.response.data.error]);
+        } else {
+          setErrorMessages(["コンテンツの取得中にエラーが発生しました"]);
+        }
       }
     };
 
@@ -107,11 +122,27 @@ export default function ServiceRegistration({
       setContents(response.data);
     } catch (error) {
       console.error("Error fetching contents:", error);
+      if (error.response && error.response.data && error.response.data.error) {
+        setErrorMessages([error.response.data.error]);
+      } else {
+        setErrorMessages(["コンテンツの取得中にエラーが発生しました"]);
+      }
     }
   };
 
   return (
     <div>
+      {errorMessages !== null &&
+        // errorMessages が文字列か配列かで処理を分岐
+        (typeof errorMessages === "string" ? (
+          <p className="text-red-500 mb-4">{errorMessages}</p>
+        ) : (
+          errorMessages.map((message, index) => (
+            <p key={index} className="text-red-500 mb-4">
+              {message}
+            </p>
+          ))
+        ))}{" "}
       <div className="grid grid-cols-1 min-[350px]:grid-cols-2 min-[820px]:grid-cols-3 min-[1200px]:grid-cols-4 min-[1450px]:grid-cols-5 min-[1880px]:grid-cols-6 gap-4 mx-4 min-[550px]:mx-14 min-[970px]:mx-32">
         {registrationServices.map((registrationService) => (
           <div

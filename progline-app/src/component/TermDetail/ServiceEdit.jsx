@@ -14,22 +14,6 @@ export default function ServiceEdit({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessages([]);
-    let hasError = false;
-
-    // 名前が入力されていない場合のエラーチェック
-    if (!editedService.name?.trim()) {
-      setErrorMessages((prevMessages) => [
-        ...prevMessages,
-        "名称を入力してください",
-      ]);
-      hasError = true;
-    }
-
-    if (hasError) {
-      // エラーがあればここで処理を中断
-      return;
-    }
-
     try {
       const formData = new FormData();
       if (imageFile) {
@@ -53,6 +37,12 @@ export default function ServiceEdit({
       closeModal();
     } catch (error) {
       console.error("サービスの編集中にエラーが発生しました:", error);
+      if (error.response && error.response.data && error.response.data.error) {
+        setErrorMessages([error.response.data.error]);
+      } else {
+        setErrorMessages(["サービスの編集中にエラーが発生しました"]);
+      }
+
       // エラー時の処理
     }
   };
@@ -73,11 +63,17 @@ export default function ServiceEdit({
   return (
     <div>
       <form onSubmit={handleSubmit} className="flex flex-col">
-        {errorMessages.map((message, index) => (
-          <p key={index} className="text-red-500 mb-4">
-            {message}
-          </p>
-        ))}
+        {errorMessages !== null &&
+          // errorMessages が文字列か配列かで処理を分岐
+          (typeof errorMessages === "string" ? (
+            <p className="text-red-500 mb-4">{errorMessages}</p>
+          ) : (
+            errorMessages.map((message, index) => (
+              <p key={index} className="text-red-500 mb-4">
+                {message}
+              </p>
+            ))
+          ))}{" "}
         <label htmlFor="editImageInput" className="mb-2">
           画像:
         </label>

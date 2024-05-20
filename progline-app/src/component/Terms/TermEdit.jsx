@@ -67,11 +67,17 @@ export default function TermEdit({
   return (
     <div>
       <form onSubmit={handleSubmit} className="flex flex-col">
-        {errorMessages.map((message, index) => (
-          <p key={index} className="text-red-500 mb-4">
-            {message}
-          </p>
-        ))}
+        {errorMessages !== null &&
+          // errorMessages が文字列か配列かで処理を分岐
+          (typeof errorMessages === "string" ? (
+            <p className="text-red-500 mb-4">{errorMessages}</p>
+          ) : (
+            errorMessages.map((message, index) => (
+              <p key={index} className="text-red-500 mb-4">
+                {message}
+              </p>
+            ))
+          ))}{" "}
         <label htmlFor="editImageInput" className="mb-2">
           画像:
         </label>
