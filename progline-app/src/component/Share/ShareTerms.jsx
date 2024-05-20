@@ -8,6 +8,7 @@ import ShareTermGraph from "./ShareTermGraph";
 export default function ShareTerms() {
   const { shareCode } = useParams();
   const [categories, setCategories] = useState([]);
+  const [errorMessages, setErrorMessages] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,6 +26,15 @@ export default function ShareTerms() {
           setCategories(res.data);
         } catch (error) {
           console.error("Error fetching Categories:", error);
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.error
+          ) {
+            setErrorMessages([error.response.data.error]);
+          } else {
+            setErrorMessages(["カテゴリー取得中にエラーが発生しました"]);
+          }
         }
       }
     };
@@ -52,6 +62,18 @@ export default function ShareTerms() {
           IT特化の学習メモリアル
         </p>
       </div>
+      {errorMessages !== null &&
+        // errorMessages が文字列か配列かで処理を分岐
+        (typeof errorMessages === "string" ? (
+          <p className="text-red-500 mb-4">{errorMessages}</p>
+        ) : (
+          errorMessages.map((message, index) => (
+            <p key={index} className="text-red-500 mb-4">
+              {message}
+            </p>
+          ))
+        ))}
+
       <div>
         <div className="my-5 p-5 ml-4  min-[1300px]:mx-32">
           <div className="flex justify-between items-center mb-3">

@@ -9,6 +9,7 @@ export default function TermGraph() {
   const [user] = useAuthState(auth);
   const chartRef = useRef(null);
   const chartInstanceRef = useRef(null); // Chart.jsインスタンスを格納するためのref
+  const [errorMessages, setErrorMessages] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +24,15 @@ export default function TermGraph() {
         }
       } catch (error) {
         console.error("グラフデータの取得エラー:", error);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.errors
+        ) {
+          setErrorMessages(error.response.data.errors.join(", "));
+        } else {
+          setErrorMessages("登録中にエラーが発生しました");
+        }
       }
     };
 
@@ -81,5 +91,20 @@ export default function TermGraph() {
     }
   }, [graphData]);
 
-  return <canvas id="myChart" width={500} height={800} ref={chartRef} />;
+  return (
+    <>
+      {errorMessages !== null &&
+        // errorMessages が文字列か配列かで処理を分岐
+        (typeof errorMessages === "string" ? (
+          <p className="text-red-500 mb-4">{errorMessages}</p>
+        ) : (
+          errorMessages.map((message, index) => (
+            <p key={index} className="text-red-500 mb-4">
+              {message}
+            </p>
+          ))
+        ))}{" "}
+      <canvas id="myChart" width={500} height={800} ref={chartRef} />
+    </>
+  );
 }

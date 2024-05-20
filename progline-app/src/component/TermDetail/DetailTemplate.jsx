@@ -10,7 +10,7 @@ export default function DetailTemplate({
   updateRegistrationServices,
 }) {
   const [selectedService, setSelectedService] = useState(null);
-  const [error, setError] = useState(null); // エラーステートの追加
+  const [errorMessages, setErrorMessages] = useState([]);
 
   const handleServiceClick = (serviceId) => {
     setSelectedService(serviceId);
@@ -30,12 +30,12 @@ export default function DetailTemplate({
       setSelectedService(null);
       closeModal();
       updateRegistrationServices();
-      setError(null);
+      setErrorMessages(null);
     } catch (error) {
       if (error.response && error.response.data && error.response.data.errors) {
-        setError(error.response.data.errors.join(", "));
+        setErrorMessages(error.response.data.errors.join(", "));
       } else {
-        setError("登録中にエラーが発生しました");
+        setErrorMessages("登録中にエラーが発生しました");
       }
     }
   };
@@ -59,8 +59,17 @@ export default function DetailTemplate({
 
   return (
     <div>
-      {error && <div className="text-red-500">{error}</div>}{" "}
-      {/* エラーメッセージの表示 */}
+      {errorMessages !== null &&
+        // errorMessages が文字列か配列かで処理を分岐
+        (typeof errorMessages === "string" ? (
+          <p className="text-red-500 mb-4">{errorMessages}</p>
+        ) : (
+          errorMessages.map((message, index) => (
+            <p key={index} className="text-red-500 mb-4">
+              {message}
+            </p>
+          ))
+        ))}{" "}
       <div
         className="grid grid-cols-2 gap-4 border p-4 overflow-auto"
         style={{ maxHeight: "500px" }}

@@ -14,22 +14,6 @@ export default function ContentTemplate({
     e.preventDefault();
 
     setErrorMessages([]);
-    let hasError = false; // エラーフラグを追加
-
-    // 名前が入力されていない場合のエラーチェック
-    if (!url.trim()) {
-      setErrorMessages((prevMessages) => [
-        ...prevMessages,
-        "urlを入力してください",
-      ]);
-      hasError = true;
-    }
-
-    if (hasError) {
-      // エラーがあればここで処理を中断
-      return;
-    }
-
     try {
       const formData = new FormData();
       formData.append("url", url);
@@ -45,6 +29,11 @@ export default function ContentTemplate({
       console.log("登録が成功しました");
     } catch (error) {
       console.error("登録中にエラーが発生しました:", error);
+      if (error.response && error.response.data && error.response.data.errors) {
+        setErrorMessages(error.response.data.errors.join(", "));
+      } else {
+        setErrorMessages("登録中にエラーが発生しました");
+      }
     } finally {
       // フォーム送信後に入力値をクリアする
       setUrl("");
@@ -54,11 +43,17 @@ export default function ContentTemplate({
   return (
     <div>
       <form onSubmit={handleSubmit} className="flex flex-col">
-        {errorMessages.map((message, index) => (
-          <p key={index} className="text-red-500 mb-4">
-            {message}
-          </p>
-        ))}
+        {errorMessages !== null &&
+          // errorMessages が文字列か配列かで処理を分岐
+          (typeof errorMessages === "string" ? (
+            <p className="text-red-500 mb-4">{errorMessages}</p>
+          ) : (
+            errorMessages.map((message, index) => (
+              <p key={index} className="text-red-500 mb-4">
+                {message}
+              </p>
+            ))
+          ))}
         <label htmlFor="url" className="mb-2">
           URLの記入ででプレビューを自動作成します
         </label>

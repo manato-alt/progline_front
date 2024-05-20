@@ -5,6 +5,7 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 export default function Content({ contents, updateContents }) {
   const [selectedContent, setSelectedContent] = useState(null);
+  const [errorMessages, setErrorMessages] = useState([]);
 
   const handleDelete = async (content_id) => {
     try {
@@ -13,11 +14,27 @@ export default function Content({ contents, updateContents }) {
       // 削除後にコンテンツを再取得して更新
     } catch (error) {
       console.error("Error deleting content:", error);
+      if (error.response && error.response.data && error.response.data.errors) {
+        setErrorMessages(error.response.data.errors.join(", "));
+      } else {
+        setErrorMessages("コンテントの削除中にエラーが発生しました");
+      }
     }
   };
 
   return (
     <div className="grid  grid-cols-1 min-[440px]:grid-cols-2 min-[600px]:grid-cols-3 min-[800px]:grid-cols-4 min-[1030px]:grid-cols-5 gap-4 mt-3">
+      {errorMessages !== null &&
+        // errorMessages が文字列か配列かで処理を分岐
+        (typeof errorMessages === "string" ? (
+          <p className="text-red-500 mb-4">{errorMessages}</p>
+        ) : (
+          errorMessages.map((message, index) => (
+            <p key={index} className="text-red-500 mb-4">
+              {message}
+            </p>
+          ))
+        ))}
       {contents &&
         contents.map((content) => (
           <div
