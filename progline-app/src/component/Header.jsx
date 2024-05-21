@@ -72,7 +72,7 @@ export default function Header() {
           )}
         </div>
       </div>
-      <Modal ref={ref}>
+      <Modal ref={ref} className="p-0">
         <form method="dialog">
           <Button
             size="sm"
@@ -83,7 +83,7 @@ export default function Header() {
             x
           </Button>
         </form>
-        <Modal.Header className="font-bold">共有</Modal.Header>
+        <Modal.Header className="p-0 m-0">{/* <p>公開名</p> */}</Modal.Header>
         <Modal.Body>
           <ShareModal />
         </Modal.Body>
