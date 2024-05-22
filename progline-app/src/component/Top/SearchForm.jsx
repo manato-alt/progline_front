@@ -14,7 +14,7 @@ export default function SearchForm({ onSearch }) {
       <div className="relative w-1/2 sm:w-2/5">
         <input
           type="text"
-          placeholder="共有コードを入力"
+          placeholder="共有コードを入力（ログイン不要）"
           value={shareCode}
           onChange={(e) => setShareCode(e.target.value)}
           className="border border-gray-300 bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-none w-full"

@@ -37,7 +37,7 @@ const CategoryProtectedRoute = ({ element: Component, ...rest }) => {
     return <div>Loading...</div>; // 認証情報やAPIレスポンスを取得中に表示するローディング画面
   }
 
-  return user && isAuthorized ? <Component {...rest} /> : <Navigate to="/" />;
+  return user && isAuthorized ? <Component {...rest} /> : <Navigate to="*" />;
 };
 
 export default CategoryProtectedRoute;
