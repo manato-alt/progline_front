@@ -34,7 +34,7 @@ const ShareProtectedRoute = ({ element: Component, ...rest }) => {
     return <div>Loading...</div>; // 認証情報やAPIレスポンスを取得中に表示するローディング画面
   }
 
-  return isAuthorized ? <Component {...rest} /> : <Navigate to="/" />;
+  return isAuthorized ? <Component {...rest} /> : <Navigate to="*" />;
 };
 
 export default ShareProtectedRoute;

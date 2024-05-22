@@ -10,7 +10,7 @@ const ProtectedRoute = ({ element: Component, ...rest }) => {
     return <div>Loading...</div>; // 認証情報を取得中に表示するローディング画面
   }
 
-  return user ? <Component {...rest} /> : <Navigate to="/" />;
+  return user ? <Component {...rest} /> : <Navigate to="*" />;
 };
 
 export default ProtectedRoute;

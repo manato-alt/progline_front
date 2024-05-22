@@ -44,24 +44,6 @@ export default function ShareTerms() {
 
   return (
     <div>
-      <div className="flex flex-col bg-[#f8f9fb] justify-center items-center  pt-5 sm:flex-row">
-        <p className="text-xl mb-1 text-center mt-2 text-sky-500 font-bold sm:hidden">
-          技術の道しるべ、
-          <br />
-          IT特化の学習メモリアル
-        </p>
-
-        <img
-          src={myImage}
-          alt="イラスト画像"
-          className="object-contain w-2/3 sm:w-1/3"
-        />
-        <p className="hidden text-sky-500 font-bold sm:flex sm:text-start md:text-2xl lg:text-3xl ">
-          技術の道しるべ、
-          <br />
-          IT特化の学習メモリアル
-        </p>
-      </div>
       {errorMessages !== null &&
         // errorMessages が文字列か配列かで処理を分岐
         (typeof errorMessages === "string" ? (
