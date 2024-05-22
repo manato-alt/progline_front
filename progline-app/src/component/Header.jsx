@@ -9,6 +9,8 @@ import { PiSignOutBold } from "react-icons/pi";
 import { FcGoogle } from "react-icons/fc";
 import axios from "axios";
 import ShareModal from "./Share/ShareModal";
+import logo from "../images/logo.png";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   const [user] = useAuthState(auth);
@@ -19,16 +21,20 @@ export default function Header() {
   }, [ref]);
 
   return (
-    <header className="bg-gray-800 py-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-white text-xl ml-4 font-bold lg:text-2xl">
-          Progline
-        </h1>
+    <header className="bg-white py-2 fixed top-0 left-0 w-full z-50 shadow-md">
+      <div className="flex justify-between items-center">
+        <Link to="/">
+          <img
+            src={logo}
+            alt="Logo"
+            className="w-32 min-[400px]:w-40 min-[600px]:w-56 mx-6"
+          />
+        </Link>
         <div className="text-white text-lg">
           {user ? (
             <div className="flex items-center">
               <button
-                className="hidden sm:flex text-white bg-blue-500 hover:bg-blue-600 py-1 px-4 rounded items-center mt-1 mr-2"
+                className="hidden sm:flex border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white py-1 px-4 rounded items-center mt-1 mr-2 transition duration-300 ease-in-out"
                 onClick={handleShow}
               >
                 <FaShareNodes className="mr-1" />
@@ -36,7 +42,7 @@ export default function Header() {
               </button>
 
               <Dropdown className="z-40">
-                <Dropdown.Toggle className="mr-2">
+                <Dropdown.Toggle className="mr-6">
                   <UserInfo />
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="w-[200px] absolute right-0 mt-1 border">
@@ -83,7 +89,7 @@ export default function Header() {
             x
           </Button>
         </form>
-        <Modal.Header className="p-0 m-0">{/* <p>公開名</p> */}</Modal.Header>
+        <Modal.Header className="p-0 m-0"></Modal.Header>
         <Modal.Body>
           <ShareModal />
         </Modal.Body>
@@ -103,10 +109,10 @@ function SignInButton() {
   return (
     <button
       onClick={signInWithGoogle}
-      className="flex items-center bg-white p-2 rounded-lg hover:bg-gray-200"
+      className="flex items-center border-2 border-cyan-500  hover:bg-cyan-500 p-2 rounded-lg mr-6 text-black hover:text-white "
     >
       <FcGoogle />
-      <p className="text-black text-sm ml-1">Login with Google</p>
+      <p className="text-base ml-1">Googleで登録</p>
     </button>
   );
 }
