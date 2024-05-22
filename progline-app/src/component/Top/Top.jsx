@@ -103,8 +103,12 @@ export default function Top() {
           <SignInButton />
         </div>
       )}
-      <div className="w-1/2 mx-auto mt-10">
-        <img src={myImage} alt="イラスト画像" className="object-contain" />
+      <div className="mt-10 flex justify-center">
+        <img
+          src={myImage}
+          alt="イラスト画像"
+          className="max-[500px]:w-4/5 max-[750px]:w-3/5"
+        />
       </div>
       <div>
         {/* 横並びの四角の要素 */}
