@@ -7,6 +7,9 @@ import Terms from "./component/Terms/Terms";
 import TermDetail from "./component/TermDetail/TermDetail";
 import ShareTerms from "./component/Share/ShareTerms";
 import ShareDetail from "./component/Share/ShareDetail";
+import ProtectedRoute from "./component/ProtectedRoute";
+import CategoryProtectedRoute from "./component/CategoryProtectedRoute";
+import ShareProtectedRoute from "./component/ShareProtectedRoute";
 
 function App() {
   return (
@@ -14,10 +17,16 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Top />} />
-        <Route path="/terms" element={<Terms />} />
-        <Route path="/termsDetail/:categoryId" element={<TermDetail />} />
+        <Route path="/terms" element={<ProtectedRoute element={Terms} />} />
+        <Route
+          path="/termsDetail/:categoryId"
+          element={<CategoryProtectedRoute element={TermDetail} />}
+        />
         <Route path="/shareTerms/:shareCode" element={<ShareTerms />} />
-        <Route path="/shareDetail/:categoryId" element={<ShareDetail />} />
+        <Route
+          path="/shareDetail/:shareCode/:categoryId"
+          element={<ShareProtectedRoute element={ShareDetail} />}
+        />
       </Routes>
     </Router>
   );

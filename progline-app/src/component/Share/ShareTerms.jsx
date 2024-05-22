@@ -80,7 +80,10 @@ export default function ShareTerms() {
             <div className="font-bold">登録したカテゴリ</div>
           </div>
           <div>
-            <ShareTermRegistration categories={categories} />
+            <ShareTermRegistration
+              categories={categories}
+              shareCode={shareCode}
+            />
           </div>
         </div>
       </div>
