@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import "./App.css";
 import Header from "./component/Header";
 import Top from "./component/Top/Top";
@@ -7,9 +12,10 @@ import Terms from "./component/Terms/Terms";
 import TermDetail from "./component/TermDetail/TermDetail";
 import ShareTerms from "./component/Share/ShareTerms";
 import ShareDetail from "./component/Share/ShareDetail";
-import ProtectedRoute from "./component/ProtectedRoute";
-import CategoryProtectedRoute from "./component/CategoryProtectedRoute";
-import ShareProtectedRoute from "./component/ShareProtectedRoute";
+import ProtectedRoute from "./component/ProtectedRoute/ProtectedRoute";
+import CategoryProtectedRoute from "./component/ProtectedRoute/CategoryProtectedRoute";
+import ShareProtectedRoute from "./component/ProtectedRoute/ShareProtectedRoute";
+import PageNotFound from "./component/PageNotFound";
 
 function App() {
   return (
@@ -27,6 +33,7 @@ function App() {
           path="/shareDetail/:shareCode/:categoryId"
           element={<ShareProtectedRoute element={ShareDetail} />}
         />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </Router>
   );
