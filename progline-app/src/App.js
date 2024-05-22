@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Header from "./component/Header";
 import Top from "./component/Top/Top";
@@ -21,20 +16,22 @@ function App() {
   return (
     <Router>
       <Header />
-      <Routes>
-        <Route path="/" element={<Top />} />
-        <Route path="/terms" element={<ProtectedRoute element={Terms} />} />
-        <Route
-          path="/termsDetail/:categoryId"
-          element={<CategoryProtectedRoute element={TermDetail} />}
-        />
-        <Route path="/shareTerms/:shareCode" element={<ShareTerms />} />
-        <Route
-          path="/shareDetail/:shareCode/:categoryId"
-          element={<ShareProtectedRoute element={ShareDetail} />}
-        />
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
+      <div className="pt-16">
+        <Routes>
+          <Route path="/" element={<Top />} />
+          <Route path="/terms" element={<ProtectedRoute element={Terms} />} />
+          <Route
+            path="/termsDetail/:categoryId"
+            element={<CategoryProtectedRoute element={TermDetail} />}
+          />
+          <Route path="/shareTerms/:shareCode" element={<ShareTerms />} />
+          <Route
+            path="/shareDetail/:shareCode/:categoryId"
+            element={<ShareProtectedRoute element={ShareDetail} />}
+          />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </div>
     </Router>
   );
 }

@@ -173,7 +173,7 @@ export default function ShareModal() {
         <div className="text-center">
           <button
             onClick={handleCreateOrUpdate}
-            className="my-2 py-2 bg-sky-500 text-white w-3/4 rounded hover:bg-sky-400 transition duration-300 ease-in-out"
+            className="my-2 py-2 bg-cyan-500 text-white w-3/4 rounded hover:bg-cyan-400 transition duration-300 ease-in-out"
           >
             変更
           </button>
@@ -195,7 +195,7 @@ export default function ShareModal() {
         <div className="flex justify-center py-2">
           <button
             onClick={handleGenerateCode}
-            className="bg-sky-500 text-white w-1/3 mr-1 py-2 rounded hover:bg-sky-400 transition duration-300 ease-in-out"
+            className="bg-cyan-500 text-white w-1/3 mr-1 py-2 rounded hover:bg-cyan-400 transition duration-300 ease-in-out"
           >
             生成
           </button>
