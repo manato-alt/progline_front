@@ -7,7 +7,7 @@ import ShareServiceRegistration from "./ShareServiceRegistration";
 
 export default function ShareDetail() {
   const [category, setCategory] = useState(null);
-  const { categoryId } = useParams();
+  const { shareCode, categoryId } = useParams();
   const [services, setServices] = useState([]);
   const [errorMessages, setErrorMessages] = useState([]);
 
@@ -38,6 +38,7 @@ export default function ShareDetail() {
             {
               params: {
                 category_id: categoryId,
+                code: shareCode,
               },
             }
           );
