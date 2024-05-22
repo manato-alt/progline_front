@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../contexts/AuthContext";
+import { auth } from "../../contexts/AuthContext";
 import axios from "axios";
 
 const CategoryProtectedRoute = ({ element: Component, ...rest }) => {
