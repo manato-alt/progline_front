@@ -3,17 +3,16 @@ import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Loading from "../Loading";
 
-const ShareProtectedRoute = ({ element: Component, ...rest }) => {
+const ShareTermProtectedRoute = ({ element: Component, ...rest }) => {
   const [isAuthorized, setIsAuthorized] = useState(null);
-  const { shareCode, categoryId } = useParams();
+  const { shareCode } = useParams();
 
   const fetchAuthorization = useCallback(async () => {
-    if ((shareCode, categoryId)) {
+    if (shareCode) {
       try {
         const response = await axios.post(
-          `http://localhost:3010/shared_codes/validate_access`,
+          `http://localhost:3010/shared_codes/validate_access_term`,
           {
-            category_id: categoryId,
             code: shareCode,
           }
         );
@@ -23,13 +22,13 @@ const ShareProtectedRoute = ({ element: Component, ...rest }) => {
         setIsAuthorized(false);
       }
     }
-  }, [shareCode, categoryId]);
+  }, [shareCode]);
 
   useEffect(() => {
-    if (shareCode && categoryId) {
+    if (shareCode) {
       fetchAuthorization();
     }
-  }, [shareCode, categoryId, fetchAuthorization]);
+  }, [shareCode, fetchAuthorization]);
 
   if (isAuthorized === null) {
     return (
@@ -42,4 +41,4 @@ const ShareProtectedRoute = ({ element: Component, ...rest }) => {
   return isAuthorized ? <Component {...rest} /> : <Navigate to="*" />;
 };
 
-export default ShareProtectedRoute;
+export default ShareTermProtectedRoute;

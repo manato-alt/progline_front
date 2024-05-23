@@ -1,6 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { TiHome } from "react-icons/ti";
 
-export default function EmptyService({ handleShow, category }) {
+export default function ShareEmptyService({ category, shareCode }) {
   return (
     <div className="flex flex-col items-center h-[92vh] pt-28 bg-[#f7f9fb] px-8">
       {category && (
@@ -15,15 +17,13 @@ export default function EmptyService({ handleShow, category }) {
       )}
       <p className="text-sm md:text-base mb-4">
         登録されたサービスはありません。
-        <br />
-        あなたの学習を記録しませんか？
       </p>
-      <button
-        onClick={handleShow}
-        className="bg-white border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white py-2 px-4 rounded items-center mt-1 mr-2 transition duration-300 ease-in-out"
+      <Link
+        to={`/shareTerms/${shareCode}`}
+        className="text-sm md:text-base flex items-center justify-center text-cyan-500 border border-cyan-500 bg-white hover:text-white hover:bg-cyan-500 py-2 px-4 rounded transition duration-300 ease-in-out"
       >
-        さっそく記録する！
-      </button>
+        カテゴリページに戻る
+      </Link>
     </div>
   );
 }
