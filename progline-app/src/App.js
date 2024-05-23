@@ -9,6 +9,7 @@ import ShareTerms from "./component/Share/ShareTerms";
 import ShareDetail from "./component/Share/ShareDetail";
 import ProtectedRoute from "./component/ProtectedRoute/ProtectedRoute";
 import CategoryProtectedRoute from "./component/ProtectedRoute/CategoryProtectedRoute";
+import ShareTermProtectedRoute from "./component/ProtectedRoute/ShareTermProtectedRoute";
 import ShareProtectedRoute from "./component/ProtectedRoute/ShareProtectedRoute";
 import PageNotFound from "./component/PageNotFound";
 
@@ -24,7 +25,10 @@ function App() {
             path="/termsDetail/:categoryId"
             element={<CategoryProtectedRoute element={TermDetail} />}
           />
-          <Route path="/shareTerms/:shareCode" element={<ShareTerms />} />
+          <Route
+            path="/shareTerms/:shareCode"
+            element={<ShareTermProtectedRoute element={ShareTerms} />}
+          />
           <Route
             path="/shareDetail/:shareCode/:categoryId"
             element={<ShareProtectedRoute element={ShareDetail} />}
