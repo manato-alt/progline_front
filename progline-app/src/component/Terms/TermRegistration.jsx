@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 export default function TermRegistration({
   registrationCategories,
   updateRegistrationCategories,
+  handleShow_second,
 }) {
   const generateUUID = () => {
     return uuidv4();
@@ -105,7 +106,7 @@ export default function TermRegistration({
                   x
                 </Button>
               </form>
-              <Modal.Header className="font-bold">用語編集</Modal.Header>
+              <Modal.Header className="font-bold">カテゴリー編集</Modal.Header>
               <Modal.Body>
                 <TermEdit
                   closeModal={handleCloseModal}
@@ -116,6 +117,14 @@ export default function TermRegistration({
             </Modal>
           </div>
         ))}
+        <div className="hidden min-[768px]:block ml-8 mt-10">
+          <button
+            onClick={handleShow_second}
+            className="bg-gray-200 rounded-full p-4 w-12 h-12 flex flex-col justify-center items-center hover:bg-gray-300"
+          >
+            <div className="text-3xl md:text-4xl">+</div>
+          </button>
+        </div>
       </div>
     </div>
   );

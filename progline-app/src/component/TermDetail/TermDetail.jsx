@@ -9,6 +9,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import DetailTemplate from "./DetailTemplate";
 import DetailCustom from "./DetailCustom";
 import ServiceRegistration from "./ServiceRegistration";
+import EmptyService from "./EmptyService";
 
 export default function TermDetail() {
   const [category, setCategory] = useState(null);
@@ -157,42 +158,48 @@ export default function TermDetail() {
             </p>
           ))
         ))}{" "}
-      <div className="flex items-center py-3 mx-6  min-[550px]:mx-14 min-[970px]:mx-32">
-        {category && (
-          <div className="flex p-2 items-center">
-            <div className="w-8 h-8 min-[550px]:w-14 min-[550px]:h-14 mx-auto mr-4">
-              <img
-                src={category.image_url}
-                alt={category.name}
-                className="object-cover w-full h-full"
+      {registrationServices.length === 0 ? (
+        <EmptyService handleShow={handleShow} category={category} />
+      ) : (
+        <>
+          <div className="flex items-center py-3 mx-6  min-[550px]:mx-14 min-[970px]:mx-32">
+            {category && (
+              <div className="flex p-2 items-center">
+                <div className="w-8 h-8 min-[550px]:w-14 min-[550px]:h-14 mx-auto mr-4">
+                  <img
+                    src={category.image_url}
+                    alt={category.name}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+                <div className="font-bold text-sm min-[350px]:text-base min-[550px]:text-lg">
+                  "{category.name}"に関する記録
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="p-5">
+            <div className="flex justify-between items-center mb-3 mx-4 min-[550px]:mx-14 min-[970px]:mx-32">
+              <div className="font-bold">登録した媒体</div>
+              <div>
+                <button
+                  onClick={handleShow}
+                  className="text-sm min-[700px]:text-base bg-gray-300 py-2 px-4 rounded-lg font-semibold transition-colors hover:bg-gray-400"
+                >
+                  媒体を追加
+                </button>
+              </div>
+            </div>
+            <div>
+              <ServiceRegistration
+                registrationServices={registrationServices}
+                MediaIcon={MediaIcon}
+                updateRegistrationServices={updateRegistrationServices}
               />
             </div>
-            <div className="font-bold text-sm min-[350px]:text-base min-[550px]:text-lg">
-              "{category.name}"に関する記録
-            </div>
           </div>
-        )}
-      </div>
-      <div className="p-5">
-        <div className="flex justify-between items-center mb-3 mx-4 min-[550px]:mx-14 min-[970px]:mx-32">
-          <div className="font-bold">登録した媒体</div>
-          <div>
-            <button
-              onClick={handleShow}
-              className="text-sm min-[700px]:text-base bg-gray-300 py-2 px-4 rounded-lg font-semibold transition-colors hover:bg-gray-400"
-            >
-              媒体を追加
-            </button>
-          </div>
-        </div>
-        <div>
-          <ServiceRegistration
-            registrationServices={registrationServices}
-            MediaIcon={MediaIcon}
-            updateRegistrationServices={updateRegistrationServices}
-          />
-        </div>
-      </div>
+        </>
+      )}
       <Modal ref={ref}>
         {/* モーダルの状態を isOpen で制御 */}
         <form method="dialog">

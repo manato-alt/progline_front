@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
-import myImage from "../../images/toppage-removebg.jpg";
 import { Modal, Button } from "react-daisyui";
 import TermTemplate from "./TermTemplate";
 import TermCustom from "./TermCustom";
@@ -8,6 +7,7 @@ import TermRegistration from "./TermRegistration";
 import { auth } from "../../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import TermGraph from "./TermGraph";
+import EmptyCategory from "./EmptyCategory";
 
 export default function Terms() {
   const [categories, setCategories] = useState([]);
@@ -115,30 +115,38 @@ export default function Terms() {
             </p>
           ))
         ))}
-      <div>
-        <div className="my-5 p-5 ml-4  min-[1300px]:mx-32">
-          <div className="flex justify-between items-center mb-3">
-            <div className="font-bold">登録したカテゴリ</div>
-            <div>
-              <button
-                onClick={handleShow}
-                className="text-sm bg-gray-300  py-2 px-4 rounded-lg font-semibold transition-colors hover:bg-gray-400"
-              >
-                カテゴリを追加
-              </button>
+
+      {registrationCategories.length === 0 ? (
+        <EmptyCategory handleShow={handleShow} />
+      ) : (
+        <>
+          <div>
+            <div className="my-5 p-5 ml-4 min-[1300px]:mx-32">
+              <div className="flex justify-between items-center mb-3">
+                <div className="font-bold">登録したカテゴリ</div>
+                <div className="min-[768px]:hidden">
+                  <button
+                    onClick={handleShow}
+                    className="max-[500px]:text-sm bg-white border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white py-2 px-4 rounded items-center mt-1 mr-2 transition duration-300 ease-in-out"
+                  >
+                    カテゴリを追加
+                  </button>
+                </div>
+              </div>
+              <div>
+                <TermRegistration
+                  registrationCategories={registrationCategories}
+                  updateRegistrationCategories={updateRegistrationCategories}
+                  handleShow_second={handleShow}
+                />
+              </div>
             </div>
           </div>
-          <div>
-            <TermRegistration
-              registrationCategories={registrationCategories}
-              updateRegistrationCategories={updateRegistrationCategories}
-            />
+          <div className="mx-5 min-[500px]:mx-10 sm:mx-20 mb-10">
+            <TermGraph />
           </div>
-        </div>
-      </div>
-      <div className="mx-5 min-[500px]:mx-10 sm:mx-20 mb-10">
-        <TermGraph />
-      </div>
+        </>
+      )}
       <Modal ref={ref} className="w-4/5 min-[560px]:w-3/5">
         {/* モーダルの状態を isOpen で制御 */}
         <form method="dialog">
@@ -165,7 +173,6 @@ export default function Terms() {
               </button>
             </>
           ) : (
-            /* カスタムの内容 */
             <>
               <button
                 onClick={toggleTemplate}
@@ -180,22 +187,18 @@ export default function Terms() {
           )}
         </Modal.Header>
         <Modal.Body>
-          {/* テンプレートとカスタムの内容をここに記述 */}
           {isTemplate ? (
-            /* テンプレートの内容 */
             <TermTemplate
               categories={categories}
               closeModal={handleCloseModal}
               updateRegistrationCategories={updateRegistrationCategories}
             />
           ) : (
-            /* カスタムの内容 */
             <TermCustom
               closeModal={handleCloseModal}
               updateRegistrationCategories={updateRegistrationCategories}
             />
           )}
-          {/* 切り替えるボタン */}
         </Modal.Body>
       </Modal>
     </div>
