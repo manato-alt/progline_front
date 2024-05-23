@@ -3,6 +3,7 @@ import { Navigate, useParams } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../contexts/AuthContext";
 import axios from "axios";
+import Loading from "../Loading";
 
 const CategoryProtectedRoute = ({ element: Component, ...rest }) => {
   const [user, loading] = useAuthState(auth);
@@ -34,7 +35,11 @@ const CategoryProtectedRoute = ({ element: Component, ...rest }) => {
   }, [user, loading, categoryId, fetchAuthorization]);
 
   if (loading || isAuthorized === null) {
-    return <div>Loading...</div>; // 認証情報やAPIレスポンスを取得中に表示するローディング画面
+    return (
+      <div>
+        <Loading />
+      </div>
+    ); // 認証情報やAPIレスポンスを取得中に表示するローディング画面
   }
 
   return user && isAuthorized ? <Component {...rest} /> : <Navigate to="*" />;
