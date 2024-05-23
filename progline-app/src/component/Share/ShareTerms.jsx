@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import myImage from "../../images/toppage-removebg.jpg";
 import ShareTermRegistration from "./ShareTermRegistration";
 import ShareTermGraph from "./ShareTermGraph";
+import ShareEmptyCategory from "./ShareEmptyCategory";
 
 export default function ShareTerms() {
   const { shareCode } = useParams();
@@ -55,23 +55,28 @@ export default function ShareTerms() {
             </p>
           ))
         ))}
-
-      <div>
-        <div className="my-5 p-5 ml-4  min-[1300px]:mx-32">
-          <div className="flex justify-between items-center mb-3">
-            <div className="font-bold">登録したカテゴリ</div>
-          </div>
+      {categories.length === 0 ? (
+        <ShareEmptyCategory />
+      ) : (
+        <>
           <div>
-            <ShareTermRegistration
-              categories={categories}
-              shareCode={shareCode}
-            />
+            <div className="my-5 p-5 ml-4  min-[1300px]:mx-32">
+              <div className="flex justify-between items-center mb-3">
+                <div className="font-bold">登録したカテゴリ</div>
+              </div>
+              <div>
+                <ShareTermRegistration
+                  categories={categories}
+                  shareCode={shareCode}
+                />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div className="mx-5 min-[500px]:mx-10 sm:mx-20 mb-10">
-        <ShareTermGraph shareCode={shareCode} />
-      </div>
+          <div className="mx-5 min-[500px]:mx-10 sm:mx-20 mb-10">
+            <ShareTermGraph shareCode={shareCode} />
+          </div>
+        </>
+      )}
     </div>
   );
 }

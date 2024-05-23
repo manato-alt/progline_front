@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { SiQiita, SiUdemy, SiZenn } from "react-icons/si";
 import { FaYoutube, FaAmazon } from "react-icons/fa";
 import ShareServiceRegistration from "./ShareServiceRegistration";
+import ShareEmptyService from "./ShareEmptyService";
 
 export default function ShareDetail() {
   const [category, setCategory] = useState(null);
@@ -30,8 +31,7 @@ export default function ShareDetail() {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (categoryId) {
-        // userとuser.uidが存在するかを確認
+      if ((categoryId, shareCode)) {
         try {
           const res = await axios.get(
             "http://localhost:3010/shared_codes/service_index",
@@ -59,7 +59,7 @@ export default function ShareDetail() {
     };
 
     fetchData();
-  }, [categoryId]);
+  }, [categoryId, shareCode]);
 
   useEffect(() => {
     const fetchCategory = async () => {
@@ -89,31 +89,39 @@ export default function ShareDetail() {
             </p>
           ))
         ))}
-
-      <div className="flex items-center py-3 mx-6  min-[550px]:mx-14 min-[970px]:mx-32">
-        {category && (
-          <div className="flex p-2 items-center">
-            <div className="w-8 h-8 min-[550px]:w-14 min-[550px]:h-14 mx-auto mr-4">
-              <img
-                src={category.image_url}
-                alt={category.name}
-                className="object-cover w-full h-full"
+      {services.length === 0 ? (
+        <ShareEmptyService category={category} shareCode={shareCode} />
+      ) : (
+        <>
+          <div className="flex items-center py-3 mx-6  min-[550px]:mx-14 min-[970px]:mx-32">
+            {category && (
+              <div className="flex p-2 items-center">
+                <div className="w-8 h-8 min-[550px]:w-14 min-[550px]:h-14 mx-auto mr-4">
+                  <img
+                    src={category.image_url}
+                    alt={category.name}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+                <div className="font-bold text-sm min-[350px]:text-base min-[550px]:text-lg">
+                  "{category.name}"に関する記録
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="p-5">
+            <div className="flex justify-between items-center mb-3 mx-4 min-[550px]:mx-14 min-[970px]:mx-32">
+              <div className="font-bold">登録した媒体</div>
+            </div>
+            <div>
+              <ShareServiceRegistration
+                services={services}
+                MediaIcon={MediaIcon}
               />
             </div>
-            <div className="font-bold text-sm min-[350px]:text-base min-[550px]:text-lg">
-              "{category.name}"に関する記録
-            </div>
           </div>
-        )}
-      </div>
-      <div className="p-5">
-        <div className="flex justify-between items-center mb-3 mx-4 min-[550px]:mx-14 min-[970px]:mx-32">
-          <div className="font-bold">登録した媒体</div>
-        </div>
-        <div>
-          <ShareServiceRegistration services={services} MediaIcon={MediaIcon} />
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 }
