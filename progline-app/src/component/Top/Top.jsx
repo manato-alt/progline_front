@@ -2,30 +2,26 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import SearchForm from "./SearchForm";
-import myImage from "../../images/toppage.jpg";
+import logo from "../../images/logo.png";
 import Square from "./HoverSquare";
 import dummyImages from "./dummyImages.jsx";
 import { FcGoogle } from "react-icons/fc";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
+import myImage_second from "../../images/270x180.png";
 
 export default function Top() {
-  const [hoveredImage, setHoveredImage] = useState("A");
-  const [lastHoveredImage, setLastHoveredImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState("A");
+  const [lastSelectedImage, setLastSelectedImage] = useState(null);
   const [user] = useAuthState(auth);
   const [searchResults, setSearchResults] = useState([]); // 検索結果の状態追加
   const [searchError, setSearchError] = useState(""); // エラーメッセージの状態追加
   const dropdownRef = useRef(null); // ドロップダウンのrefを追加
 
-  const handleMouseEnter = (image) => {
-    setLastHoveredImage(null);
-    setHoveredImage(image);
-  };
-
-  const handleMouseLeave = () => {
-    setLastHoveredImage(hoveredImage);
-    setHoveredImage(null);
+  const handleClick = (image) => {
+    setLastSelectedImage(null);
+    setSelectedImage(image);
   };
 
   // シェアコードを検索する関数
@@ -59,16 +55,16 @@ export default function Top() {
   }, [dropdownRef]);
 
   return (
-    <div className="py-12">
+    <div className="py-20">
       <div className="flex justify-center items-center">
         <div className="text-center">
-          <h1 className="text-3xl font-bold tracking-wider md:text-4xl lg:text-5xl">
-            技術の道しるべ、
-            <br className="sm:hidden" />
-            IT特化の学習メモリアル
+          <h1 className="text-3xl font-bold tracking-widest md:text-4xl lg:text-[3.5rem]">
+            IT技術の道しるべ
           </h1>
-          <p className="mt-3 mx-auto text-gray-500 sm:text-2xl">
-            学習の記録・可視化・共有を行うことができます。
+          <p className="mt-4 mx-auto sm:text-[1.3rem]">
+            テンプレートを活用した記録、共有機能で、
+            <br />
+            IT技術を向上させましょう。
           </p>
         </div>
       </div>
@@ -104,32 +100,33 @@ export default function Top() {
         </div>
       )}
       <div className="mt-10 flex justify-center">
-        <img
-          src={myImage}
-          alt="イラスト画像"
-          className="max-[500px]:w-4/5 max-[750px]:w-3/5"
-        />
+        <img src={myImage_second} alt="イラスト画像" className="w-1/3" />
+      </div>
+      <div className="flex flex-col justify-center items-center py-24">
+        <img src={logo} alt="Logo" className="w-1/6" />
+        <p className="text-4xl font-serif w-1/5 text-center">
+          「ITに特化した学習メモリアルです。」
+        </p>
       </div>
       <div>
         {/* 横並びの四角の要素 */}
-        <div className="flex flex-wrap justify-center mx-1 space-x-2 sm:space-x-3">
+        <div className="flex flex-wrap justify-center mx-1 space-x-2 sm:space-x-4">
           {["A", "B", "C", "D", "E"].map((item) => (
             <Square
               key={item}
               id={item}
-              handleMouseEnter={handleMouseEnter}
-              handleMouseLeave={handleMouseLeave}
-              isHovered={hoveredImage === item || lastHoveredImage === item}
+              handleClick={handleClick}
+              isSelected={selectedImage === item || lastSelectedImage === item}
             />
           ))}
         </div>
         {/* 画像 */}
         <div className="flex justify-center">
-          {(hoveredImage || lastHoveredImage) && (
+          {(selectedImage || lastSelectedImage) && (
             <img
-              src={dummyImages[hoveredImage || lastHoveredImage]}
-              alt={`ダミー画像 ${hoveredImage || lastHoveredImage}`}
-              className="w-full sm:max-w-lg"
+              src={dummyImages[selectedImage || lastSelectedImage]}
+              alt={`ダミー画像 ${selectedImage || lastSelectedImage}`}
+              className="w-full sm:max-w-lg transition-transform duration-500 ease-in-out transform-gpu"
             />
           )}
         </div>

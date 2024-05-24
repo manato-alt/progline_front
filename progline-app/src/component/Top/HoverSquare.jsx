@@ -5,12 +5,7 @@ import ElementC from "./ElementC";
 import ElementD from "./ElementD";
 import ElementE from "./ElementE";
 
-export default function HoverSquare({
-  id,
-  handleMouseEnter,
-  handleMouseLeave,
-  isHovered,
-}) {
+export default function HoverSquare({ id, handleClick, isSelected }) {
   let content = <ElementA />;
 
   switch (id) {
@@ -34,11 +29,10 @@ export default function HoverSquare({
   }
   return (
     <div
-      className={`rounded-lg my-1 flex justify-center cursor-pointer w-[6rem] h-[6rem] md:w-28 md:h-28 lg:w-48 lg:h-48 ${
-        isHovered ? "bg-white border-2" : "bg-gray-100"
-      }`}
-      onMouseEnter={() => handleMouseEnter(id)}
-      onMouseLeave={handleMouseLeave}
+      className={`my-1 flex justify-center rounded-xl items-center cursor-pointer w-40 h-28 ${
+        isSelected ? "bg-white border-2" : "bg-gray-100"
+      } transition-colors duration-300 ease-in-out`}
+      onClick={() => handleClick(id)}
     >
       {content}
     </div>
