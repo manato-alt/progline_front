@@ -21,7 +21,7 @@ export default function Header() {
   }, [ref]);
 
   return (
-    <header className="bg-white py-2 fixed top-0 left-0 w-full z-50 shadow-sm">
+    <header className="bg-white py-2 fixed top-0 left-0 w-full z-50 shadow-lg">
       <div className="flex justify-between items-center">
         <Link to="/">
           <img
