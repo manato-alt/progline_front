@@ -27,7 +27,7 @@ export default function Header() {
           <img
             src={logo}
             alt="Logo"
-            className="w-32 min-[400px]:w-40 min-[600px]:w-56 mx-6"
+            className="w-32 min-[500px]:w-40 min-[700px]:w-56 mx-6"
           />
         </Link>
         <div className="text-white text-lg">
@@ -109,7 +109,7 @@ function SignInButton() {
   return (
     <button
       onClick={signInWithGoogle}
-      className="flex items-center border-2 border-cyan-500  hover:bg-cyan-500 p-2 rounded-lg mr-6 text-black hover:text-white "
+      className="flex items-center py-1 px-4 min-[500px]:py-2 bg-black min-[700px]:py-3 min-[500px]:px-6 rounded-lg mr-4 min-[500px]:mr-6 text-white"
     >
       <FcGoogle />
       <p className="text-base ml-1">Googleで登録</p>

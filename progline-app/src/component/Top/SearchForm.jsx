@@ -11,7 +11,7 @@ export default function SearchForm({ onSearch }) {
 
   return (
     <div className="flex justify-center items-center mt-7">
-      <div className="w-1/4 flex justify-center">
+      <div className="w-3/4 min-[700px]:w-[30rem] flex justify-center">
         <input
           type="text"
           placeholder="共有コードを入力（ログイン不要）"

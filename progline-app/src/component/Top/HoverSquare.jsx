@@ -29,7 +29,7 @@ export default function HoverSquare({ id, handleClick, isSelected }) {
   }
   return (
     <div
-      className={`my-1 flex justify-center rounded-xl items-center cursor-pointer w-40 h-28 ${
+      className={`mb-[16px] flex px-[14px] py-[1px] justify-center rounded min-[700px]:rounded-xl items-center cursor-pointer min-[700px]:w-[7rem] min-[700px]:h-[6rem] min-[1000px]:w-[10rem] min-[1000px]:h-[7rem] ${
         isSelected ? "bg-white border-2" : "bg-gray-100"
       } transition-colors duration-300 ease-in-out`}
       onClick={() => handleClick(id)}
