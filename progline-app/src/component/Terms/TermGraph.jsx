@@ -80,9 +80,11 @@ export default function TermGraph() {
             maintainAspectRatio: false,
             indexAxis: "y", // y軸を使用することを明示
             scales: {
-              y: {
+              x: {
                 beginAtZero: true,
-                stepSize: 1,
+                ticks: {
+                  stepSize: 1, // 1単位ごとにする設定
+                },
               },
             },
           },
@@ -90,6 +92,8 @@ export default function TermGraph() {
       }
     }
   }, [graphData]);
+
+  const canvasHeight = graphData ? 55 * graphData.length + 75 : 0;
 
   return (
     <>
@@ -104,7 +108,7 @@ export default function TermGraph() {
             </p>
           ))
         ))}{" "}
-      <canvas id="myChart" width={500} height={800} ref={chartRef} />
+      <canvas id="myChart" width={500} height={canvasHeight} ref={chartRef} />
     </>
   );
 }
