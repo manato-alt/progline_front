@@ -55,14 +55,17 @@ export default function Top() {
   }, [dropdownRef]);
 
   return (
-    <div className="py-20">
+    <div className="py-6 min-[700px]:py-20">
       <div className="flex justify-center items-center">
         <div className="text-center">
-          <h1 className="text-3xl font-bold tracking-widest md:text-4xl lg:text-[3.5rem]">
-            IT技術の道しるべ
+          <h1 className=" text-[3rem] min-[700px]:text-[3.6rem] font-bold tracking-widest leading-[1]">
+            IT技術
+            <br className="min-[700px]:hidden" />
+            の道しるべ
           </h1>
-          <p className="mt-4 mx-auto sm:text-[1.3rem]">
-            テンプレートを活用した記録、共有機能で、
+          <p className="px-6 mt-4 mx-auto text-[1.3rem]">
+            テンプレートを活用した<span className="font-bold">記録</span>、
+            <span className="font-bold">共有</span>機能で、
             <br />
             IT技術を向上させましょう。
           </p>
@@ -103,14 +106,20 @@ export default function Top() {
         <img src={myImage_second} alt="イラスト画像" className="w-1/3" />
       </div>
       <div className="flex flex-col justify-center items-center py-24">
-        <img src={logo} alt="Logo" className="w-1/6" />
-        <p className="text-4xl font-serif w-1/5 text-center">
-          「ITに特化した学習メモリアルです。」
+        <img
+          src={logo}
+          alt="Logo"
+          className="w-[15rem] min-[600px]:w-[20rem]"
+        />
+        <p className="mt-2 text-3xl min-[600px]:text-4xl font-serif w-[24rem] text-center">
+          「ITに特化した学習メ
+          <br />
+          モリアルです。」
         </p>
       </div>
       <div>
         {/* 横並びの四角の要素 */}
-        <div className="flex flex-wrap justify-center mx-1 space-x-2 sm:space-x-4">
+        <div className="flex flex-wrap justify-center mx-[32px] space-x-2 sm:space-x-4">
           {["A", "B", "C", "D", "E"].map((item) => (
             <Square
               key={item}
