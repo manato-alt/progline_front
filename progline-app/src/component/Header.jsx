@@ -11,6 +11,7 @@ import axios from "axios";
 import ShareModal from "./Share/ShareModal";
 import logo from "../images/logo.png";
 import { Link } from "react-router-dom";
+import { FaChalkboardTeacher } from "react-icons/fa";
 
 export default function Header() {
   const [user] = useAuthState(auth);
@@ -33,6 +34,13 @@ export default function Header() {
         <div className="text-white text-lg">
           {user ? (
             <div className="flex items-center">
+              <Link to="/terms">
+                <button className="hidden sm:flex border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white py-1 px-4 rounded items-center mt-1 mr-2 transition duration-300 ease-in-out">
+                  <FaChalkboardTeacher className="mr-1" />
+                  <p>記録ボード</p>
+                </button>
+              </Link>
+
               <button
                 className="hidden sm:flex border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white py-1 px-4 rounded items-center mt-1 mr-2 transition duration-300 ease-in-out"
                 onClick={handleShow}
@@ -56,6 +64,14 @@ export default function Header() {
                       {auth.currentUser.displayName}
                     </p>
                   </div>
+                  <div className="border my-2 sm:hidden"></div>
+                  <Dropdown.Item
+                    className="flex items-center text-black sm:hidden"
+                    href="/terms"
+                  >
+                    <FaChalkboardTeacher className="mr-2" />
+                    <p>記録ボード</p>
+                  </Dropdown.Item>
                   <div className="border my-2 sm:hidden"></div>
                   <Dropdown.Item className="sm:hidden">
                     <button
