@@ -16,6 +16,27 @@ export default function Terms() {
   const ref = useRef(null);
   const [user] = useAuthState(auth);
   const [errorMessages, setErrorMessages] = useState([]);
+  const [graphData, setGraphData] = useState(null);
+
+  const fetchGraphData = useCallback(async () => {
+    try {
+      if (user && user.uid) {
+        const res = await axios.get("http://localhost:3010/graphs", {
+          params: {
+            user_id: user.uid,
+          },
+        });
+        setGraphData(res.data);
+      }
+    } catch (error) {
+      console.error("グラフデータの取得エラー:", error);
+      if (error.response && error.response.data && error.response.data.errors) {
+        setErrorMessages(error.response.data.errors.join(", "));
+      } else {
+        setErrorMessages("登録中にエラーが発生しました");
+      }
+    }
+  }, [user]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,7 +67,6 @@ export default function Terms() {
   useEffect(() => {
     const fetchData = async () => {
       if (user && user.uid) {
-        // userとuser.uidが存在するかを確認
         try {
           const res = await axios.get("http://localhost:3010/categories", {
             params: {
@@ -54,6 +74,7 @@ export default function Terms() {
             },
           });
           setRegistrationCategories(res.data);
+          fetchGraphData();
         } catch (error) {
           console.error("Error fetching registrationCategories:", error);
           if (
@@ -70,7 +91,7 @@ export default function Terms() {
     };
 
     fetchData();
-  }, [user]);
+  }, [user, fetchGraphData]);
 
   const handleShow = useCallback(() => {
     ref.current?.showModal();
@@ -92,6 +113,7 @@ export default function Terms() {
         },
       });
       setRegistrationCategories(res.data);
+      fetchGraphData();
     } catch (error) {
       console.error("Error fetching registrationCategories:", error);
       if (error.response && error.response.data && error.response.data.errors) {
@@ -101,6 +123,10 @@ export default function Terms() {
       }
     }
   };
+
+  useEffect(() => {
+    fetchGraphData();
+  }, [user, fetchGraphData]);
 
   return (
     <div>
@@ -143,7 +169,7 @@ export default function Terms() {
             </div>
           </div>
           <div className="mx-5 min-[500px]:mx-10 sm:mx-20 mb-10">
-            <TermGraph />
+            <TermGraph graphData={graphData} />
           </div>
         </>
       )}
