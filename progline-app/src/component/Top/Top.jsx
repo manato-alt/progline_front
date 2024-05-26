@@ -77,7 +77,7 @@ export default function Top() {
         {searchResults.length > 0 && (
           <div
             ref={dropdownRef}
-            className="absolute left-1/2 transform -translate-x-1/2 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-10 w-1/2 sm:w-2/5"
+            className="absolute left-[47.5%] transform -translate-x-1/2 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-10 w-[85%] min-[700px]:w-[30rem]"
           >
             {searchResults.map((result, index) => (
               <Link
