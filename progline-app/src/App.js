@@ -17,7 +17,7 @@ function App() {
   return (
     <Router>
       <Header />
-      <div className="pt-20">
+      <div className="pt-10">
         <Routes>
           <Route path="/" element={<Top />} />
           <Route path="/terms" element={<ProtectedRoute element={Terms} />} />

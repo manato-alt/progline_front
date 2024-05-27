@@ -23,7 +23,7 @@ export default function Content({ contents, updateContents }) {
   };
 
   return (
-    <div className="grid  grid-cols-1 min-[440px]:grid-cols-2 min-[600px]:grid-cols-3 min-[800px]:grid-cols-4 min-[1030px]:grid-cols-5 gap-4 mt-3">
+    <div className="bg-white p-5 grid  grid-cols-1 min-[440px]:grid-cols-2 min-[600px]:grid-cols-3 min-[800px]:grid-cols-4 min-[1030px]:grid-cols-5 gap-4 mt-3">
       {errorMessages !== null &&
         // errorMessages が文字列か配列かで処理を分岐
         (typeof errorMessages === "string" ? (
@@ -39,7 +39,7 @@ export default function Content({ contents, updateContents }) {
         contents.map((content) => (
           <div
             key={content.id}
-            className="p-4 rounded-md border border-gray-300 hover:border-blue-500 hover:shadow-md relative"
+            className="rounded-md border border-gray-300 hover:border-blue-500 hover:shadow-md relative"
           >
             <a
               href={content.url}
@@ -51,16 +51,16 @@ export default function Content({ contents, updateContents }) {
                 <img
                   src={content.image_url}
                   alt=""
-                  className="block mx-auto mb-2"
+                  className="block mx-auto mb-2 rounded"
                   style={{ maxHeight: "200px", width: "auto" }}
                 />
               )}
-              <h3 className="text-lg font-semibold mb-1">
+              <h3 className="px-1 text-base font-semibold mb-1">
                 {content.title.length > 30
                   ? `${content.title.slice(0, 30)}...`
                   : content.title}
               </h3>
-              <div className="flex items-center mt-2">
+              <div className="flex items-center mt-2 px-2">
                 {content.favicon_url && (
                   <img
                     src={content.favicon_url}

@@ -9,11 +9,14 @@ import { MdAppRegistration } from "react-icons/md";
 import ContentTemplate from "./contents/ContentTemplate";
 import ContentCustom from "./contents/ContentCustom";
 import Content from "./contents/Content";
+import { IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowForward } from "react-icons/io";
 
 export default function ServiceRegistration({
   registrationServices,
   MediaIcon,
   updateRegistrationServices,
+  handleShow_detail,
 }) {
   const generateUUID = () => {
     return uuidv4();
@@ -25,6 +28,12 @@ export default function ServiceRegistration({
   const [selectedService, setSelectedService] = useState(null);
   const [contents, setContents] = useState(null);
   const [errorMessages, setErrorMessages] = useState([]);
+  const scrollRef = useRef(null);
+  const [isClickDisabled, setIsClickDisabled] = useState(false);
+
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
 
   useEffect(() => {
     if (registrationServices.length > 0) {
@@ -33,7 +42,9 @@ export default function ServiceRegistration({
   }, [registrationServices]);
 
   const handleServiceClick = (service) => {
-    setSelectedService(service);
+    if (!isClickDisabled) {
+      setSelectedService(service);
+    }
   };
 
   const handleShow = useCallback((service) => {
@@ -61,7 +72,6 @@ export default function ServiceRegistration({
       await axios.delete(`http://localhost:3010/services/${serviceId}`);
       console.log("サービスが削除されました");
       updateRegistrationServices();
-      // 成功した場合の処理をここに記述
     } catch (error) {
       console.error("サービスの削除中にエラーが発生しました:", error);
       if (error.response && error.response.data && error.response.data.error) {
@@ -69,14 +79,12 @@ export default function ServiceRegistration({
       } else {
         setErrorMessages(["サービスの削除中にエラーが発生しました"]);
       }
-
-      // エラー時の処理をここに記述
     }
   };
 
   const handleCancelEditing = () => {
     setAddService(null);
-    setEditingService(null); // 編集サービスをリセット
+    setEditingService(null);
   };
 
   const toggleTemplate = () => {
@@ -118,7 +126,6 @@ export default function ServiceRegistration({
           service_id: selectedService.id,
         },
       });
-      // 取得したコンテンツをセットする
       setContents(response.data);
     } catch (error) {
       console.error("Error fetching contents:", error);
@@ -130,10 +137,38 @@ export default function ServiceRegistration({
     }
   };
 
+  const handleScrollLeft = () => {
+    scrollRef.current.scrollBy({ left: -200, behavior: "smooth" });
+  };
+
+  const handleScrollRight = () => {
+    scrollRef.current.scrollBy({ left: 200, behavior: "smooth" });
+  };
+
+  const startDrag = (e) => {
+    isDragging.current = true;
+    startX.current = e.pageX || e.touches[0].pageX;
+    scrollLeft.current = scrollRef.current.scrollLeft;
+  };
+
+  const onDrag = (e) => {
+    if (!isDragging.current) return;
+    const x = e.pageX || e.touches[0].pageX;
+    const walk = (x - startX.current) * 0.7;
+    scrollRef.current.scrollLeft = scrollLeft.current - walk;
+    e.preventDefault();
+    setIsClickDisabled(true);
+  };
+
+  const stopDrag = () => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    setIsClickDisabled(false); // 変更：ここで即座にリセット
+  };
+
   return (
     <div>
       {errorMessages !== null &&
-        // errorMessages が文字列か配列かで処理を分岐
         (typeof errorMessages === "string" ? (
           <p className="text-red-500 mb-4">{errorMessages}</p>
         ) : (
@@ -142,149 +177,196 @@ export default function ServiceRegistration({
               {message}
             </p>
           ))
-        ))}{" "}
-      <div className="grid grid-cols-1 min-[350px]:grid-cols-2 min-[820px]:grid-cols-3 min-[1200px]:grid-cols-4 min-[1450px]:grid-cols-5 min-[1880px]:grid-cols-6 gap-4 mx-4 min-[550px]:mx-14 min-[970px]:mx-32">
-        {registrationServices.map((registrationService) => (
-          <div
-            key={generateUUID()}
-            className="relative min-[600px]:w-[14rem] min-[1650px]:w-[16.5rem]"
-          >
-            <div
-              className={` min-[600px]:w-[14rem] min-[1650px]:w-[16.5rem] p-5 cursor-pointer hover:bg-blue-200 flex items-center justify-center ${
-                selectedService === registrationService
-                  ? "bg-blue-200"
-                  : "bg-slate-100"
-              }`}
-              onClick={() => handleServiceClick(registrationService)}
-            >
-              {registrationService.image_url && (
-                <div className="w-5 h-5">
-                  <img
-                    src={registrationService.image_url}
-                    alt={registrationService.name}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-              )}
-              {!registrationService.image_url && (
-                <MediaIcon name={registrationService.name} />
-              )}
-              <p className="text-sm text-center font-bold ml-2  overflow-hidden">
-                {registrationService.name}
-              </p>
-            </div>
-            <div className="absolute right-3 top-5 font-bold">︙</div>
-            <Dropdown className="absolute right-0 top-2">
-              <Dropdown.Toggle className="opacity-0 hover:opacity-50"></Dropdown.Toggle>
-              <Dropdown.Menu className="w-40 right-0 border z-50">
-                <Dropdown.Item
-                  onClick={() => handleShowContentTemplate(registrationService)}
-                >
-                  <MdAppRegistration className="mr-1" />
-                  登録
-                </Dropdown.Item>
-                <div className="border my-2"></div>
-
-                <>
-                  <Dropdown.Item
-                    onClick={() => handleShow(registrationService)}
-                  >
-                    <CiEdit className="mr-1" />
-                    編集
-                  </Dropdown.Item>
-                  <div className="border my-2"></div>
-                </>
-                <Dropdown.Item
-                  onClick={() => handleDelete(registrationService.id)}
-                >
-                  <RiDeleteBinLine className="mr-1" />
-                  削除
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Modal ref={ref}>
-              <form method="dialog">
-                <Button
-                  size="sm"
-                  color="ghost"
-                  shape="circle"
-                  className="absolute right-2 top-2"
-                  onClick={handleCancelEditing}
-                >
-                  x
-                </Button>
-              </form>
-              <Modal.Header className="font-bold">
-                {addService ? (
-                  isTemplate ? (
-                    <>
-                      <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
-                        <p className="text-sm min-[500px]:text-base">
-                          テンプレート
-                        </p>
-                      </button>
-                      <button
-                        onClick={toggleTemplate}
-                        className="bg-blue-200 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
-                      >
-                        <p className="text-sm min-[500px]:text-base">
-                          カスタム
-                        </p>
-                      </button>
-                    </>
-                  ) : (
-                    /* カスタムの内容 */
-                    <>
-                      <button
-                        onClick={toggleTemplate}
-                        className="bg-blue-200 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
-                      >
-                        <p className="text-sm min-[500px]:text-base">
-                          テンプレート
-                        </p>
-                      </button>
-                      <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
-                        <p className="text-sm min-[500px]:text-base">
-                          カスタム
-                        </p>
-                      </button>
-                    </>
-                  )
-                ) : (
-                  <p>サービスの追加は利用できません</p>
-                )}
-              </Modal.Header>
-              <Modal.Body>
-                {addService ? (
-                  isTemplate ? (
-                    <ContentTemplate
-                      service={addService}
-                      closeModal={handleCloseModal}
-                      updateContents={updateContents}
-                      handleCancelEditing={handleCancelEditing}
-                    />
-                  ) : (
-                    <ContentCustom
-                      service={addService}
-                      closeModal={handleCloseModal}
-                      updateContents={updateContents}
-                      handleCancelEditing={handleCancelEditing}
-                    />
-                  )
-                ) : (
-                  <ServiceEdit
-                    closeModal={handleCloseModal}
-                    updateRegistrationServices={updateRegistrationServices}
-                    service={editingService}
-                  />
-                )}
-              </Modal.Body>
-            </Modal>
-          </div>
         ))}
+      <div className="max-w-[1250px] flex flex-col justify-center mx-auto">
+        <div className="block min-[700px]:hidden mb-2">
+          <button
+            onClick={handleShow_detail}
+            className="w-full bg-white border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white py-2 rounded items-center mt-1 mr-2 transition duration-300 ease-in-out"
+          >
+            サービスを追加
+          </button>
+        </div>
+
+        <div className="flex justify-center">
+          <div className="hidden min-[700px]:block">
+            <button
+              onClick={handleShow_detail}
+              className="w-[148px] bg-white border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white py-2 rounded items-center mt-1 mr-2 transition duration-300 ease-in-out"
+            >
+              サービスを追加
+            </button>
+          </div>
+          <button
+            onClick={handleScrollLeft}
+            className="mr-1 max-[699px]:ml-[-15px] text-2xl min-[700px]:text-4xl text-gray-400 hover:text-black"
+          >
+            <IoIosArrowBack />
+          </button>
+
+          <div
+            className="flex overflow-hidden pb-[145px] mb-[-145px]"
+            ref={scrollRef}
+            onMouseDown={startDrag}
+            onMouseMove={onDrag}
+            onMouseUp={stopDrag}
+            onMouseLeave={stopDrag}
+            onTouchStart={startDrag}
+            onTouchMove={onDrag}
+            onTouchEnd={stopDrag}
+          >
+            {registrationServices.map((registrationService) => (
+              <div key={generateUUID()} className="relative">
+                <div
+                  className={`py-3 pl-3 pr-7 mr-2 border rounded cursor-pointer hover:bg-blue-200 flex items-center justify-center ${
+                    selectedService === registrationService
+                      ? "bg-blue-200"
+                      : "bg-slate-200"
+                  }`}
+                  onClick={() => handleServiceClick(registrationService)}
+                >
+                  {registrationService.image_url && (
+                    <div className="w-5 h-5">
+                      <img
+                        src={registrationService.image_url}
+                        alt={registrationService.name}
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
+                  )}
+                  {!registrationService.image_url && (
+                    <MediaIcon name={registrationService.name} />
+                  )}
+                  <div>
+                    <p className="text-sm text-center font-bold ml-1 overflow-hidden">
+                      {registrationService.name}
+                    </p>
+                  </div>
+                </div>
+                <div className="absolute right-4 top-3 font-bold">︙</div>
+                <Dropdown className="absolute right-2 top-0" id="modal">
+                  <Dropdown.Toggle className="opacity-0 hover:opacity-50"></Dropdown.Toggle>
+                  <Dropdown.Menu className="w-28 right-0 border z-50">
+                    <Dropdown.Item
+                      onClick={() =>
+                        handleShowContentTemplate(registrationService)
+                      }
+                      className="p-1 flex justify-center"
+                    >
+                      <MdAppRegistration />
+                      <p>登録</p>
+                    </Dropdown.Item>
+                    <div className="border my-2"></div>
+                    <>
+                      <Dropdown.Item
+                        onClick={() => handleShow(registrationService)}
+                        className="p-1 flex justify-center"
+                      >
+                        <CiEdit className="" />
+                        編集
+                      </Dropdown.Item>
+                      <div className="border my-2"></div>
+                    </>
+                    <Dropdown.Item
+                      onClick={() => handleDelete(registrationService.id)}
+                      className="p-1 flex justify-center"
+                    >
+                      <RiDeleteBinLine className="" />
+                      削除
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                <Modal ref={ref}>
+                  <form method="dialog">
+                    <Button
+                      size="sm"
+                      color="ghost"
+                      shape="circle"
+                      className="absolute right-2 top-2"
+                      onClick={handleCancelEditing}
+                    >
+                      x
+                    </Button>
+                  </form>
+                  <Modal.Header className="font-bold">
+                    {addService ? (
+                      isTemplate ? (
+                        <>
+                          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
+                            <p className="text-sm min-[500px]:text-base">
+                              テンプレート
+                            </p>
+                          </button>
+                          <button
+                            onClick={toggleTemplate}
+                            className="bg-blue-200 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+                          >
+                            <p className="text-sm min-[500px]:text-base">
+                              カスタム
+                            </p>
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            onClick={toggleTemplate}
+                            className="bg-blue-200 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+                          >
+                            <p className="text-sm min-[500px]:text-base">
+                              テンプレート
+                            </p>
+                          </button>
+                          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline">
+                            <p className="text-sm min-[500px]:text-base">
+                              カスタム
+                            </p>
+                          </button>
+                        </>
+                      )
+                    ) : (
+                      <p>サービスの編集</p>
+                    )}
+                  </Modal.Header>
+                  <Modal.Body>
+                    {addService ? (
+                      isTemplate ? (
+                        <ContentTemplate
+                          service={addService}
+                          closeModal={handleCloseModal}
+                          updateContents={updateContents}
+                          handleCancelEditing={handleCancelEditing}
+                        />
+                      ) : (
+                        <ContentCustom
+                          service={addService}
+                          closeModal={handleCloseModal}
+                          updateContents={updateContents}
+                          handleCancelEditing={handleCancelEditing}
+                        />
+                      )
+                    ) : (
+                      <ServiceEdit
+                        closeModal={handleCloseModal}
+                        updateRegistrationServices={updateRegistrationServices}
+                        service={editingService}
+                      />
+                    )}
+                  </Modal.Body>
+                </Modal>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={handleScrollRight}
+            className="ml-1 max-[699px]:mr-[-15px] text-2xl min-[700px]:text-4xl text-gray-400 hover:text-black"
+          >
+            <IoIosArrowForward />
+          </button>
+        </div>
+        <div>
+          <Content contents={contents} updateContents={updateContents} />
+        </div>
       </div>
-      <div className="border my-3 mx-3"></div>
-      <Content contents={contents} updateContents={updateContents} />
     </div>
   );
 }

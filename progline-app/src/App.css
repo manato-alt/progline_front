@@ -43,3 +43,10 @@
   color: white;
   height: 2.5rem;
 }
+
+#modal button {
+  height: 2.8rem;
+  min-height: 2.8rem;
+  padding-left: 1.6rem;
+  padding-right: 0.1rem;
+}
