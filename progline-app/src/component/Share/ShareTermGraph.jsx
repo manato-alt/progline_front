@@ -1,43 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 
-export default function ShareTermGraph({ shareCode }) {
-  const [graphData, setGraphData] = useState(null);
+export default function ShareTermGraph({ graphData }) {
   const chartRef = useRef(null);
   const chartInstanceRef = useRef(null); // Chart.jsインスタンスを格納するためのref
-  const [errorMessages, setErrorMessages] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (shareCode) {
-          const res = await axios.get(
-            "http://localhost:3010/shared_codes/graph",
-            {
-              params: {
-                code: shareCode,
-              },
-            }
-          );
-          setGraphData(res.data);
-        }
-      } catch (error) {
-        console.error("グラフデータの取得エラー:", error);
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.error
-        ) {
-          setErrorMessages([error.response.data.error]);
-        } else {
-          setErrorMessages(["グラフデータの取得中にエラーが発生しました"]);
-        }
-      }
-    };
-
-    fetchData();
-  }, [shareCode]);
 
   useEffect(() => {
     if (graphData && graphData.length > 0) {
@@ -80,32 +46,23 @@ export default function ShareTermGraph({ shareCode }) {
             maintainAspectRatio: false,
             indexAxis: "y", // y軸を使用することを明示
             scales: {
-              y: {
+              x: {
                 beginAtZero: true,
-                stepSize: 1,
+                ticks: {
+                  stepSize: 1, // 1単位ごとにする設定
+                },
               },
             },
           },
         });
+        chartRef.current.style.height = `${55 * graphData.length + 75}px`;
       }
     }
   }, [graphData]);
 
   return (
     <>
-      {errorMessages !== null &&
-        // errorMessages が文字列か配列かで処理を分岐
-        (typeof errorMessages === "string" ? (
-          <p className="text-red-500 mb-4">{errorMessages}</p>
-        ) : (
-          errorMessages.map((message, index) => (
-            <p key={index} className="text-red-500 mb-4">
-              {message}
-            </p>
-          ))
-        ))}
-
-      <canvas id="myChart" width={500} height={800} ref={chartRef} />
+      <canvas id="myChart" width={500} ref={chartRef} />
     </>
   );
 }

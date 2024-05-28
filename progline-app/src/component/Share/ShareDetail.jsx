@@ -77,7 +77,7 @@ export default function ShareDetail() {
   }, [categoryId]);
 
   return (
-    <div>
+    <div className="bg-[#f2f8f9] min-h-screen pt-20 px-[15px]">
       {errorMessages !== null &&
         // errorMessages が文字列か配列かで処理を分岐
         (typeof errorMessages === "string" ? (
@@ -92,27 +92,24 @@ export default function ShareDetail() {
       {services.length === 0 ? (
         <ShareEmptyService category={category} shareCode={shareCode} />
       ) : (
-        <>
-          <div className="flex items-center py-3 mx-6  min-[550px]:mx-14 min-[970px]:mx-32">
+        <div>
+          <div className="flex justify-center mb-9">
             {category && (
-              <div className="flex p-2 items-center">
-                <div className="w-8 h-8 min-[550px]:w-14 min-[550px]:h-14 mx-auto mr-4">
+              <div className="flex items-center p-[10px] min-[700px]:p-[20px] bg-white w-[1250px] h-[90px] min-[700px]:h-[110px] rounded">
+                <div className="h-[30px] w-[30px] ml-6 mr-4">
                   <img
                     src={category.image_url}
                     alt={category.name}
                     className="object-cover w-full h-full"
                   />
                 </div>
-                <div className="font-bold text-sm min-[350px]:text-base min-[550px]:text-lg">
+                <div className="font-bold text-sm min-[350px]:text-base min-[700px]:text-lg">
                   "{category.name}"に関する記録
                 </div>
               </div>
             )}
           </div>
-          <div className="p-5">
-            <div className="flex justify-between items-center mb-3 mx-4 min-[550px]:mx-14 min-[970px]:mx-32">
-              <div className="font-bold">登録した媒体</div>
-            </div>
+          <div>
             <div>
               <ShareServiceRegistration
                 services={services}
@@ -120,7 +117,7 @@ export default function ShareDetail() {
               />
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

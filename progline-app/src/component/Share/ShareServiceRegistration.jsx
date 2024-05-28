@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import ShareContent from "./ShareContent";
+import { IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowForward } from "react-icons/io";
 
 export default function ShareServiceRegistration({ services, MediaIcon }) {
   const generateUUID = () => {
@@ -11,6 +13,13 @@ export default function ShareServiceRegistration({ services, MediaIcon }) {
   const [contents, setContents] = useState(null);
   const [errorMessages, setErrorMessages] = useState([]);
 
+  const ref = useRef(null);
+  const scrollRef = useRef(null);
+  const [isClickDisabled, setIsClickDisabled] = useState(false);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+
   useEffect(() => {
     if (services.length > 0) {
       setSelectedService(services[0]);
@@ -18,7 +27,9 @@ export default function ShareServiceRegistration({ services, MediaIcon }) {
   }, [services]);
 
   const handleServiceClick = (service) => {
-    setSelectedService(service);
+    if (!isClickDisabled) {
+      setSelectedService(service);
+    }
   };
 
   useEffect(() => {
@@ -49,6 +60,35 @@ export default function ShareServiceRegistration({ services, MediaIcon }) {
     fetchData();
   }, [selectedService]);
 
+  const handleScrollLeft = () => {
+    scrollRef.current.scrollBy({ left: -200, behavior: "smooth" });
+  };
+
+  const handleScrollRight = () => {
+    scrollRef.current.scrollBy({ left: 200, behavior: "smooth" });
+  };
+
+  const startDrag = (e) => {
+    isDragging.current = true;
+    startX.current = e.pageX || e.touches[0].pageX;
+    scrollLeft.current = scrollRef.current.scrollLeft;
+  };
+
+  const onDrag = (e) => {
+    if (!isDragging.current) return;
+    const x = e.pageX || e.touches[0].pageX;
+    const walk = (x - startX.current) * 0.7;
+    scrollRef.current.scrollLeft = scrollLeft.current - walk;
+    e.preventDefault();
+    setIsClickDisabled(true);
+  };
+
+  const stopDrag = () => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    setIsClickDisabled(false); // 変更：ここで即座にリセット
+  };
+
   return (
     <div>
       {errorMessages !== null &&
@@ -62,38 +102,62 @@ export default function ShareServiceRegistration({ services, MediaIcon }) {
             </p>
           ))
         ))}
-
-      <div className="grid grid-cols-1 min-[350px]:grid-cols-2 min-[820px]:grid-cols-3 min-[1200px]:grid-cols-4 min-[1450px]:grid-cols-5 min-[1880px]:grid-cols-6 gap-4 mx-4 min-[550px]:mx-14 min-[970px]:mx-32">
-        {services.map((service) => (
-          <div
-            key={generateUUID()}
-            className="relative min-[600px]:w-[14rem] min-[1650px]:w-[16.5rem]"
+      <div className="max-w-[1250px] flex flex-col justify-center mx-auto">
+        <div className="flex justify-center">
+          <button
+            onClick={handleScrollLeft}
+            className="mr-1 max-[699px]:ml-[-15px] text-2xl min-[700px]:text-4xl text-gray-400 hover:text-black"
           >
-            <div
-              className={` min-[600px]:w-[14rem] min-[1650px]:w-[16.5rem] p-5 cursor-pointer hover:bg-blue-200 flex items-center justify-center ${
-                selectedService === service ? "bg-blue-200" : "bg-slate-100"
-              }`}
-              onClick={() => handleServiceClick(service)}
-            >
-              {service.image_url && (
-                <div className="w-5 h-5">
-                  <img
-                    src={service.image_url}
-                    alt={service.name}
-                    className="object-cover w-full h-full"
-                  />
+            <IoIosArrowBack />
+          </button>
+
+          <div
+            className="flex overflow-hidden pb-[145px] mb-[-145px]"
+            ref={scrollRef}
+            onMouseDown={startDrag}
+            onMouseMove={onDrag}
+            onMouseUp={stopDrag}
+            onMouseLeave={stopDrag}
+            onTouchStart={startDrag}
+            onTouchMove={onDrag}
+            onTouchEnd={stopDrag}
+          >
+            {services.map((service) => (
+              <div key={generateUUID()}>
+                <div
+                  className={`py-3 pl-3 pr-3 mr-2 border rounded cursor-pointer hover:bg-blue-200 flex items-center justify-center ${
+                    selectedService === service ? "bg-blue-200" : "bg-slate-200"
+                  }`}
+                  onClick={() => handleServiceClick(service)}
+                >
+                  {service.image_url && (
+                    <div className="w-5 h-5">
+                      <img
+                        src={service.image_url}
+                        alt={service.name}
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
+                  )}
+                  {!service.image_url && <MediaIcon name={service.name} />}
+                  <p className="text-sm text-center font-bold ml-1 overflow-hidden">
+                    {service.name}
+                  </p>
                 </div>
-              )}
-              {!service.image_url && <MediaIcon name={service.name} />}
-              <p className="text-sm text-center font-bold ml-2  overflow-hidden">
-                {service.name}
-              </p>
-            </div>
+              </div>
+            ))}
           </div>
-        ))}
+          <button
+            onClick={handleScrollRight}
+            className="ml-1 max-[699px]:mr-[-15px] text-2xl min-[700px]:text-4xl text-gray-400 hover:text-black"
+          >
+            <IoIosArrowForward />
+          </button>
+        </div>
+        <div>
+          <ShareContent contents={contents} />
+        </div>
       </div>
-      <div className="border my-3 mx-3"></div>
-      <ShareContent contents={contents} />
     </div>
   );
 }

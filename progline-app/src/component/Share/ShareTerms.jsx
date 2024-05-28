@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import ShareTermRegistration from "./ShareTermRegistration";
@@ -9,6 +9,7 @@ export default function ShareTerms() {
   const { shareCode } = useParams();
   const [categories, setCategories] = useState([]);
   const [errorMessages, setErrorMessages] = useState([]);
+  const [graphData, setGraphData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,8 +43,35 @@ export default function ShareTerms() {
     fetchData();
   }, [shareCode]);
 
+  const fetchGraphData = useCallback(async () => {
+    try {
+      if (shareCode) {
+        const res = await axios.get(
+          "http://localhost:3010/shared_codes/graph",
+          {
+            params: {
+              code: shareCode,
+            },
+          }
+        );
+        setGraphData(res.data);
+      }
+    } catch (error) {
+      console.error("グラフデータの取得エラー:", error);
+      if (error.response && error.response.data && error.response.data.errors) {
+        setErrorMessages(error.response.data.errors.join(", "));
+      } else {
+        setErrorMessages("登録中にエラーが発生しました");
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchGraphData();
+  }, [shareCode, fetchGraphData]);
+
   return (
-    <div>
+    <div className="bg-[#f2f8f9] min-h-screen pt-20 px-[15px]">
       {errorMessages !== null &&
         // errorMessages が文字列か配列かで処理を分岐
         (typeof errorMessages === "string" ? (
@@ -59,10 +87,10 @@ export default function ShareTerms() {
         <ShareEmptyCategory />
       ) : (
         <>
-          <div>
-            <div className="my-5 p-5 ml-4  min-[1300px]:mx-32">
+          <div className="flex justify-center">
+            <div className="my-5 w-full min-[1600px]:w-[1580px]">
               <div className="flex justify-between items-center mb-3">
-                <div className="font-bold">登録したカテゴリ</div>
+                <div className="font-bold text-2xl">カテゴリ</div>
               </div>
               <div>
                 <ShareTermRegistration
@@ -72,8 +100,8 @@ export default function ShareTerms() {
               </div>
             </div>
           </div>
-          <div className="mx-5 min-[500px]:mx-10 sm:mx-20 mb-10">
-            <ShareTermGraph shareCode={shareCode} />
+          <div className="bg-white py-[50px] px-[20px] min-[1000px]:px-[100px] min-[1600px]:w-[1580px] mx-auto">
+            <ShareTermGraph graphData={graphData} />
           </div>
         </>
       )}

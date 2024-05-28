@@ -44,7 +44,7 @@ export default function TermRegistration({
   };
   return (
     <div>
-      <div className="grid grid-cols-2 min-[300px]:grid-cols-3 min-[400px]:grid-cols-4 min-[500px]:grid-cols-5 sm:grid-cols-6 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-8 2xl:grid-cols-10">
+      <div className="grid grid-cols-2 min-[300px]:grid-cols-3 min-[400px]:grid-cols-4 min-[500px]:grid-cols-5 sm:grid-cols-6 md:grid-cols-5 lg:grid-cols-8 2xl:grid-cols-10">
         {errorMessages !== null &&
           // errorMessages が文字列か配列かで処理を分岐
           (typeof errorMessages === "string" ? (
