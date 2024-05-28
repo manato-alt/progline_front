@@ -60,7 +60,7 @@ export default function TermRegistration({
           <div key={generateUUID()} className="relative w-20 md:w-28 mr-2 mt-2">
             <Link
               to={`/termsDetail/${registrationCategory.id}`}
-              className="bg-slate-100 rounded-md p-4 cursor-pointer hover:bg-blue-200  w-20 h-20 md:w-28 md:h-28 flex flex-col justify-center"
+              className="bg-white rounded-md p-4 cursor-pointer hover:bg-blue-200  w-20 h-20 md:w-28 md:h-28 flex flex-col justify-center"
             >
               <div>
                 <div className="w-6 h-6 md:w-10 md:h-10 mx-auto">

@@ -129,7 +129,7 @@ export default function Terms() {
   }, [user, fetchGraphData]);
 
   return (
-    <div>
+    <div className="bg-[#f2f8f9] min-h-screen pt-20 px-[15px]">
       {errorMessages !== null &&
         // errorMessages が文字列か配列かで処理を分岐
         (typeof errorMessages === "string" ? (
@@ -146,10 +146,10 @@ export default function Terms() {
         <EmptyCategory handleShow={handleShow} />
       ) : (
         <>
-          <div>
-            <div className="my-5 p-5 ml-4 min-[1300px]:mx-32">
+          <div className="flex justify-center">
+            <div className="my-5 w-full min-[1600px]:w-[1580px]">
               <div className="flex justify-between items-center mb-3">
-                <div className="font-bold">登録したカテゴリ</div>
+                <div className="font-bold text-2xl">カテゴリ</div>
                 <div className="min-[768px]:hidden">
                   <button
                     onClick={handleShow}
@@ -168,7 +168,7 @@ export default function Terms() {
               </div>
             </div>
           </div>
-          <div className="mx-5 min-[500px]:mx-10 sm:mx-20 mb-10">
+          <div className="bg-white py-[50px] px-[20px] min-[1000px]:px-[100px] min-[1600px]:w-[1580px] mx-auto">
             <TermGraph graphData={graphData} />
           </div>
         </>

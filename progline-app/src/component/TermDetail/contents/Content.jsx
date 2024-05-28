@@ -23,7 +23,7 @@ export default function Content({ contents, updateContents }) {
   };
 
   return (
-    <div className="bg-white p-5 grid  grid-cols-1 min-[440px]:grid-cols-2 min-[600px]:grid-cols-3 min-[800px]:grid-cols-4 min-[1030px]:grid-cols-5 gap-4 mt-3">
+    <div className="bg-white p-5 grid  grid-cols-1 min-[420px]:grid-cols-2 min-[800px]:grid-cols-3 min-[1030px]:grid-cols-5 gap-4 mt-3">
       {errorMessages !== null &&
         // errorMessages が文字列か配列かで処理を分岐
         (typeof errorMessages === "string" ? (
@@ -39,7 +39,7 @@ export default function Content({ contents, updateContents }) {
         contents.map((content) => (
           <div
             key={content.id}
-            className="rounded-md border border-gray-300 hover:border-blue-500 hover:shadow-md relative"
+            className="pb-2 rounded-md border border-gray-300 hover:border-blue-500 hover:shadow-md relative"
           >
             <a
               href={content.url}
@@ -75,7 +75,7 @@ export default function Content({ contents, updateContents }) {
               </div>
             </a>
             <div
-              className="absolute right-4 bottom-2 p-2 cursor-pointer transition duration-300 transform hover:scale-110"
+              className="absolute right-3 bottom-0 p-2 cursor-pointer transition duration-300 transform hover:scale-110"
               onClick={() => setSelectedContent(content)}
             >
               <RiDeleteBinLine />
