@@ -55,7 +55,7 @@ export default function Top() {
   }, [dropdownRef]);
 
   return (
-    <div className="py-6 min-[700px]:py-20">
+    <div className="py-[65px] min-[700px]:py-[120px]">
       <div className="flex justify-center items-center">
         <div className="text-center">
           <h1 className=" text-[3rem] min-[700px]:text-[3.6rem] font-bold tracking-widest leading-[1]">
