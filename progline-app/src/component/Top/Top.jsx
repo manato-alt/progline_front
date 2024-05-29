@@ -9,7 +9,7 @@ import { FcGoogle } from "react-icons/fc";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
-import myImage_second from "../../images/270x180.png";
+import TopPageImage from "../../images/TopPage.png";
 
 export default function Top() {
   const [selectedImage, setSelectedImage] = useState("A");
@@ -58,12 +58,10 @@ export default function Top() {
     <div className="py-[65px] min-[700px]:py-[120px]">
       <div className="flex justify-center items-center">
         <div className="text-center">
-          <h1 className=" text-[3rem] min-[700px]:text-[3.6rem] font-bold tracking-widest leading-[1]">
-            IT技術
-            <br className="min-[700px]:hidden" />
-            の道しるべ
+          <h1 className="text-[2.2rem] min-[400px]:text-[2.6rem] min-[500px]:text-[3rem] min-[700px]:text-[3.6rem] font-bold tracking-widest leading-[1]">
+            IT技術の道しるべ
           </h1>
-          <p className="px-6 mt-4 mx-auto text-[1.3rem]">
+          <p className="text-gray-500 px-12 mt-4 mx-auto text-[1.3rem]">
             テンプレートを活用した<span className="font-bold">記録</span>、
             <span className="font-bold">共有</span>機能で、
             <br />
@@ -103,7 +101,11 @@ export default function Top() {
         </div>
       )}
       <div className="mt-10 flex justify-center">
-        <img src={myImage_second} alt="イラスト画像" className="w-1/3" />
+        <img
+          src={TopPageImage}
+          alt="イラスト画像"
+          className="w-[100%] min-[1000px]:w-[80%] min-[1300px]:w-[70%] min-[1800px]:w-[52%]"
+        />
       </div>
       <div className="flex flex-col justify-center items-center py-24">
         <img
