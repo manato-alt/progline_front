@@ -64,7 +64,7 @@ export default function ShareTerms() {
         setErrorMessages("登録中にエラーが発生しました");
       }
     }
-  }, []);
+  }, [shareCode]);
 
   useEffect(() => {
     fetchGraphData();
@@ -88,7 +88,7 @@ export default function ShareTerms() {
       ) : (
         <>
           <div className="flex justify-center">
-            <div className="my-5 w-full min-[1600px]:w-[1580px]">
+            <div className="my-5 w-full min-[1200px]:w-[1080px]  min-[1600px]:w-[1580px]">
               <div className="flex justify-between items-center mb-3">
                 <div className="font-bold text-2xl">カテゴリ</div>
               </div>
@@ -100,7 +100,7 @@ export default function ShareTerms() {
               </div>
             </div>
           </div>
-          <div className="bg-white py-[50px] px-[20px] min-[1000px]:px-[100px] min-[1600px]:w-[1580px] mx-auto">
+          <div className="bg-white py-[50px] px-[20px] min-[1000px]:px-[100px] min-[1200px]:w-[1080px] min-[1600px]:w-[1580px] mx-auto">
             <ShareTermGraph graphData={graphData} />
           </div>
         </>
