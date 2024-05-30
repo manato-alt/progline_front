@@ -4,7 +4,7 @@ import axios from "axios";
 import SearchForm from "./SearchForm";
 import logo from "../../images/logo.png";
 import Square from "./HoverSquare";
-import dummyImages from "./dummyImages.jsx";
+import gifImages from "./gifImages.jsx";
 import { FcGoogle } from "react-icons/fc";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../../contexts/AuthContext";
@@ -15,16 +15,15 @@ export default function Top() {
   const [selectedImage, setSelectedImage] = useState("A");
   const [lastSelectedImage, setLastSelectedImage] = useState(null);
   const [user] = useAuthState(auth);
-  const [searchResults, setSearchResults] = useState([]); // 検索結果の状態追加
-  const [searchError, setSearchError] = useState(""); // エラーメッセージの状態追加
-  const dropdownRef = useRef(null); // ドロップダウンのrefを追加
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchError, setSearchError] = useState("");
+  const dropdownRef = useRef(null);
 
   const handleClick = (image) => {
     setLastSelectedImage(null);
     setSelectedImage(image);
   };
 
-  // シェアコードを検索する関数
   const searchShareCode = async (code) => {
     try {
       const response = await axios.post(
@@ -32,15 +31,14 @@ export default function Top() {
         { code }
       );
       setSearchResults([{ public_name: response.data.public_name, code }]);
-      setSearchError(""); // エラーをクリア
+      setSearchError("");
     } catch (error) {
       console.error("シェアコードの検索エラー:", error);
-      setSearchResults([]); // 検索結果をクリア
+      setSearchResults([]);
       setSearchError("シェアコードが見つかりません");
     }
   };
 
-  // クリック外しでドロップダウンを閉じる
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -53,6 +51,22 @@ export default function Top() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [dropdownRef]);
+
+  const textMappingTitle = {
+    A: "学びの足跡を残そう、用語を手軽に登録",
+    B: "学びの道筋を整理整頓、どのサービスで学んだかも一目瞭然",
+    C: "学習サービスとコンテンツをスマートに紐づけ",
+    D: "学びを見える化、用語ごとの学習量をグラフでチェック",
+    E: "知識の交流を促進、自分の記録を公開し、他人の学びも参考に",
+  };
+
+  const textMapping = {
+    A: "テンプレートやカスタム機能を使い学習した用語を手軽に登録できます。",
+    B: "テンプレートやカスタム機能を使い学習に利用したサービスを手軽に登録できます。",
+    C: "学習に利用したコンテンツをURLから自動でプレビュー生成し、簡単にサービスに紐付けられます。",
+    D: "登録したコンテンツの数を用語別にグラフ化して可視化することで、学習量が一目でわかるようになります。",
+    E: "共有機能を使って自分の記録を共有したり、他の人の記録を見ることができます。",
+  };
 
   return (
     <div className="py-[65px] min-[700px]:py-[120px]">
@@ -71,7 +85,6 @@ export default function Top() {
       </div>
       <div className="relative">
         <SearchForm onSearch={searchShareCode} />
-        {/* 検索結果のドロップダウン表示 */}
         {searchResults.length > 0 && (
           <div
             ref={dropdownRef}
@@ -88,7 +101,6 @@ export default function Top() {
             ))}
           </div>
         )}
-        {/* エラーメッセージの表示 */}
         {searchError && (
           <div className="mt-4 text-center text-red-500">
             <p>{searchError}</p>
@@ -100,7 +112,7 @@ export default function Top() {
           <SignInButton />
         </div>
       )}
-      <div className="mt-10 flex justify-center">
+      <div className="mt-10 flex justify-center max-[699px]:ml-[-40px] max-[699px]:mr-[-20px] overflow-x-hidden">
         <img
           src={TopPageImage}
           alt="イラスト画像"
@@ -120,7 +132,6 @@ export default function Top() {
         </p>
       </div>
       <div>
-        {/* 横並びの四角の要素 */}
         <div className="flex flex-wrap justify-center mx-[32px] space-x-2 sm:space-x-4">
           {["A", "B", "C", "D", "E"].map((item) => (
             <Square
@@ -131,14 +142,22 @@ export default function Top() {
             />
           ))}
         </div>
-        {/* 画像 */}
-        <div className="flex justify-center">
+        <div className="flex justify-center mt-4 mx-[15px] max-[999px]:mt-[5px]">
           {(selectedImage || lastSelectedImage) && (
-            <img
-              src={dummyImages[selectedImage || lastSelectedImage]}
-              alt={`ダミー画像 ${selectedImage || lastSelectedImage}`}
-              className="w-full sm:max-w-lg transition-transform duration-500 ease-in-out transform-gpu"
-            />
+            <div className="bg-gray-100 p-[10px] min-[900px]:p-[30px] w-[950px] rounded-lg">
+              <p className="text-left font-bold text-[18px] mb-[5px] max-[899px]:pt-3 max-[899px]:pl-3">
+                {textMappingTitle[selectedImage || lastSelectedImage]}
+              </p>
+              <p className="text-left mb-[30px] max-[899px]:pl-3">
+                {textMapping[selectedImage || lastSelectedImage]}
+              </p>
+
+              <img
+                src={gifImages[selectedImage || lastSelectedImage]}
+                alt={`ダミー画像 ${selectedImage || lastSelectedImage}`}
+                className="w-full rounded-lg shadow-lg"
+              />
+            </div>
           )}
         </div>
       </div>
