@@ -21,10 +21,17 @@ export default function Header() {
     ref.current?.showModal();
   }, [ref]);
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <header className="bg-white py-2 fixed top-0 left-0 w-full z-50 shadow-lg">
       <div className="flex justify-between items-center">
-        <Link to="/">
+        <Link to="/" onClick={scrollToTop}>
           <img
             src={logo}
             alt="Logo"
