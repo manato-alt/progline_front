@@ -128,7 +128,7 @@ function SignInButton() {
       className="flex items-center py-1 px-4 min-[500px]:py-2 bg-black min-[700px]:py-3 min-[500px]:px-6 rounded-lg mr-4 min-[500px]:mr-6 text-white"
     >
       <FcGoogle />
-      <p className="text-base ml-1">Googleで登録</p>
+      <p className="text-base ml-1">Googleでログイン</p>
     </button>
   );
 }
