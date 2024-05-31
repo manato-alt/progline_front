@@ -119,7 +119,7 @@ export default function Top() {
           className="w-[100%] min-[1000px]:w-[80%] min-[1300px]:w-[70%] min-[1800px]:w-[52%]"
         />
       </div>
-      <div className="flex flex-col justify-center items-center py-24">
+      <div className="flex flex-col justify-center items-center py-20">
         <img
           src={logo}
           alt="Logo"
