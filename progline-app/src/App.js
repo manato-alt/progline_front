@@ -12,6 +12,9 @@ import CategoryProtectedRoute from "./component/ProtectedRoute/CategoryProtected
 import ShareTermProtectedRoute from "./component/ProtectedRoute/ShareTermProtectedRoute";
 import ShareProtectedRoute from "./component/ProtectedRoute/ShareProtectedRoute";
 import PageNotFound from "./component/PageNotFound";
+import Privacy from "./component/Footer/Privacy";
+import Rule from "./component/Footer/Rule";
+import Footer from "./component/Footer/Footer";
 
 function App() {
   return (
@@ -33,9 +36,12 @@ function App() {
             path="/shareDetail/:shareCode/:categoryId"
             element={<ShareProtectedRoute element={ShareDetail} />}
           />
+          <Route path="/rule" element={<Rule />} />
+          <Route path="/privacy" element={<Privacy />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </div>
+      <Footer />
     </Router>
   );
 }
