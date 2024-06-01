@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { axiosInstance } from "../../utils/axios";
 
 export default function DetailCustom({
   closeModal,
@@ -37,7 +37,7 @@ export default function DetailCustom({
       formData.append("name", imageName);
       formData.append("category_id", category.id);
 
-      await axios.post("http://localhost:3010/services", formData, {
+      await axiosInstance.post("/services", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

@@ -2,10 +2,10 @@ import React, { useRef, useState, useCallback } from "react";
 import { Dropdown, Modal, Button } from "react-daisyui";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { CiEdit } from "react-icons/ci";
-import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import TermEdit from "./TermEdit";
 import { Link } from "react-router-dom";
+import { axiosInstance } from "../../utils/axios";
 
 export default function TermRegistration({
   registrationCategories,
@@ -21,7 +21,7 @@ export default function TermRegistration({
   const handleDelete = async (categoryId) => {
     try {
       // カテゴリーを削除するリクエストを送信
-      await axios.delete(`http://localhost:3010/categories/${categoryId}`);
+      await axiosInstance.delete(`/categories/${categoryId}`);
       console.log("カテゴリーが削除されました");
       updateRegistrationCategories();
       setErrorMessages([]); // エラーメッセージをクリア

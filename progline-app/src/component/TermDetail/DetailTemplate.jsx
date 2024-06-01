@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { SiQiita, SiUdemy, SiZenn } from "react-icons/si";
 import { FaYoutube, FaAmazon } from "react-icons/fa";
+import { axiosInstance } from "../../utils/axios";
 
 export default function DetailTemplate({
   services,
@@ -21,7 +21,7 @@ export default function DetailTemplate({
 
     try {
       // 選択されたカテゴリの情報を含めて API リクエストを送信
-      await axios.post("http://localhost:3010/services_template", {
+      await axiosInstance.post("/services_template", {
         service_id: selectedService,
         category_id: category.id,
         // 選択されたサービスのID

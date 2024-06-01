@@ -2,8 +2,8 @@ import React, { useEffect, useState, useCallback } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../contexts/AuthContext";
-import axios from "axios";
 import Loading from "../Loading";
+import { axiosInstance } from "../../utils/axios";
 
 const CategoryProtectedRoute = ({ element: Component, ...rest }) => {
   const [user, loading] = useAuthState(auth);
@@ -13,8 +13,8 @@ const CategoryProtectedRoute = ({ element: Component, ...rest }) => {
   const fetchAuthorization = useCallback(async () => {
     if (user) {
       try {
-        const response = await axios.post(
-          `http://localhost:3010/categories/validate_access`,
+        const response = await axiosInstance.post(
+          `/categories/validate_access`,
           {
             category_id: categoryId,
             user_id: user.uid,

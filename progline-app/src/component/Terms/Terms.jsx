@@ -2,12 +2,12 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import { Modal, Button } from "react-daisyui";
 import TermTemplate from "./TermTemplate";
 import TermCustom from "./TermCustom";
-import axios from "axios";
 import TermRegistration from "./TermRegistration";
 import { auth } from "../../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import TermGraph from "./TermGraph";
 import EmptyCategory from "./EmptyCategory";
+import { axiosInstance } from "../../utils/axios";
 
 export default function Terms() {
   const [categories, setCategories] = useState([]);
@@ -21,7 +21,7 @@ export default function Terms() {
   const fetchGraphData = useCallback(async () => {
     try {
       if (user && user.uid) {
-        const res = await axios.get("http://localhost:3010/graphs", {
+        const res = await axiosInstance.get("/graphs", {
           params: {
             user_id: user.uid,
           },
@@ -41,9 +41,7 @@ export default function Terms() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:3010/template_categories"
-        );
+        const res = await axiosInstance.get("/template_categories");
         setCategories(res.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -68,7 +66,7 @@ export default function Terms() {
     const fetchData = async () => {
       if (user && user.uid) {
         try {
-          const res = await axios.get("http://localhost:3010/categories", {
+          const res = await axiosInstance.get("/categories", {
             params: {
               user_id: user.uid,
             },
@@ -107,7 +105,7 @@ export default function Terms() {
 
   const updateRegistrationCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:3010/categories", {
+      const res = await axiosInstance.get("/categories", {
         params: {
           user_id: user.uid,
         },

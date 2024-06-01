@@ -1,9 +1,9 @@
 import React, { useRef, useEffect, useState } from "react";
-import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import ShareContent from "./ShareContent";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
+import { axiosInstance } from "../../utils/axios";
 
 export default function ShareServiceRegistration({ services, MediaIcon }) {
   const generateUUID = () => {
@@ -13,7 +13,6 @@ export default function ShareServiceRegistration({ services, MediaIcon }) {
   const [contents, setContents] = useState(null);
   const [errorMessages, setErrorMessages] = useState([]);
 
-  const ref = useRef(null);
   const scrollRef = useRef(null);
   const [isClickDisabled, setIsClickDisabled] = useState(false);
   const isDragging = useRef(false);
@@ -36,7 +35,7 @@ export default function ShareServiceRegistration({ services, MediaIcon }) {
     const fetchData = async () => {
       try {
         if (selectedService) {
-          const response = await axios.get("http://localhost:3010/contents", {
+          const response = await axiosInstance.get("/contents", {
             params: {
               service_id: selectedService.id,
             },

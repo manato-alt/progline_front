@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import NoContents from "../../NoContents";
+import { axiosInstance } from "../../../utils/axios";
 
 export default function Content({ contents, updateContents }) {
   const [selectedContent, setSelectedContent] = useState(null);
@@ -10,7 +10,7 @@ export default function Content({ contents, updateContents }) {
 
   const handleDelete = async (content_id) => {
     try {
-      await axios.delete(`http://localhost:3010/contents/${content_id}`);
+      await axiosInstance.delete(`/contents/${content_id}`);
       updateContents();
       // 削除後にコンテンツを再取得して更新
     } catch (error) {

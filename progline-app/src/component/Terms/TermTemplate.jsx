@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { auth } from "../../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { axiosInstance } from "../../utils/axios";
 
 export default function TermTemplate({
   categories,
@@ -23,7 +23,7 @@ export default function TermTemplate({
 
     try {
       // 選択されたカテゴリの情報を含めて API リクエストを送信
-      await axios.post("http://localhost:3010/template_categories", {
+      await axiosInstance.post("/template_categories", {
         user_id: user.uid, // ログインユーザーのID
         category_id: selectedCategory, // 選択されたカテゴリのID
       });

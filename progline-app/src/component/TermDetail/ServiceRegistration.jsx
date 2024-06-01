@@ -2,7 +2,6 @@ import React, { useRef, useCallback, useEffect, useState } from "react";
 import { Dropdown, Modal, Button } from "react-daisyui";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { CiEdit } from "react-icons/ci";
-import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import ServiceEdit from "./ServiceEdit";
 import { MdAppRegistration } from "react-icons/md";
@@ -11,6 +10,7 @@ import ContentCustom from "./contents/ContentCustom";
 import Content from "./contents/Content";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
+import { axiosInstance } from "../../utils/axios";
 
 export default function ServiceRegistration({
   registrationServices,
@@ -69,7 +69,7 @@ export default function ServiceRegistration({
 
   const handleDelete = async (serviceId) => {
     try {
-      await axios.delete(`http://localhost:3010/services/${serviceId}`);
+      await axiosInstance.delete(`/services/${serviceId}`);
       console.log("サービスが削除されました");
       updateRegistrationServices();
     } catch (error) {
@@ -95,7 +95,7 @@ export default function ServiceRegistration({
     const fetchData = async () => {
       try {
         if (selectedService) {
-          const response = await axios.get("http://localhost:3010/contents", {
+          const response = await axiosInstance.get("/contents", {
             params: {
               service_id: selectedService.id,
             },
@@ -121,7 +121,7 @@ export default function ServiceRegistration({
 
   const updateContents = async () => {
     try {
-      const response = await axios.get("http://localhost:3010/contents", {
+      const response = await axiosInstance.get("/contents", {
         params: {
           service_id: selectedService.id,
         },

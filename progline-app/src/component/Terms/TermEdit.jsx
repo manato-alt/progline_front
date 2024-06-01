@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { axiosInstance } from "../../utils/axios";
 
 export default function TermEdit({
   closeModal,
@@ -22,13 +22,9 @@ export default function TermEdit({
       }
       formData.append("name", editedCategory.name);
       // カテゴリー情報の更新リクエストを送信
-      await axios.put(
-        `http://localhost:3010/categories/${editedCategory.id}`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      await axiosInstance.put(`/categories/${editedCategory.id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       console.log("カテゴリーが編集されました");
       // 親コンポーネントに通知

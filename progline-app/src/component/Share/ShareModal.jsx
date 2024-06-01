@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { auth } from "../../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { FaCopy } from "react-icons/fa";
+import { axiosInstance } from "../../utils/axios";
 
 export default function ShareModal() {
   const [publicName, setPublicName] = useState("");
@@ -16,12 +16,9 @@ export default function ShareModal() {
       if (user && user.uid) {
         // userとuser.uidが存在するかを確認
         try {
-          const response = await axios.get(
-            "http://localhost:3010/shared_codes",
-            {
-              params: { user_id: user.uid },
-            }
-          );
+          const response = await axiosInstance.get("/shared_codes", {
+            params: { user_id: user.uid },
+          });
 
           // レスポンスデータがnullでないことを確認
           if (response.data) {
@@ -50,13 +47,10 @@ export default function ShareModal() {
   const handleCreateOrUpdate = async () => {
     if (user && user.uid) {
       try {
-        const response = await axios.post(
-          "http://localhost:3010/shared_codes/create_name",
-          {
-            user_id: user.uid,
-            public_name: publicName,
-          }
-        );
+        const response = await axiosInstance.post("/shared_codes/create_name", {
+          user_id: user.uid,
+          public_name: publicName,
+        });
         console.log(response.data);
         setError("");
         setErrorMessages([]);
@@ -74,13 +68,10 @@ export default function ShareModal() {
   const handleGenerateCode = async () => {
     if (user && user.uid) {
       try {
-        const response = await axios.post(
-          "http://localhost:3010/shared_codes/create_code",
-          {
-            user_id: user.uid,
-            public_name: auth.currentUser.displayName,
-          }
-        );
+        const response = await axiosInstance.post("/shared_codes/create_code", {
+          user_id: user.uid,
+          public_name: auth.currentUser.displayName,
+        });
         setCode(response.data.shared_code.code);
         console.log(response.data.message);
         setError("");
@@ -95,8 +86,8 @@ export default function ShareModal() {
   const handleDeleteCode = async () => {
     if (user && user.uid) {
       try {
-        const response = await axios.delete(
-          "http://localhost:3010/shared_codes/delete_code",
+        const response = await axiosInstance.delete(
+          "/shared_codes/delete_code",
           {
             params: { user_id: user.uid },
           }

@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import { SiQiita, SiUdemy, SiZenn } from "react-icons/si";
 import { FaYoutube, FaAmazon } from "react-icons/fa";
@@ -10,6 +9,7 @@ import DetailTemplate from "./DetailTemplate";
 import DetailCustom from "./DetailCustom";
 import ServiceRegistration from "./ServiceRegistration";
 import EmptyService from "./EmptyService";
+import { axiosInstance } from "../../utils/axios";
 
 export default function TermDetail() {
   const [category, setCategory] = useState(null);
@@ -43,7 +43,7 @@ export default function TermDetail() {
       if (user && user.uid) {
         // userとuser.uidが存在するかを確認
         try {
-          const res = await axios.get("http://localhost:3010/services", {
+          const res = await axiosInstance.get("/services", {
             params: {
               category_id: categoryId,
             },
@@ -70,9 +70,7 @@ export default function TermDetail() {
   useEffect(() => {
     const fetchCategory = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3010/categories/${categoryId}`
-        );
+        const response = await axiosInstance.get(`/categories/${categoryId}`);
         setCategory(response.data);
       } catch (error) {
         console.error("Error fetching category:", error);
@@ -94,7 +92,7 @@ export default function TermDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:3010/template_services");
+        const res = await axiosInstance.get("/template_services");
         setServices(res.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -129,7 +127,7 @@ export default function TermDetail() {
 
   const updateRegistrationServices = async () => {
     try {
-      const res = await axios.get("http://localhost:3010/services", {
+      const res = await axiosInstance.get("/services", {
         params: {
           category_id: categoryId,
         },
