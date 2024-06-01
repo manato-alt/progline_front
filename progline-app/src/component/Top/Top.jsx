@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import SearchForm from "./SearchForm";
 import logo from "../../images/logo.png";
 import Square from "./HoverSquare";
@@ -10,6 +9,7 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import TopPageImage from "../../images/TopPage.png";
+import { axiosInstance } from "../../utils/axios.js";
 
 export default function Top() {
   const [selectedImage, setSelectedImage] = useState("A");
@@ -26,10 +26,9 @@ export default function Top() {
 
   const searchShareCode = async (code) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3010/shared_codes/search",
-        { code }
-      );
+      const response = await axiosInstance.post("/shared_codes/search", {
+        code,
+      });
       setSearchResults([{ public_name: response.data.public_name, code }]);
       setSearchError("");
     } catch (error) {
@@ -185,7 +184,7 @@ function SignInButton() {
 
 async function addUserToDatabase(uid) {
   try {
-    await axios.post("http://localhost:3010/users", { uid });
+    await axiosInstance.post("/users", { uid });
     console.log("UIDがRailsのAPIに送信されました");
   } catch (error) {
     console.error("RailsのAPIへのリクエスト中にエラーが発生しました:", error);

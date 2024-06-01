@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { auth } from "../../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { axiosInstance } from "../../utils/axios";
 
 export default function TermCustom({
   closeModal,
@@ -38,7 +38,7 @@ export default function TermCustom({
       formData.append("name", imageName);
       formData.append("user_id", user.uid);
 
-      await axios.post("http://localhost:3010/categories", formData, {
+      await axiosInstance.post("/categories", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { TiHome } from "react-icons/ti";
 
 export default function ShareEmptyService({ category, shareCode }) {
   return (

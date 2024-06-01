@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { axiosInstance } from "../../utils/axios";
 
 export default function ServiceEdit({
   closeModal,
@@ -22,13 +22,9 @@ export default function ServiceEdit({
       formData.append("name", editedService.name);
 
       // カテゴリー情報の更新リクエストを送信
-      await axios.put(
-        `http://localhost:3010/services/${editedService.id}`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      await axiosInstance.put(`/services/${editedService.id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       console.log("サービスが編集されました");
       // 親コンポーネントに通知

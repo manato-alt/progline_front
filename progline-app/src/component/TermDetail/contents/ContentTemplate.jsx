@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { axiosInstance } from "../../../utils/axios";
 
 export default function ContentTemplate({
   service,
@@ -21,7 +21,7 @@ export default function ContentTemplate({
       formData.append("url", url);
       formData.append("service_id", service.id);
 
-      await axios.post("http://localhost:3010/contents", formData, {
+      await axiosInstance.post("/contents", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

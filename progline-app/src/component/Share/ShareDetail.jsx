@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import { SiQiita, SiUdemy, SiZenn } from "react-icons/si";
 import { FaYoutube, FaAmazon } from "react-icons/fa";
 import ShareServiceRegistration from "./ShareServiceRegistration";
 import ShareEmptyService from "./ShareEmptyService";
+import { axiosInstance } from "../../utils/axios";
 
 export default function ShareDetail() {
   const [category, setCategory] = useState(null);
@@ -33,15 +33,12 @@ export default function ShareDetail() {
     const fetchData = async () => {
       if ((categoryId, shareCode)) {
         try {
-          const res = await axios.get(
-            "http://localhost:3010/shared_codes/service_index",
-            {
-              params: {
-                category_id: categoryId,
-                code: shareCode,
-              },
-            }
-          );
+          const res = await axiosInstance.get("/shared_codes/service_index", {
+            params: {
+              category_id: categoryId,
+              code: shareCode,
+            },
+          });
           setServices(res.data);
         } catch (error) {
           console.error("Error fetching Services:", error);
@@ -64,9 +61,7 @@ export default function ShareDetail() {
   useEffect(() => {
     const fetchCategory = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3010/categories/${categoryId}`
-        );
+        const response = await axiosInstance.get(`/categories/${categoryId}`);
         setCategory(response.data);
       } catch (error) {
         console.error("Error fetching category:", error);

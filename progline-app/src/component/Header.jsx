@@ -7,11 +7,11 @@ import { GoTriangleDown } from "react-icons/go";
 import { Dropdown, Modal, Button } from "react-daisyui";
 import { PiSignOutBold } from "react-icons/pi";
 import { FcGoogle } from "react-icons/fc";
-import axios from "axios";
 import ShareModal from "./Share/ShareModal";
 import logo from "../images/logo.png";
 import { Link } from "react-router-dom";
 import { FaChalkboardTeacher } from "react-icons/fa";
+import { axiosInstance } from "../utils/axios";
 
 export default function Header() {
   const [user] = useAuthState(auth);
@@ -165,7 +165,7 @@ function UserInfo() {
 async function addUserToDatabase(uid) {
   try {
     // RailsのAPIエンドポイントにUIDを送信
-    await axios.post("http://localhost:3010/users", { uid });
+    await axiosInstance.post("/users", { uid });
     console.log("UIDがRailsのAPIに送信されました");
   } catch (error) {
     console.error("RailsのAPIへのリクエスト中にエラーが発生しました:", error);

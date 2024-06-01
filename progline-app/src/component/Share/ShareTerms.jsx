@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import ShareTermRegistration from "./ShareTermRegistration";
 import ShareTermGraph from "./ShareTermGraph";
 import ShareEmptyCategory from "./ShareEmptyCategory";
+import { axiosInstance } from "../../utils/axios";
 
 export default function ShareTerms() {
   const { shareCode } = useParams();
@@ -16,14 +16,11 @@ export default function ShareTerms() {
       if (shareCode) {
         // userとuser.uidが存在するかを確認
         try {
-          const res = await axios.get(
-            "http://localhost:3010/shared_codes/term_index",
-            {
-              params: {
-                code: shareCode,
-              },
-            }
-          );
+          const res = await axiosInstance.get("/shared_codes/term_index", {
+            params: {
+              code: shareCode,
+            },
+          });
           setCategories(res.data);
         } catch (error) {
           console.error("Error fetching Categories:", error);
@@ -46,14 +43,11 @@ export default function ShareTerms() {
   const fetchGraphData = useCallback(async () => {
     try {
       if (shareCode) {
-        const res = await axios.get(
-          "http://localhost:3010/shared_codes/graph",
-          {
-            params: {
-              code: shareCode,
-            },
-          }
-        );
+        const res = await axiosInstance.get("/shared_codes/graph", {
+          params: {
+            code: shareCode,
+          },
+        });
         setGraphData(res.data);
       }
     } catch (error) {

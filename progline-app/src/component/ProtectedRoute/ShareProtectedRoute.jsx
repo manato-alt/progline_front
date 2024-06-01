@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Navigate, useParams } from "react-router-dom";
-import axios from "axios";
 import Loading from "../Loading";
+import { axiosInstance } from "../../utils/axios";
 
 const ShareProtectedRoute = ({ element: Component, ...rest }) => {
   const [isAuthorized, setIsAuthorized] = useState(null);
@@ -10,8 +10,8 @@ const ShareProtectedRoute = ({ element: Component, ...rest }) => {
   const fetchAuthorization = useCallback(async () => {
     if ((shareCode, categoryId)) {
       try {
-        const response = await axios.post(
-          `http://localhost:3010/shared_codes/validate_access`,
+        const response = await axiosInstance.post(
+          `/shared_codes/validate_access`,
           {
             category_id: categoryId,
             code: shareCode,
