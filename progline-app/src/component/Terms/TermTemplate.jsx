@@ -68,7 +68,7 @@ export default function TermTemplate({
           >
             <div className="w-5 h-5 min-[860px]:w-8 min-[860px]:h-8 mx-auto">
               <img
-                src={category.image_url}
+                src={category.original_url}
                 alt={category.name}
                 className="object-cover w-full h-full"
               />

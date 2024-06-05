@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from "react";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import { Dropdown, Modal, Button } from "react-daisyui";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { CiEdit } from "react-icons/ci";
@@ -17,6 +17,7 @@ export default function TermRegistration({
   };
   const ref = useRef(null);
   const [errorMessages, setErrorMessages] = useState([]);
+  const [editingCategory, setEditingCategory] = useState(null);
 
   const handleDelete = async (categoryId) => {
     try {
@@ -35,9 +36,15 @@ export default function TermRegistration({
     }
   };
 
-  const handleShow = useCallback(() => {
-    ref.current?.showModal();
-  }, [ref]);
+  const handleShow = useCallback((category) => {
+    setEditingCategory(category);
+  }, []);
+
+  useEffect(() => {
+    if (editingCategory) {
+      ref.current?.showModal();
+    }
+  }, [editingCategory]);
 
   const handleCloseModal = () => {
     ref.current?.close();
@@ -63,13 +70,18 @@ export default function TermRegistration({
               className="bg-white rounded-md p-4 cursor-pointer hover:bg-blue-200  w-20 h-20 md:w-28 md:h-28 flex flex-col justify-center"
             >
               <div>
-                <div className="w-6 h-6 md:w-10 md:h-10 mx-auto">
-                  <img
-                    src={registrationCategory.image_url}
-                    alt={registrationCategory.name}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
+                {registrationCategory.image.url ||
+                registrationCategory.original_url ? (
+                  <div className="w-6 h-6 md:w-10 md:h-10 mx-auto">
+                    <img
+                      src={
+                        registrationCategory.image.url ||
+                        registrationCategory.original_url
+                      }
+                      alt="Category"
+                    />
+                  </div>
+                ) : null}
                 <p className="text-xs md:text-sm text-center mt-2 overflow-hidden">
                   {registrationCategory.name}
                 </p>
@@ -81,7 +93,9 @@ export default function TermRegistration({
               <Dropdown.Toggle className="opacity-0 hover:opacity-50"></Dropdown.Toggle>
               <Dropdown.Menu className="w-28 sm:w-40 right-0 border z-50">
                 <>
-                  <Dropdown.Item onClick={handleShow}>
+                  <Dropdown.Item
+                    onClick={() => handleShow(registrationCategory)}
+                  >
                     <CiEdit className="mr-1" />
                     編集
                   </Dropdown.Item>
@@ -111,7 +125,7 @@ export default function TermRegistration({
                 <TermEdit
                   closeModal={handleCloseModal}
                   updateRegistrationCategories={updateRegistrationCategories}
-                  category={registrationCategory}
+                  category={editingCategory}
                 />
               </Modal.Body>
             </Modal>

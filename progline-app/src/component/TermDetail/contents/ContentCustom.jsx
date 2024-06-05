@@ -44,9 +44,9 @@ export default function ContentCustom({
 
     try {
       const formData = new FormData();
-      formData.append("image_file", imageFile);
-      formData.append("title", title);
-      formData.append("url", url);
+      formData.append("content[image]", imageFile);
+      formData.append("content[title]", title);
+      formData.append("content[url]", url);
       formData.append("service_id", service.id);
 
       await axiosInstance.post("/contents_custom", formData, {

@@ -34,8 +34,8 @@ export default function TermCustom({
 
     try {
       const formData = new FormData();
-      formData.append("image_file", imageFile);
-      formData.append("name", imageName);
+      formData.append("category[image]", imageFile);
+      formData.append("category[name]", imageName);
       formData.append("user_id", user.uid);
 
       await axiosInstance.post("/categories", formData, {

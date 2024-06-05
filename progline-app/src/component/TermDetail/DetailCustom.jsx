@@ -33,8 +33,8 @@ export default function DetailCustom({
 
     try {
       const formData = new FormData();
-      formData.append("image_file", imageFile);
-      formData.append("name", imageName);
+      formData.append("service[image]", imageFile);
+      formData.append("service[name]", imageName);
       formData.append("category_id", category.id);
 
       await axiosInstance.post("/services", formData, {

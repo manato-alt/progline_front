@@ -8,7 +8,9 @@ export default function ServiceEdit({
 }) {
   const [editedService, setEditedService] = useState(service || {}); // カテゴリー情報の編集用ステート
   const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(service?.image_url); // 画像プレビューの状態
+  const [imagePreview, setImagePreview] = useState(
+    service?.image.url || service?.original_url
+  ); // 画像プレビューの状態
   const [errorMessages, setErrorMessages] = useState([]);
 
   const handleSubmit = async (e) => {
@@ -17,9 +19,9 @@ export default function ServiceEdit({
     try {
       const formData = new FormData();
       if (imageFile) {
-        formData.append("image_file", imageFile);
+        formData.append("service[image]", imageFile);
       }
-      formData.append("name", editedService.name);
+      formData.append("service[name]", editedService.name);
 
       // カテゴリー情報の更新リクエストを送信
       await axiosInstance.put(`/services/${editedService.id}`, formData, {

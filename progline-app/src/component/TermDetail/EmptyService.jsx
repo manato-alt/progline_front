@@ -5,11 +5,13 @@ export default function EmptyService({ handleShow, category }) {
     <div className="flex flex-col items-center h-[92vh] pt-28 bg-[#f7f9fb] px-8">
       {category && (
         <>
-          <img
-            src={category.image_url}
-            alt="Logo"
-            className="w-24 h-24 rounded-full"
-          />
+          {(category.image.url || category.original_url) && (
+            <img
+              src={category.image.url || category.original_url}
+              alt="Logo"
+              className="object-cover w-24 h-24 rounded-full"
+            />
+          )}
           <p className="mb-8 font-bold text-2xl">{category.name}</p>
         </>
       )}
