@@ -225,16 +225,16 @@ export default function ServiceRegistration({
                   }`}
                   onClick={() => handleServiceClick(registrationService)}
                 >
-                  {registrationService.image_url && (
+                  {registrationService.image.url && (
                     <div className="w-5 h-5">
                       <img
-                        src={registrationService.image_url}
+                        src={registrationService.image.url}
                         alt={registrationService.name}
                         className="object-cover w-full h-full"
                       />
                     </div>
                   )}
-                  {!registrationService.image_url && (
+                  {!registrationService.image.url && (
                     <MediaIcon name={registrationService.name} />
                   )}
                   <div>

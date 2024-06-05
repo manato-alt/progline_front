@@ -13,11 +13,13 @@ export default function ShareTermRegistration({ categories, shareCode }) {
             >
               <div>
                 <div className="w-6 h-6 md:w-10 md:h-10 mx-auto">
-                  <img
-                    src={category.image_url}
-                    alt={category.name}
-                    className="object-cover w-full h-full"
-                  />
+                  {(category.image.url || category.original_url) && (
+                    <img
+                      src={category.image.url || category.original_url}
+                      alt={category.name}
+                      className="object-cover w-full h-full"
+                    />
+                  )}
                 </div>
                 <p className="text-xs md:text-sm text-center mt-2 overflow-hidden">
                   {category.name}

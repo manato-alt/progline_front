@@ -17,9 +17,9 @@ export default function ShareContent({ contents }) {
                 rel="noopener noreferrer"
                 className="block pb-5"
               >
-                {content.image_url && (
+                {(content.image.url || content.original_url) && (
                   <img
-                    src={content.image_url}
+                    src={content.image.url || content.original_url}
                     alt=""
                     className="block mx-auto mb-2 rounded"
                     style={{ maxHeight: "200px", width: "auto" }}

@@ -6,9 +6,11 @@ export default function TermEdit({
   updateRegistrationCategories,
   category,
 }) {
-  const [editedCategory, setEditedCategory] = useState(category); // カテゴリー情報の編集用ステート
+  const [editedCategory, setEditedCategory] = useState(category || {}); // カテゴリー情報の編集用ステート
   const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(category.image_url); // 画像プレビューの状態
+  const [imagePreview, setImagePreview] = useState(
+    category?.image.url || category?.original_url
+  ); // 画像プレビューの状態
   const [errorMessages, setErrorMessages] = useState([]);
 
   const handleSubmit = async (e) => {
@@ -18,9 +20,9 @@ export default function TermEdit({
     try {
       const formData = new FormData();
       if (imageFile) {
-        formData.append("image_file", imageFile);
+        formData.append("category[image]", imageFile);
       }
-      formData.append("name", editedCategory.name);
+      formData.append("category[name]", editedCategory.name);
       // カテゴリー情報の更新リクエストを送信
       await axiosInstance.put(`/categories/${editedCategory.id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },

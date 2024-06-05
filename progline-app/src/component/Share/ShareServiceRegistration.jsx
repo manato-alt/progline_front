@@ -129,16 +129,16 @@ export default function ShareServiceRegistration({ services, MediaIcon }) {
                   }`}
                   onClick={() => handleServiceClick(service)}
                 >
-                  {service.image_url && (
+                  {service.image.url && (
                     <div className="w-5 h-5">
                       <img
-                        src={service.image_url}
+                        src={service.image.url}
                         alt={service.name}
                         className="object-cover w-full h-full"
                       />
                     </div>
                   )}
-                  {!service.image_url && <MediaIcon name={service.name} />}
+                  {!service.image.url && <MediaIcon name={service.name} />}
                   <p className="text-sm text-center font-bold ml-1 overflow-hidden">
                     {service.name}
                   </p>

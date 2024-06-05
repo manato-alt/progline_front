@@ -92,11 +92,13 @@ export default function ShareDetail() {
             {category && (
               <div className="flex items-center p-[10px] min-[700px]:p-[20px] bg-white w-[1250px] h-[90px] min-[700px]:h-[110px] rounded">
                 <div className="h-[30px] w-[30px] ml-6 mr-4">
-                  <img
-                    src={category.image_url}
-                    alt={category.name}
-                    className="object-cover w-full h-full"
-                  />
+                  {(category.image.url || category.original_url) && (
+                    <img
+                      src={category.image.url || category.original_url}
+                      alt={category.name}
+                      className="object-cover w-full h-full"
+                    />
+                  )}
                 </div>
                 <div className="font-bold text-sm min-[350px]:text-base min-[700px]:text-lg">
                   "{category.name}"に関する記録
