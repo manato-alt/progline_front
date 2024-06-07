@@ -166,6 +166,10 @@ export default function ServiceRegistration({
     setIsClickDisabled(false); // 変更：ここで即座にリセット
   };
 
+  const stopPropagation = (e) => {
+    e.stopPropagation();
+  };
+
   return (
     <div>
       {errorMessages !== null &&
@@ -238,13 +242,22 @@ export default function ServiceRegistration({
                     <MediaIcon name={registrationService.name} />
                   )}
                   <div>
-                    <p className="text-sm text-center font-bold ml-1 overflow-hidden">
+                    <p className="text-sm text-center font-bold ml-1 whitespace-nowrap">
                       {registrationService.name}
                     </p>
                   </div>
                 </div>
                 <div className="absolute right-4 top-3 font-bold">︙</div>
-                <Dropdown className="absolute right-2 top-0" id="modal">
+                <Dropdown
+                  className="absolute right-2 top-0"
+                  id="modal"
+                  onMouseDown={stopPropagation}
+                  onMouseMove={stopPropagation}
+                  onMouseUp={stopPropagation}
+                  onTouchStart={stopPropagation}
+                  onTouchMove={stopPropagation}
+                  onTouchEnd={stopPropagation}
+                >
                   <Dropdown.Toggle className="opacity-0 hover:opacity-50"></Dropdown.Toggle>
                   <Dropdown.Menu className="w-28 right-0 border z-50">
                     <Dropdown.Item
@@ -276,7 +289,15 @@ export default function ServiceRegistration({
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
-                <Modal ref={ref}>
+                <Modal
+                  ref={ref}
+                  onMouseDown={stopPropagation}
+                  onMouseMove={stopPropagation}
+                  onMouseUp={stopPropagation}
+                  onTouchStart={stopPropagation}
+                  onTouchMove={stopPropagation}
+                  onTouchEnd={stopPropagation}
+                >
                   <form method="dialog">
                     <Button
                       size="sm"

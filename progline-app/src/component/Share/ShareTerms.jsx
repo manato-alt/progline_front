@@ -10,6 +10,7 @@ export default function ShareTerms() {
   const [categories, setCategories] = useState([]);
   const [errorMessages, setErrorMessages] = useState([]);
   const [graphData, setGraphData] = useState(null);
+  const [publicName, setPublicName] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +33,35 @@ export default function ShareTerms() {
             setErrorMessages([error.response.data.error]);
           } else {
             setErrorMessages(["カテゴリー取得中にエラーが発生しました"]);
+          }
+        }
+      }
+    };
+
+    fetchData();
+  }, [shareCode]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (shareCode) {
+        // userとuser.uidが存在するかを確認
+        try {
+          const res = await axiosInstance.get("/shared_codes/share_user", {
+            params: {
+              code: shareCode,
+            },
+          });
+          setPublicName(res.data);
+        } catch (error) {
+          console.error("Error fetching User:", error);
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.error
+          ) {
+            setErrorMessages([error.response.data.error]);
+          } else {
+            setErrorMessages(["ユーザーの取得中にエラーが発生しました"]);
           }
         }
       }
@@ -65,7 +95,7 @@ export default function ShareTerms() {
   }, [shareCode, fetchGraphData]);
 
   return (
-    <div className="bg-[#f2f8f9] min-h-screen pt-20 px-[15px]">
+    <div className="bg-[#f2f8f9] min-h-screen pt-16 px-[15px]">
       {errorMessages !== null &&
         // errorMessages が文字列か配列かで処理を分岐
         (typeof errorMessages === "string" ? (
@@ -83,8 +113,11 @@ export default function ShareTerms() {
         <>
           <div className="flex justify-center">
             <div className="my-5 w-full min-[1200px]:w-[1080px]  min-[1600px]:w-[1580px]">
-              <div className="flex justify-between items-center mb-3">
-                <div className="font-bold text-2xl">カテゴリ</div>
+              <div className="border-b border-slate-300 mb-[20px] pb-[10px] text-xl font-bold">
+                {publicName ? `"${publicName}" さんの記録` : "記録"}
+              </div>
+              <div className="flex justify-between items-center mb-1">
+                <div className="font-bold text-xl">カテゴリ</div>
               </div>
               <div>
                 <ShareTermRegistration
