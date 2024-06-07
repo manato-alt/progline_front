@@ -11,6 +11,7 @@ export default function ShareDetail() {
   const { shareCode, categoryId } = useParams();
   const [services, setServices] = useState([]);
   const [errorMessages, setErrorMessages] = useState([]);
+  const [publicName, setPublicName] = useState([]);
 
   function MediaIcon({ name }) {
     switch (name) {
@@ -59,6 +60,35 @@ export default function ShareDetail() {
   }, [categoryId, shareCode]);
 
   useEffect(() => {
+    const fetchData = async () => {
+      if (shareCode) {
+        // userとuser.uidが存在するかを確認
+        try {
+          const res = await axiosInstance.get("/shared_codes/share_user", {
+            params: {
+              code: shareCode,
+            },
+          });
+          setPublicName(res.data);
+        } catch (error) {
+          console.error("Error fetching User:", error);
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.error
+          ) {
+            setErrorMessages([error.response.data.error]);
+          } else {
+            setErrorMessages(["ユーザーの取得中にエラーが発生しました"]);
+          }
+        }
+      }
+    };
+
+    fetchData();
+  }, [shareCode]);
+
+  useEffect(() => {
     const fetchCategory = async () => {
       try {
         const response = await axiosInstance.get(`/categories/${categoryId}`);
@@ -88,6 +118,11 @@ export default function ShareDetail() {
         <ShareEmptyService category={category} shareCode={shareCode} />
       ) : (
         <div>
+          <div className="flex justify-center">
+            <div className="border-b border-slate-300 mb-[20px] pb-[10px] text-xl font-bold w-[1250px]">
+              {publicName ? `"${publicName}" さんの記録` : "記録"}
+            </div>
+          </div>
           <div className="flex justify-center mb-9">
             {category && (
               <div className="flex items-center p-[10px] min-[700px]:p-[20px] bg-white w-[1250px] h-[90px] min-[700px]:h-[110px] rounded">

@@ -139,7 +139,7 @@ export default function ShareServiceRegistration({ services, MediaIcon }) {
                     </div>
                   )}
                   {!service.image.url && <MediaIcon name={service.name} />}
-                  <p className="text-sm text-center font-bold ml-1 overflow-hidden">
+                  <p className="text-sm text-center font-bold ml-1 whitespace-nowrap">
                     {service.name}
                   </p>
                 </div>
