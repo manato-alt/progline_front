@@ -10,6 +10,9 @@ import { auth, provider } from "../../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import TopPageImage from "../../images/TopPage.png";
 import { axiosInstance } from "../../utils/axios.js";
+import { Helmet } from "react-helmet-async";
+import back from "../../images/back.jpg";
+import Topback from "../../images/Topback.png";
 
 export default function Top() {
   const [selectedImage, setSelectedImage] = useState("A");
@@ -68,96 +71,115 @@ export default function Top() {
   };
 
   return (
-    <div className="py-[65px] min-[700px]:py-[120px]">
-      <div className="flex justify-center items-center">
-        <div className="text-center">
-          <h1 className="text-[2.2rem] min-[400px]:text-[2.6rem] min-[500px]:text-[3rem] min-[700px]:text-[3.6rem] font-bold tracking-widest leading-[1]">
-            IT技術の道しるべ
-          </h1>
-          <p className="text-gray-500 px-12 mt-4 mx-auto text-[1.3rem]">
-            テンプレートを活用した<span className="font-bold">記録</span>、
-            <span className="font-bold">共有</span>機能で、
+    <div className="py-[10px] min-[700px]:py-[50px]">
+      <Helmet>
+        <title>PROGLINE</title>
+      </Helmet>
+      <div
+        style={{ backgroundImage: `url(${back})` }}
+        className="bg-no-repeat w-screen h-[530px] min-[700px]:h-[650px] min-[700px]:bg-[length:100vw_650px] bg-cover"
+      >
+        <div className="flex justify-center items-center pt-[60px] min-[700px]:pt-[80px] mb-[50px] min-[700px]:mb-[70px]">
+          <div className="text-center flex justify-center items-center flex-col">
+            <img
+              src={Topback}
+              alt="Logo"
+              className="w-[12rem] min-[700px]:w-[15rem]"
+            />
+            <h1 className="mt-[20px] min-[700px]:mt-[40px] text-white text-[2.2rem] min-[400px]:text-[2.6rem] min-[700px]:text-[3.6rem] font-bold tracking-widest leading-[1]">
+              ITに特化した
+              <br />
+              学習メモリアル
+            </h1>
+          </div>
+        </div>
+
+        {user ? null : (
+          <div className="flex justify-center mt-[-20px]">
+            <SignInButton />
+          </div>
+        )}
+
+        <div className="">
+          <SearchForm onSearch={searchShareCode} />
+          <div className="flex flex-col items-center">
+            {searchResults.length > 0 && (
+              <div
+                ref={dropdownRef}
+                className="mt-1 bg-white border border-gray-300 rounded-md shadow-lg w-[85%] min-[700px]:w-[30rem]"
+              >
+                {searchResults.map((result, index) => (
+                  <Link
+                    to={`/shareTerms/${result.code}`}
+                    key={index}
+                    className="block p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {result.public_name}
+                  </Link>
+                ))}
+              </div>
+            )}
+            {searchError && (
+              <div className="mt-4 text-center text-red-500">
+                <p>{searchError}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="mt-[-120px] px-[20px]">
+        <div className=" flex justify-center">
+          <img
+            src={TopPageImage}
+            alt="イラスト画像"
+            className="w-[100%] min-[900px]:w-[80%] min-[1300px]:w-[70%] min-[1800px]:w-[43%]"
+          />
+        </div>
+        <div className="flex flex-col justify-center items-center py-20">
+          <img
+            src={logo}
+            alt="Logo"
+            className="w-[13rem] min-[600px]:w-[15rem] min-[800px]:w-[20rem]"
+          />
+          <p className="mt-2 text-2xl min-[600px]:text-3xl min-[800px]:text-4xl font-serif text-center">
+            「テンプレートを活用した
             <br />
-            IT技術を向上させましょう。
+            記録、共有機能で、
+            <br />
+            IT技術を向上させましょう。」
           </p>
         </div>
-      </div>
-      <div className="relative">
-        <SearchForm onSearch={searchShareCode} />
-        {searchResults.length > 0 && (
-          <div
-            ref={dropdownRef}
-            className="absolute left-[47.5%] transform -translate-x-1/2 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-10 w-[85%] min-[700px]:w-[30rem]"
-          >
-            {searchResults.map((result, index) => (
-              <Link
-                to={`/shareTerms/${result.code}`}
-                key={index}
-                className="block p-2 hover:bg-gray-100 cursor-pointer"
-              >
-                {result.public_name}
-              </Link>
+        <div>
+          <div className="flex flex-wrap justify-center mx-[32px] space-x-2 sm:space-x-4">
+            {["A", "B", "C", "D", "E"].map((item) => (
+              <Square
+                key={item}
+                id={item}
+                handleClick={handleClick}
+                isSelected={
+                  selectedImage === item || lastSelectedImage === item
+                }
+              />
             ))}
           </div>
-        )}
-        {searchError && (
-          <div className="mt-4 text-center text-red-500">
-            <p>{searchError}</p>
-          </div>
-        )}
-      </div>
-      {user ? null : (
-        <div className="mt-5 flex justify-center">
-          <SignInButton />
-        </div>
-      )}
-      <div className="mt-10 flex justify-center max-[699px]:ml-[-40px] max-[699px]:mr-[-20px] overflow-x-hidden">
-        <img
-          src={TopPageImage}
-          alt="イラスト画像"
-          className="w-[100%] min-[1000px]:w-[80%] min-[1300px]:w-[70%] min-[1800px]:w-[52%]"
-        />
-      </div>
-      <div className="flex flex-col justify-center items-center py-20">
-        <img
-          src={logo}
-          alt="Logo"
-          className="w-[15rem] min-[600px]:w-[20rem]"
-        />
-        <p className="mt-2 text-3xl min-[600px]:text-4xl font-serif w-[24rem] text-center">
-          「ITに特化した学習メ
-          <br />
-          モリアルです。」
-        </p>
-      </div>
-      <div>
-        <div className="flex flex-wrap justify-center mx-[32px] space-x-2 sm:space-x-4">
-          {["A", "B", "C", "D", "E"].map((item) => (
-            <Square
-              key={item}
-              id={item}
-              handleClick={handleClick}
-              isSelected={selectedImage === item || lastSelectedImage === item}
-            />
-          ))}
-        </div>
-        <div className="flex justify-center mt-4 mx-[15px] max-[999px]:mt-[5px]">
-          {(selectedImage || lastSelectedImage) && (
-            <div className="bg-gray-100 p-[10px] min-[900px]:p-[30px] w-[950px] rounded-lg">
-              <p className="text-left font-bold text-[18px] mb-[5px] max-[899px]:pt-3 max-[899px]:pl-3">
-                {textMappingTitle[selectedImage || lastSelectedImage]}
-              </p>
-              <p className="text-left mb-[30px] max-[899px]:pl-3">
-                {textMapping[selectedImage || lastSelectedImage]}
-              </p>
+          <div className="flex justify-center mt-4 max-[999px]:mt-[5px]">
+            {(selectedImage || lastSelectedImage) && (
+              <div className="bg-gray-100 p-[10px] min-[900px]:p-[30px] w-[950px] rounded-lg">
+                <p className="text-left font-bold text-[18px] mb-[5px] max-[899px]:pt-3 max-[899px]:pl-3">
+                  {textMappingTitle[selectedImage || lastSelectedImage]}
+                </p>
+                <p className="text-left mb-[30px] max-[899px]:pl-3">
+                  {textMapping[selectedImage || lastSelectedImage]}
+                </p>
 
-              <img
-                src={gifImages[selectedImage || lastSelectedImage]}
-                alt={`ダミー画像 ${selectedImage || lastSelectedImage}`}
-                className="w-full rounded-lg shadow-lg"
-              />
-            </div>
-          )}
+                <img
+                  src={gifImages[selectedImage || lastSelectedImage]}
+                  alt={`ダミー画像 ${selectedImage || lastSelectedImage}`}
+                  className="w-full rounded-lg shadow-lg"
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
