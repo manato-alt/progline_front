@@ -94,7 +94,7 @@ export default function Header() {
 
   function UserInfo() {
     return (
-      <div className="flex items-center text-black">
+      <div className="flex items-center text-white">
         <p>{auth.currentUser.displayName}</p>
         <GoTriangleDown />
       </div>
