@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 
 export default function Rule() {
   useEffect(() => {
@@ -16,6 +17,9 @@ export default function Rule() {
       id="info"
       className="flex justify-center min-h-screen py-[100px] bg-[#f7f9fb] rounded"
     >
+      <Helmet>
+        <title>利用規約 | PROGLINE</title>
+      </Helmet>
       <div className="bg-white mx-[10px] px-[30px] min-[900px]:mx-[100px] min-[1500px]:mx-[328px] min-[900px]:px-[60px]">
         <h1 className="text-2xl min-[400px]:text-3xl font-bold mb-4 text-center mt-[60px]">
           利用規約

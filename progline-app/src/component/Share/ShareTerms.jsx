@@ -4,6 +4,7 @@ import ShareTermRegistration from "./ShareTermRegistration";
 import ShareTermGraph from "./ShareTermGraph";
 import ShareEmptyCategory from "./ShareEmptyCategory";
 import { axiosInstance } from "../../utils/axios";
+import { Helmet } from "react-helmet-async";
 
 export default function ShareTerms() {
   const { shareCode } = useParams();
@@ -96,6 +97,9 @@ export default function ShareTerms() {
 
   return (
     <div className="bg-[#f2f8f9] min-h-screen pt-16 px-[15px]">
+      <Helmet>
+        <title>共有 | PROGLINE</title>
+      </Helmet>
       {errorMessages !== null &&
         // errorMessages が文字列か配列かで処理を分岐
         (typeof errorMessages === "string" ? (
