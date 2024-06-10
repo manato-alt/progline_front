@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../contexts/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -12,10 +12,14 @@ import logo from "../images/logo.png";
 import { Link } from "react-router-dom";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { axiosInstance } from "../utils/axios";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { Transition } from "@headlessui/react";
+import { IoHomeSharp } from "react-icons/io5";
 
 export default function Header() {
   const [user] = useAuthState(auth);
   const ref = useRef(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleShow = useCallback(() => {
     ref.current?.showModal();
@@ -28,6 +32,81 @@ export default function Header() {
     });
   };
 
+  function SignInButton_nav() {
+    const signInWithGoogle = async () => {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user; // resultからユーザー情報を取得
+      addUserToDatabase(user.uid);
+      setMenuOpen(false);
+      //firebaceを使ってGoogleでサインインする
+    };
+
+    return (
+      <button
+        onClick={signInWithGoogle}
+        className="block border-b border-gray-300 py-2 w-full text-left"
+      >
+        <p className="flex items-center">
+          <span className="mr-1">
+            <FcGoogle />
+          </span>
+          Googleでログイン
+        </p>
+      </button>
+    );
+  }
+
+  function SignInButton() {
+    const signInWithGoogle = async () => {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user; // resultからユーザー情報を取得
+      addUserToDatabase(user.uid);
+      //firebaceを使ってGoogleでサインインする
+    };
+
+    return (
+      <button
+        onClick={signInWithGoogle}
+        className="flex items-center py-1 px-4 min-[500px]:py-2 bg-black min-[700px]:py-3 min-[500px]:px-6 rounded-lg mr-4 min-[500px]:mr-6 text-white"
+      >
+        <FcGoogle />
+        <p className="text-base ml-1">Googleでログイン</p>
+      </button>
+    );
+  }
+
+  //サインアウト
+  function SignOutButton() {
+    return (
+      <button
+        className="flex items-center text-black"
+        onClick={() => auth.signOut()}
+      >
+        <PiSignOutBold className="mr-1" />
+        <p>ログアウト</p>
+      </button>
+    );
+  }
+
+  function UserInfo() {
+    return (
+      <div className="flex items-center text-black">
+        <p>{auth.currentUser.displayName}</p>
+        <GoTriangleDown />
+      </div>
+    );
+  }
+
+  async function addUserToDatabase(uid) {
+    try {
+      // RailsのAPIエンドポイントにUIDを送信
+      await axiosInstance.post("/users", { uid });
+      console.log("UIDがRailsのAPIに送信されました");
+    } catch (error) {
+      console.error("RailsのAPIへのリクエスト中にエラーが発生しました:", error);
+    }
+  }
+
   return (
     <header className="bg-white py-2 fixed top-0 left-0 w-full z-50 shadow-lg">
       <div className="flex justify-between items-center">
@@ -38,7 +117,7 @@ export default function Header() {
             className="w-32 min-[500px]:w-40 min-[700px]:w-56 mx-6"
           />
         </Link>
-        <div className="text-white text-lg">
+        <div className="text-white text-lg flex items-center">
           {user ? (
             <div className="flex items-center">
               <Link to="/terms">
@@ -97,10 +176,21 @@ export default function Header() {
               </Dropdown>
             </div>
           ) : (
-            <SignInButton />
+            <>
+              <button
+                className="sm:hidden mr-4 focus:outline-none"
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                <GiHamburgerMenu className="text-black w-6 h-6" />
+              </button>
+              <div className="hidden sm:flex">
+                <SignInButton />
+              </div>
+            </>
           )}
         </div>
       </div>
+
       <Modal ref={ref} className="p-0">
         <form method="dialog">
           <Button
@@ -117,57 +207,59 @@ export default function Header() {
           <ShareModal />
         </Modal.Body>
       </Modal>
+      {menuOpen && (
+        <div
+          className="fixed inset-0 bg-black opacity-50 z-40"
+          onClick={() => setMenuOpen(false)}
+        ></div>
+      )}
+      <Transition
+        show={menuOpen}
+        enter="transition ease-out duration-300 transform"
+        enterFrom="translate-x-full"
+        enterTo="translate-x-0"
+        leave="transition ease-in duration-300 transform"
+        leaveFrom="translate-x-0"
+        leaveTo="translate-x-full"
+      >
+        <div className="fixed inset-y-0 right-0 w-64 z-50">
+          <div className="bg-white text-black p-4 h-full">
+            <button
+              className="absolute top-4 right-4 focus:outline-none"
+              onClick={() => setMenuOpen(false)}
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </button>
+            <nav className="mt-8 space-y-4">
+              <div>
+                <a
+                  href="/"
+                  className="flex items-center border-b border-gray-300 py-2 w-full text-left"
+                >
+                  <IoHomeSharp className="mr-1" />
+                  トップページ
+                </a>
+              </div>
+              <div>
+                <SignInButton_nav />
+              </div>
+            </nav>
+          </div>
+        </div>
+      </Transition>
     </header>
   );
-}
-
-function SignInButton() {
-  const signInWithGoogle = async () => {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user; // resultからユーザー情報を取得
-    addUserToDatabase(user.uid);
-    //firebaceを使ってGoogleでサインインする
-  };
-
-  return (
-    <button
-      onClick={signInWithGoogle}
-      className="flex items-center py-1 px-4 min-[500px]:py-2 bg-black min-[700px]:py-3 min-[500px]:px-6 rounded-lg mr-4 min-[500px]:mr-6 text-white"
-    >
-      <FcGoogle />
-      <p className="text-base ml-1">Googleでログイン</p>
-    </button>
-  );
-}
-
-//サインアウト
-function SignOutButton() {
-  return (
-    <button
-      className="flex items-center text-black"
-      onClick={() => auth.signOut()}
-    >
-      <PiSignOutBold className="mr-1" />
-      <p>ログアウト</p>
-    </button>
-  );
-}
-
-function UserInfo() {
-  return (
-    <div className="flex items-center">
-      <p>{auth.currentUser.displayName}</p>
-      <GoTriangleDown />
-    </div>
-  );
-}
-
-async function addUserToDatabase(uid) {
-  try {
-    // RailsのAPIエンドポイントにUIDを送信
-    await axiosInstance.post("/users", { uid });
-    console.log("UIDがRailsのAPIに送信されました");
-  } catch (error) {
-    console.error("RailsのAPIへのリクエスト中にエラーが発生しました:", error);
-  }
 }
