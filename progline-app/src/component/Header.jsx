@@ -20,9 +20,11 @@ export default function Header() {
   const [user] = useAuthState(auth);
   const ref = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpenAfterLogin, setMenuOpenAfterLogin] = useState(false);
 
   const handleShow = useCallback(() => {
     ref.current?.showModal();
+    setMenuOpenAfterLogin(false);
   }, [ref]);
 
   const scrollToTop = () => {
@@ -32,12 +34,13 @@ export default function Header() {
     });
   };
 
-  function SignInButton_nav() {
+  function SignInButtonNav() {
     const signInWithGoogle = async () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user; // resultからユーザー情報を取得
       addUserToDatabase(user.uid);
       setMenuOpen(false);
+      setMenuOpenAfterLogin(false);
       //firebaceを使ってGoogleでサインインする
     };
 
@@ -77,11 +80,12 @@ export default function Header() {
 
   //サインアウト
   function SignOutButton() {
+    const signOut = async () => {
+      await auth.signOut();
+      setMenuOpenAfterLogin(false);
+    };
     return (
-      <button
-        className="flex items-center text-black"
-        onClick={() => auth.signOut()}
-      >
+      <button className="flex items-center text-black" onClick={signOut}>
         <PiSignOutBold className="mr-1" />
         <p>ログアウト</p>
       </button>
@@ -101,7 +105,7 @@ export default function Header() {
     try {
       // RailsのAPIエンドポイントにUIDを送信
       await axiosInstance.post("/users", { uid });
-      console.log("UIDがRailsのAPIに送信されました");
+      console.log("ログインしました");
     } catch (error) {
       console.error("RailsのAPIへのリクエスト中にエラーが発生しました:", error);
     }
@@ -117,63 +121,53 @@ export default function Header() {
             className="w-32 min-[500px]:w-40 min-[700px]:w-56 mx-6"
           />
         </Link>
-        <div className="text-white text-lg flex items-center">
+        <div className="text-lg flex items-center">
           {user ? (
-            <div className="flex items-center">
-              <Link to="/terms">
-                <button className="hidden sm:flex border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white py-1 px-4 rounded items-center mt-1 mr-2 transition duration-300 ease-in-out">
-                  <FaChalkboardTeacher className="mr-1" />
-                  <p>記録ボード</p>
-                </button>
-              </Link>
-
-              <button
-                className="hidden sm:flex border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white py-1 px-4 rounded items-center mt-1 mr-2 transition duration-300 ease-in-out"
-                onClick={handleShow}
-              >
-                <FaShareNodes className="mr-1" />
-                <p>共有</p>
+            <div>
+              <button className="min-[800px]:hidden mr-4 focus:outline-none">
+                <GiHamburgerMenu
+                  className="text-black w-6 h-6"
+                  onClick={() => setMenuOpenAfterLogin(!menuOpenAfterLogin)}
+                />
               </button>
 
-              <Dropdown className="z-40">
-                <Dropdown.Toggle className="mr-6">
-                  <UserInfo />
-                </Dropdown.Toggle>
-                <Dropdown.Menu className="w-[200px] absolute right-0 mt-1 border">
-                  <div className="flex items-center p-2">
-                    <img
-                      src={auth.currentUser.photoURL}
-                      alt=""
-                      className="rounded-full w-8 h-8 mr-3"
-                    />
-                    <p className="text-sm text-black">
-                      {auth.currentUser.displayName}
-                    </p>
-                  </div>
-                  <div className="border my-2 sm:hidden"></div>
-                  <Dropdown.Item
-                    className="flex items-center text-black sm:hidden"
-                    href="/terms"
-                  >
-                    <FaChalkboardTeacher className="mr-2" />
+              <div className="flex items-center max-[799px]:hidden">
+                <Link to="/terms">
+                  <button className="flex border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white py-1 px-4 rounded items-center mt-1 mr-2 transition duration-300 ease-in-out">
+                    <FaChalkboardTeacher className="mr-1" />
                     <p>記録ボード</p>
-                  </Dropdown.Item>
-                  <div className="border my-2 sm:hidden"></div>
-                  <Dropdown.Item className="sm:hidden">
-                    <button
-                      className="flex items-center text-black"
-                      onClick={handleShow}
-                    >
-                      <FaShareNodes className="mr-2" />
-                      <p>共有</p>
-                    </button>
-                  </Dropdown.Item>
-                  <div className="border my-2"></div>
-                  <Dropdown.Item>
-                    <SignOutButton />
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+                  </button>
+                </Link>
+
+                <button
+                  className="flex border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white py-1 px-4 rounded items-center mt-1 mr-2 transition duration-300 ease-in-out"
+                  onClick={handleShow}
+                >
+                  <FaShareNodes className="mr-1" />
+                  <p>共有</p>
+                </button>
+                <Dropdown className="z-40">
+                  <Dropdown.Toggle className="mr-6">
+                    <UserInfo />
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu className="w-[200px] absolute right-0 mt-1 border">
+                    <div className="flex items-center p-2">
+                      <img
+                        src={auth.currentUser.photoURL}
+                        alt=""
+                        className="rounded-full w-8 h-8 mr-3"
+                      />
+                      <p className="text-sm text-black">
+                        {auth.currentUser.displayName}
+                      </p>
+                    </div>
+                    <div className="border my-2"></div>
+                    <Dropdown.Item>
+                      <SignOutButton />
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
             </div>
           ) : (
             <>
@@ -254,8 +248,94 @@ export default function Header() {
                 </a>
               </div>
               <div>
-                <SignInButton_nav />
+                <SignInButtonNav />
               </div>
+            </nav>
+          </div>
+        </div>
+      </Transition>
+      {menuOpenAfterLogin && (
+        <div
+          className="fixed inset-0 bg-black opacity-50 z-40"
+          onClick={() => setMenuOpenAfterLogin(false)}
+        ></div>
+      )}
+      <Transition
+        show={menuOpenAfterLogin}
+        enter="transition ease-out duration-300 transform"
+        enterFrom="translate-x-full"
+        enterTo="translate-x-0"
+        leave="transition ease-in duration-300 transform"
+        leaveFrom="translate-x-0"
+        leaveTo="translate-x-full"
+      >
+        <div className="fixed inset-y-0 right-0 w-64 z-50">
+          <div className="bg-white text-black p-4 h-full">
+            <button
+              className="absolute top-4 right-4 focus:outline-none"
+              onClick={() => setMenuOpenAfterLogin(false)}
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </button>
+            <nav className="mt-8 space-y-4">
+              {user && (
+                <>
+                  <div className="flex items-center p-2">
+                    <img
+                      src={auth.currentUser.photoURL}
+                      alt=""
+                      className="rounded-full w-8 h-8 mr-3"
+                    />
+                    <p className="text-sm text-black">
+                      {auth.currentUser.displayName}
+                    </p>
+                  </div>
+                  <div>
+                    <a
+                      href="/"
+                      className="flex items-center border-b border-gray-300 py-2 w-full text-left"
+                    >
+                      <IoHomeSharp className="mr-2" />
+                      トップページ
+                    </a>
+                  </div>
+
+                  <div>
+                    <a
+                      href="/terms"
+                      className="flex items-center border-b border-gray-300 py-2 w-full text-left"
+                    >
+                      <FaChalkboardTeacher className="mr-2" />
+                      記録ボード
+                    </a>
+                  </div>
+                  <div>
+                    <button
+                      className="flex items-center border-b border-gray-300 py-2 w-full text-left"
+                      onClick={handleShow}
+                    >
+                      <FaShareNodes className="mr-2" />
+                      <p>共有</p>
+                    </button>
+                  </div>
+                  <div>
+                    <SignOutButton />
+                  </div>
+                </>
+              )}
             </nav>
           </div>
         </div>
