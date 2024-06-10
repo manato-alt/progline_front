@@ -15,34 +15,37 @@ import PageNotFound from "./component/PageNotFound";
 import Privacy from "./component/Footer/Privacy";
 import Rule from "./component/Footer/Rule";
 import Footer from "./component/Footer/Footer";
+import { HelmetProvider } from "react-helmet-async";
 
 function App() {
   return (
-    <Router>
-      <Header />
-      <div className="pt-10">
-        <Routes>
-          <Route path="/" element={<Top />} />
-          <Route path="/terms" element={<ProtectedRoute element={Terms} />} />
-          <Route
-            path="/termsDetail/:categoryId"
-            element={<CategoryProtectedRoute element={TermDetail} />}
-          />
-          <Route
-            path="/shareTerms/:shareCode"
-            element={<ShareTermProtectedRoute element={ShareTerms} />}
-          />
-          <Route
-            path="/shareDetail/:shareCode/:categoryId"
-            element={<ShareProtectedRoute element={ShareDetail} />}
-          />
-          <Route path="/rule" element={<Rule />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </div>
-      <Footer />
-    </Router>
+    <HelmetProvider>
+      <Router>
+        <Header />
+        <div className="pt-10">
+          <Routes>
+            <Route path="/" element={<Top />} />
+            <Route path="/terms" element={<ProtectedRoute element={Terms} />} />
+            <Route
+              path="/termsDetail/:categoryId"
+              element={<CategoryProtectedRoute element={TermDetail} />}
+            />
+            <Route
+              path="/shareTerms/:shareCode"
+              element={<ShareTermProtectedRoute element={ShareTerms} />}
+            />
+            <Route
+              path="/shareDetail/:shareCode/:categoryId"
+              element={<ShareProtectedRoute element={ShareDetail} />}
+            />
+            <Route path="/rule" element={<Rule />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </div>
+        <Footer />
+      </Router>
+    </HelmetProvider>
   );
 }
 

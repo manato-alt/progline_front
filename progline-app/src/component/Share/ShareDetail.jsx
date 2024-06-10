@@ -5,6 +5,7 @@ import { FaYoutube, FaAmazon } from "react-icons/fa";
 import ShareServiceRegistration from "./ShareServiceRegistration";
 import ShareEmptyService from "./ShareEmptyService";
 import { axiosInstance } from "../../utils/axios";
+import { Helmet } from "react-helmet-async";
 
 export default function ShareDetail() {
   const [category, setCategory] = useState(null);
@@ -103,6 +104,9 @@ export default function ShareDetail() {
 
   return (
     <div className="bg-[#f2f8f9] min-h-screen pt-20 px-[15px]">
+      <Helmet>
+        <title>共有詳細 | PROGLINE</title>
+      </Helmet>
       {errorMessages !== null &&
         // errorMessages が文字列か配列かで処理を分岐
         (typeof errorMessages === "string" ? (

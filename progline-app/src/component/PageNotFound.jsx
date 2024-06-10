@@ -2,10 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../images/logo-icon.png";
 import { TiHome } from "react-icons/ti";
+import { Helmet } from "react-helmet-async";
 
 export default function PageNotFound() {
   return (
     <div className="flex flex-col items-center h-[92vh] pt-28 bg-[#f7f9fb] px-8">
+      <Helmet>
+        <title>Page Not Found | PROGLINE</title>
+      </Helmet>
       <img src={logo} alt="Logo" className="w-32 h-32 mb-8" />
       <h1 className="text-xl md:text-3xl font-bold mb-4 text-cyan-500">
         Page Not Found

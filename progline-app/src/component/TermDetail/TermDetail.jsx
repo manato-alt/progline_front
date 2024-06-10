@@ -10,6 +10,7 @@ import DetailCustom from "./DetailCustom";
 import ServiceRegistration from "./ServiceRegistration";
 import EmptyService from "./EmptyService";
 import { axiosInstance } from "../../utils/axios";
+import { Helmet } from "react-helmet-async";
 
 export default function TermDetail() {
   const [category, setCategory] = useState(null);
@@ -145,6 +146,9 @@ export default function TermDetail() {
 
   return (
     <div className="bg-[#f2f8f9] min-h-screen pt-20 px-[15px]">
+      <Helmet>
+        <title>用語詳細 | PROGLINE</title>
+      </Helmet>
       {errorMessages !== null &&
         // errorMessages が文字列か配列かで処理を分岐
         (typeof errorMessages === "string" ? (

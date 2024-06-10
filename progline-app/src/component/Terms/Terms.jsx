@@ -8,6 +8,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import TermGraph from "./TermGraph";
 import EmptyCategory from "./EmptyCategory";
 import { axiosInstance } from "../../utils/axios";
+import { Helmet } from "react-helmet-async";
 
 export default function Terms() {
   const [categories, setCategories] = useState([]);
@@ -128,6 +129,10 @@ export default function Terms() {
 
   return (
     <div className="bg-[#f2f8f9] min-h-screen pt-20 px-[15px]">
+      <Helmet>
+        <title>用語一覧 | PROGLINE</title>
+      </Helmet>
+
       {errorMessages !== null &&
         // errorMessages が文字列か配列かで処理を分岐
         (typeof errorMessages === "string" ? (
