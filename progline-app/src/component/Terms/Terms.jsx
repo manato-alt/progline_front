@@ -3,10 +3,10 @@ import { Modal, Button } from "react-daisyui";
 import TermTemplate from "./TermTemplate";
 import TermCustom from "./TermCustom";
 import TermRegistration from "./TermRegistration";
-import { auth } from "../../contexts/AuthContext";
-import { useAuthState } from "react-firebase-hooks/auth";
 import TermGraph from "./TermGraph";
 import EmptyCategory from "./EmptyCategory";
+import { auth } from "../../contexts/AuthContext";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { axiosInstance } from "../../utils/axios";
 import { Helmet } from "react-helmet-async";
 
@@ -18,6 +18,7 @@ export default function Terms() {
   const [user] = useAuthState(auth);
   const [errorMessages, setErrorMessages] = useState([]);
   const [graphData, setGraphData] = useState(null);
+  const [activeTab, setActiveTab] = useState("registration");
 
   const fetchGraphData = useCallback(async () => {
     try {
@@ -123,17 +124,13 @@ export default function Terms() {
     }
   };
 
-  useEffect(() => {
-    fetchGraphData();
-  }, [user, fetchGraphData]);
-
   return (
-    <div className="bg-[#f2f8f9] min-h-screen pt-20 px-[15px]">
+    <div className="bg-[#f2f8f9] min-h-screen pb-[60px] pt-[30px] min-[500px]:pt-[40px] min-[700px]:pt-[90px] px-[15px]">
       <Helmet>
         <title>用語一覧 | PROGLINE</title>
       </Helmet>
 
-      {errorMessages !== null &&
+      {errorMessages.length > 0 &&
         // errorMessages が文字列か配列かで処理を分岐
         (typeof errorMessages === "string" ? (
           <p className="text-red-500 mb-4">{errorMessages}</p>
@@ -151,28 +148,61 @@ export default function Terms() {
         <>
           <div className="flex justify-center">
             <div className="my-5 w-full min-[1200px]:w-[1080px]  min-[1600px]:w-[1580px]">
-              <div className="flex justify-between items-center mb-3">
-                <div className="font-bold text-2xl">カテゴリ</div>
-                <div className="min-[768px]:hidden">
-                  <button
-                    onClick={handleShow}
-                    className="max-[500px]:text-sm bg-white border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white py-2 px-4 rounded items-center mt-1 mr-2 transition duration-300 ease-in-out"
-                  >
-                    カテゴリを追加
-                  </button>
-                </div>
+              <div className="flex mb-4 justify-center border-b pb-[10px] border-slate-300">
+                <button
+                  className={`px-4 py-2 mx-2 rounded-lg transition duration-300 ${
+                    activeTab === "registration"
+                      ? "bg-blue-500 text-white shadow-lg"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                  onClick={() => setActiveTab("registration")}
+                >
+                  カテゴリ
+                </button>
+                <button
+                  className={`px-4 py-2 mx-2 rounded-lg transition duration-300 ${
+                    activeTab === "graph"
+                      ? "bg-blue-500 text-white shadow-lg"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                  onClick={() => setActiveTab("graph")}
+                >
+                  グラフ
+                </button>
               </div>
+
               <div>
-                <TermRegistration
-                  registrationCategories={registrationCategories}
-                  updateRegistrationCategories={updateRegistrationCategories}
-                  handleShow_second={handleShow}
-                />
+                {activeTab === "registration" ? (
+                  <div>
+                    <div className="min-[700px]:hidden">
+                      <button
+                        onClick={handleShow}
+                        className="w-full max-[500px]:text-sm bg-white border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-white py-2 px-4 rounded items-center mt-1 mr-2 transition duration-300 ease-in-out"
+                      >
+                        カテゴリを追加
+                      </button>
+                    </div>
+                    <div className="flex justify-center my-2">
+                      <p className=" text-sm">
+                        ※
+                        登録したカテゴリをクリックすることで詳細ページへ遷移できます
+                      </p>
+                    </div>
+                    <TermRegistration
+                      registrationCategories={registrationCategories}
+                      updateRegistrationCategories={
+                        updateRegistrationCategories
+                      }
+                      handleShow_second={handleShow}
+                    />
+                  </div>
+                ) : (
+                  <div className="py-[10px] pr-[5px] min-[1000px]:px-[100px] min-[1200px]:w-[1080px] min-[1600px]:w-[1580px] mx-auto">
+                    <TermGraph graphData={graphData} />
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-          <div className="bg-white py-[50px] px-[20px] min-[1000px]:px-[100px] min-[1200px]:w-[1080px] min-[1600px]:w-[1580px] mx-auto">
-            <TermGraph graphData={graphData} />
           </div>
         </>
       )}

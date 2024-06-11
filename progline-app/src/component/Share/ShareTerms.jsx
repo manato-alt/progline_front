@@ -12,11 +12,11 @@ export default function ShareTerms() {
   const [errorMessages, setErrorMessages] = useState([]);
   const [graphData, setGraphData] = useState(null);
   const [publicName, setPublicName] = useState([]);
+  const [activeTab, setActiveTab] = useState("registration");
 
   useEffect(() => {
     const fetchData = async () => {
       if (shareCode) {
-        // userとuser.uidが存在するかを確認
         try {
           const res = await axiosInstance.get("/shared_codes/term_index", {
             params: {
@@ -45,7 +45,6 @@ export default function ShareTerms() {
   useEffect(() => {
     const fetchData = async () => {
       if (shareCode) {
-        // userとuser.uidが存在するかを確認
         try {
           const res = await axiosInstance.get("/shared_codes/share_user", {
             params: {
@@ -96,12 +95,11 @@ export default function ShareTerms() {
   }, [shareCode, fetchGraphData]);
 
   return (
-    <div className="bg-[#f2f8f9] min-h-screen pt-16 px-[15px]">
+    <div className="bg-[#f2f8f9] min-h-screen pb-[60px] pt-[30px] min-[500px]:pt-[40px] min-[700px]:pt-[90px] px-[15px]">
       <Helmet>
         <title>共有 | PROGLINE</title>
       </Helmet>
       {errorMessages !== null &&
-        // errorMessages が文字列か配列かで処理を分岐
         (typeof errorMessages === "string" ? (
           <p className="text-red-500 mb-4">{errorMessages}</p>
         ) : (
@@ -116,23 +114,47 @@ export default function ShareTerms() {
       ) : (
         <>
           <div className="flex justify-center">
-            <div className="my-5 w-full min-[1200px]:w-[1080px]  min-[1600px]:w-[1580px]">
-              <div className="border-b border-slate-300 mb-[20px] pb-[10px] text-xl font-bold">
+            <div className="my-5 w-full min-[1200px]:w-[1080px] min-[1600px]:w-[1580px]">
+              <div className="flex justify-center">
+                <button
+                  className={`px-4 py-2 mx-2 rounded-lg transition duration-300 ${
+                    activeTab === "registration"
+                      ? "bg-blue-500 text-white shadow-lg"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                  onClick={() => setActiveTab("registration")}
+                >
+                  カテゴリ
+                </button>
+                <button
+                  className={`px-4 py-2 mx-2 rounded-lg transition duration-300 ${
+                    activeTab === "graph"
+                      ? "bg-blue-500 text-white shadow-lg"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                  onClick={() => setActiveTab("graph")}
+                >
+                  グラフ
+                </button>
+              </div>
+
+              <div className="text-center mt-4 border-t border-slate-300 pt-[10px] text-xl font-bold">
                 {publicName ? `"${publicName}" さんの記録` : "記録"}
               </div>
-              <div className="flex justify-between items-center mb-1">
-                <div className="font-bold text-xl">カテゴリ</div>
-              </div>
+
               <div>
-                <ShareTermRegistration
-                  categories={categories}
-                  shareCode={shareCode}
-                />
+                {activeTab === "registration" ? (
+                  <ShareTermRegistration
+                    categories={categories}
+                    shareCode={shareCode}
+                  />
+                ) : (
+                  <div className="py-[30px] pr-[5px] min-[1000px]:px-[100px] min-[1200px]:w-[1080px] min-[1600px]:w-[1580px] mx-auto">
+                    <ShareTermGraph graphData={graphData} />
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-          <div className="bg-white py-[50px] px-[20px] min-[1000px]:px-[100px] min-[1200px]:w-[1080px] min-[1600px]:w-[1580px] mx-auto">
-            <ShareTermGraph graphData={graphData} />
           </div>
         </>
       )}

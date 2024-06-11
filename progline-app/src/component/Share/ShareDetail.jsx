@@ -103,7 +103,7 @@ export default function ShareDetail() {
   }, [categoryId]);
 
   return (
-    <div className="bg-[#f2f8f9] min-h-screen pt-20 px-[15px]">
+    <div className="bg-[#f2f8f9] min-h-screen  pb-[60px] pt-[50px] min-[500px]:pt-[60px] min-[700px]:pt-[90px] px-[15px]">
       <Helmet>
         <title>共有詳細 | PROGLINE</title>
       </Helmet>
@@ -123,7 +123,7 @@ export default function ShareDetail() {
       ) : (
         <div>
           <div className="flex justify-center">
-            <div className="border-b border-slate-300 mb-[20px] pb-[10px] text-xl font-bold w-[1250px]">
+            <div className="border-b text-center border-slate-300 mb-[20px] pb-[10px] text-xl font-bold w-[1250px]">
               {publicName ? `"${publicName}" さんの記録` : "記録"}
             </div>
           </div>

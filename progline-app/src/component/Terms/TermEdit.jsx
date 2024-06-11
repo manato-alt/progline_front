@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { axiosInstance } from "../../utils/axios";
 
 export default function TermEdit({
@@ -6,12 +6,18 @@ export default function TermEdit({
   updateRegistrationCategories,
   category,
 }) {
-  const [editedCategory, setEditedCategory] = useState(category || {}); // カテゴリー情報の編集用ステート
+  const [editedCategory, setEditedCategory] = useState({}); // 初期値を空のオブジェクトに設定
   const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(
-    category?.image.url || category?.original_url
-  ); // 画像プレビューの状態
+  const [imagePreview, setImagePreview] = useState(null); // 初期値をnullに設定
   const [errorMessages, setErrorMessages] = useState([]);
+
+  useEffect(() => {
+    // categoryが変更されたときに状態を更新
+    if (category) {
+      setEditedCategory(category);
+      setImagePreview(category.image?.url || category.original_url || null);
+    }
+  }, [category]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -65,8 +71,7 @@ export default function TermEdit({
   return (
     <div>
       <form onSubmit={handleSubmit} className="flex flex-col">
-        {errorMessages !== null &&
-          // errorMessages が文字列か配列かで処理を分岐
+        {errorMessages &&
           (typeof errorMessages === "string" ? (
             <p className="text-red-500 mb-4">{errorMessages}</p>
           ) : (
@@ -75,7 +80,7 @@ export default function TermEdit({
                 {message}
               </p>
             ))
-          ))}{" "}
+          ))}
         <label htmlFor="editImageInput" className="mb-2">
           画像:
         </label>
@@ -86,7 +91,6 @@ export default function TermEdit({
           accept="image/*"
           className="border rounded-md px-2 py-1 mb-4"
         />
-        {/* 画像プレビュー */}
         {imagePreview && (
           <img
             src={imagePreview}
@@ -101,7 +105,7 @@ export default function TermEdit({
         <input
           type="text"
           id="editNameInput"
-          value={editedCategory.name}
+          value={editedCategory.name || ""}
           onChange={(e) =>
             setEditedCategory({ ...editedCategory, name: e.target.value })
           }
