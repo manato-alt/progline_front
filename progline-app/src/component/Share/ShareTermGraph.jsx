@@ -11,11 +11,16 @@ export default function ShareTermGraph({ graphData }) {
         chartInstanceRef.current.destroy(); // 前のChartインスタンスを破棄する
       }
       const ctx = chartRef.current.getContext("2d");
+
       if (ctx) {
         chartInstanceRef.current = new Chart(ctx, {
           type: "bar",
           data: {
-            labels: graphData.map((data) => data.label),
+            labels: graphData.map((data) =>
+              data.label.length > 5
+                ? data.label.slice(0, 5) + "..."
+                : data.label
+            ),
             datasets: [
               {
                 label: "コンテンツ数",
@@ -52,17 +57,49 @@ export default function ShareTermGraph({ graphData }) {
                   stepSize: 1, // 1単位ごとにする設定
                 },
               },
+              y: {
+                ticks: {
+                  // ラベルのフォントサイズを縮小
+                  font: {
+                    size: 10,
+                  },
+                },
+              },
+            },
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  title: (tooltipItems) => {
+                    return graphData[tooltipItems[0].dataIndex].label;
+                  },
+                },
+              },
             },
           },
         });
-        chartRef.current.style.height = `${55 * graphData.length + 75}px`;
+
+        const setChartHeight = () => {
+          const width = window.innerWidth;
+          if (width >= 500) {
+            chartRef.current.style.height = `${55 * graphData.length + 75}px`;
+          } else {
+            chartRef.current.style.height = `${43 * graphData.length + 50}px`;
+          }
+        };
+
+        setChartHeight(); // 初期設定
+        window.addEventListener("resize", setChartHeight); // 画面リサイズ時に再設定
+
+        return () => {
+          window.removeEventListener("resize", setChartHeight); // クリーンアップ
+        };
       }
     }
   }, [graphData]);
 
   return (
     <>
-      <canvas id="myChart" width={500} ref={chartRef} />
+      <canvas id="myChart" ref={chartRef} />
     </>
   );
 }

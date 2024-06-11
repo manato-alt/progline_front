@@ -123,7 +123,7 @@ export default function ShareDetail() {
       ) : (
         <div>
           <div className="flex justify-center">
-            <div className="border-b border-slate-300 mb-[20px] pb-[10px] text-xl font-bold w-[1250px]">
+            <div className="border-b text-center border-slate-300 mb-[20px] pb-[10px] text-xl font-bold w-[1250px]">
               {publicName ? `"${publicName}" さんの記録` : "記録"}
             </div>
           </div>

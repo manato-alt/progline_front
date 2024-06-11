@@ -259,7 +259,7 @@ export default function ServiceRegistration({
                   onTouchEnd={stopPropagation}
                 >
                   <Dropdown.Toggle className="opacity-0 hover:opacity-50"></Dropdown.Toggle>
-                  <Dropdown.Menu className="w-28 right-0 border z-50">
+                  <Dropdown.Menu className="w-20 right-0 border z-50">
                     <Dropdown.Item
                       onClick={() =>
                         handleShowContentTemplate(registrationService)
