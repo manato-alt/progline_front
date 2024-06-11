@@ -71,13 +71,13 @@ export default function Top() {
   };
 
   return (
-    <div className="py-[10px] min-[700px]:py-[50px]">
+    <div className="pb-[20px] min-[700px]:py-[50px]">
       <Helmet>
         <title>PROGLINE</title>
       </Helmet>
       <div
         style={{ backgroundImage: `url(${back})` }}
-        className="bg-no-repeat w-screen h-[530px] min-[700px]:h-[650px] min-[700px]:bg-[length:100vw_650px] bg-cover"
+        className="bg-no-repeat w-screen h-[470px] min-[700px]:h-[650px] min-[700px]:bg-[length:100vw_650px] bg-cover"
       >
         <div className="flex justify-center items-center pt-[60px] min-[700px]:pt-[80px] mb-[50px] min-[700px]:mb-[70px]">
           <div className="text-center flex justify-center items-center flex-col">
@@ -86,7 +86,7 @@ export default function Top() {
               alt="Logo"
               className="w-[12rem] min-[700px]:w-[15rem]"
             />
-            <h1 className="mt-[20px] min-[700px]:mt-[40px] text-white text-[2.2rem] min-[400px]:text-[2.6rem] min-[700px]:text-[3.6rem] font-bold tracking-widest leading-[1]">
+            <h1 className="mt-[20px] min-[700px]:mt-[40px] text-white text-[2.4rem] min-[400px]:text-[2.6rem] min-[700px]:text-[3.6rem] font-bold tracking-widest leading-[1]">
               ITに特化した
               <br />
               学習メモリアル
@@ -127,7 +127,7 @@ export default function Top() {
           </div>
         </div>
       </div>
-      <div className="mt-[-120px] px-[20px]">
+      <div className="mt-[-100px] min-[700px]:mt-[-120px] px-[20px]">
         <div className=" flex justify-center">
           <img
             src={TopPageImage}

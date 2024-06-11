@@ -95,7 +95,7 @@ export default function ShareTerms() {
   }, [shareCode, fetchGraphData]);
 
   return (
-    <div className="bg-[#f2f8f9] min-h-screen pt-16 px-[15px]">
+    <div className="bg-[#f2f8f9] min-h-screen pb-[60px] pt-[30px] min-[500px]:pt-[40px] min-[700px]:pt-[90px] px-[15px]">
       <Helmet>
         <title>共有 | PROGLINE</title>
       </Helmet>
