@@ -1,15 +1,29 @@
-import gifImage1 from "../../images/8ba8c39d40481ec82b1cc9ff1f451a86.gif";
-import gifImage2 from "../../images/8cb766318d32b696bcdd30fd5f4543a3.gif";
-import gifImage3 from "../../images/58db076ef9ddd20a47de2f2e18d387ac.gif";
-import gifImage4 from "../../images/629597fec04e600f143512c8d8e9347b.gif";
-import gifImage5 from "../../images/059229873055efc5765de5114f3899d1.gif";
+import categoryPc from "../..//images/category-pc.png";
+import categoryMb from "../..//images/category-mb.png";
+import servicePc from "../..//images/service-pc.png";
+import serviceMb from "../..//images/service-mb.png";
+import contentsPc from "../..//images/contents-pc.png";
+import contentsMb from "../..//images/contents-mb.png";
+import graphPc from "../..//images/graph-pc.png";
+import graphMb from "../..//images/graph-mb.png";
+import sharePc from "../..//images/share-pc.png";
+import shareMb from "../..//images/share-mb.png";
 
 const gifImages = {
-  A: gifImage1,
-  B: gifImage2,
-  C: gifImage3,
-  D: gifImage4,
-  E: gifImage5,
+  pc: {
+    A: categoryPc,
+    B: servicePc,
+    C: contentsPc,
+    D: graphPc,
+    E: sharePc,
+  },
+  mb: {
+    A: categoryMb,
+    B: serviceMb,
+    C: contentsMb,
+    D: graphMb,
+    E: shareMb,
+  },
 };
 
 export default gifImages;
